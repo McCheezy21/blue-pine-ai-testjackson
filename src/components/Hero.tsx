@@ -44,7 +44,7 @@ const Hero = () => {
             Helping SNFs Bill Insurance <br />More Efficiently
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-up">
-            Streamlining insurance billing for Skilled Nursing Facilities while effectively collecting authorized cash automatically.
+            Industry trained AI agent to automate your patient authorization, billing, and claims denial resolution to ensure collections from services performed for your patients.
           </p>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up">
