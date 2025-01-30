@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { Input } from "./ui/input";
 
 const Hero = () => {
   return (
@@ -15,12 +16,14 @@ const Hero = () => {
             Blue Pine AI combines cutting-edge artificial intelligence with sustainable innovation to create solutions that matter.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up">
+            <Input 
+              type="email" 
+              placeholder="Enter your email" 
+              className="max-w-xs"
+            />
             <button className="bg-primary text-white px-8 py-3 rounded-md hover:bg-primary/90 flex items-center gap-2 group">
               Join Waitlist
               <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button className="text-primary border-2 border-primary px-8 py-3 rounded-md hover:bg-primary/10">
-              Learn More
             </button>
           </div>
         </div>
