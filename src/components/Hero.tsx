@@ -27,10 +27,14 @@ const Hero = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log('Submitting email:', values.email);
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('Waitlist')
-        .insert({ email: values.email });
+        .insert({ email: values.email })
+        .select();
+
+      console.log('Supabase response:', { data, error });
 
       if (error) throw error;
 
