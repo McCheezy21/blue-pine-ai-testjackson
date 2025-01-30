@@ -13,10 +13,7 @@ const Navbar = () => {
           </div>
           
           {/* Desktop menu */}
-          <div className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-600 hover:text-primary">Features</a>
-            <a href="#about" className="text-gray-600 hover:text-primary">About</a>
-            <a href="#contact" className="text-gray-600 hover:text-primary">Contact</a>
+          <div className="hidden md:flex items-center">
             <button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90">
               Get Started
             </button>
@@ -37,27 +34,6 @@ const Navbar = () => {
         {isOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              <a
-                href="#features"
-                className="block px-3 py-2 text-gray-600 hover:text-primary"
-                onClick={() => setIsOpen(false)}
-              >
-                Features
-              </a>
-              <a
-                href="#about"
-                className="block px-3 py-2 text-gray-600 hover:text-primary"
-                onClick={() => setIsOpen(false)}
-              >
-                About
-              </a>
-              <a
-                href="#contact"
-                className="block px-3 py-2 text-gray-600 hover:text-primary"
-                onClick={() => setIsOpen(false)}
-              >
-                Contact
-              </a>
               <button className="w-full text-left px-3 py-2 text-white bg-primary rounded-md hover:bg-primary/90">
                 Get Started
               </button>
