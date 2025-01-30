@@ -16,7 +16,7 @@ const Hero = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up">
             <button className="bg-primary text-white px-8 py-3 rounded-md hover:bg-primary/90 flex items-center gap-2 group">
-              Get Started
+              Join Waitlist
               <ArrowRight className="group-hover:translate-x-1 transition-transform" />
             </button>
             <button className="text-primary border-2 border-primary px-8 py-3 rounded-md hover:bg-primary/10">

@@ -15,7 +15,7 @@ const Navbar = () => {
           {/* Desktop menu */}
           <div className="hidden md:flex items-center">
             <button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90">
-              Get Started
+              Join Waitlist
             </button>
           </div>
 
@@ -35,7 +35,7 @@ const Navbar = () => {
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <button className="w-full text-left px-3 py-2 text-white bg-primary rounded-md hover:bg-primary/90">
-                Get Started
+                Join Waitlist
               </button>
             </div>
           </div>
