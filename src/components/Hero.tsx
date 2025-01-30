@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "./ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Form,
   FormControl,
@@ -25,12 +26,27 @@ const Hero = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    toast({
-      title: "Success!",
-      description: "You've been added to our waitlist.",
-    });
-    form.reset();
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const { error } = await supabase
+        .from('Waitlist')
+        .insert([{ email: values.email }]);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success!",
+        description: "You've been added to our waitlist.",
+      });
+      form.reset();
+    } catch (error) {
+      console.error('Error:', error);
+      toast({
+        title: "Error",
+        description: "There was a problem adding you to the waitlist. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
