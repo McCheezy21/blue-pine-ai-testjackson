@@ -57,7 +57,7 @@ const Hero = () => {
                       <Input 
                         type="email" 
                         placeholder="Enter your email" 
-                        className="max-w-xs"
+                        className="w-[300px] h-12"
                         {...field}
                       />
                     </FormControl>
@@ -67,7 +67,7 @@ const Hero = () => {
               />
               <button 
                 type="submit"
-                className="bg-primary text-white px-8 py-3 rounded-md hover:bg-primary/90 flex items-center gap-2 group"
+                className="h-12 bg-primary text-white px-8 py-3 rounded-md hover:bg-primary/90 flex items-center gap-2 group"
               >
                 Join Waitlist
                 <ArrowRight className="group-hover:translate-x-1 transition-transform" />
