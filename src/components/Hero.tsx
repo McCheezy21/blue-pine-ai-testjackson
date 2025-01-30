@@ -30,7 +30,7 @@ const Hero = () => {
     try {
       const { error } = await supabase
         .from('Waitlist')
-        .insert([{ email: values.email }]);
+        .insert({ email: values.email });
 
       if (error) throw error;
 
