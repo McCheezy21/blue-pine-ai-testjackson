@@ -41,10 +41,10 @@ const Hero = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
         <div className="text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-primary mb-6 animate-fade-down">
-            Pioneering AI Solutions <br />for Tomorrow's Challenges
+            Helping SNFs Bill Insurance <br />More Efficiently
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-up">
-            Blue Pine AI combines cutting-edge artificial intelligence with sustainable innovation to create solutions that matter.
+            Streamlining insurance billing for Skilled Nursing Facilities while effectively collecting authorized cash automatically.
           </p>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up">
