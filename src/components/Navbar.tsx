@@ -18,7 +18,7 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center gap-2">
             <img 
-              src="/lovable-uploads/da7c17c5-429b-4214-9103-3a18d0b27744.png" 
+              src="/lovable-uploads/408a9d6d-f5ef-4982-8932-336aecfb2915.png" 
               alt="Blue Pine AI Logo" 
               className="h-12 w-12"
             />
