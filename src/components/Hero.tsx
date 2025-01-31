@@ -64,7 +64,7 @@ const Hero = () => {
             AI-Powered Claims Automation <br />For Skilled Nursing Facilities
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-up">
-            Stop losing revenue to denied claims. Our AI-powered solution automates your entire billing workflow - from patient authorization to claims resolution. Join leading SNFs already saving hundreds of thousands in recovered payments each month.
+            Stop losing revenue to denied claims. Our AI-powered solution automates your entire billing workflow - from patient authorization to claims resolution. Join leading SNFs already saving thousands in recovered payments each month.
           </p>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up">
