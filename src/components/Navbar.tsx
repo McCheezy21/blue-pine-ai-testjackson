@@ -12,7 +12,7 @@ const Navbar = () => {
             <img 
               src="/lovable-uploads/da7c17c5-429b-4214-9103-3a18d0b27744.png" 
               alt="Blue Pine AI Logo" 
-              className="h-8 w-8"
+              className="h-12 w-12"
             />
             <span className="text-2xl font-bold text-primary">Blue Pine AI</span>
           </div>
