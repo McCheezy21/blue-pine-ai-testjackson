@@ -4,7 +4,7 @@ import { Footer as UIFooter } from "@/components/ui/footer"
 const Footer = () => {
   return (
     <UIFooter
-      logo={<Hexagon className="h-10 w-10" />}
+      logo={<Hexagon className="h-10 w-10 text-primary-foreground" />}
       brandName="Blue Pine AI"
       socialLinks={[
         {
