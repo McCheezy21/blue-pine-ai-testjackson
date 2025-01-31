@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useIsMobile } from "../hooks/use-mobile";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const scrollToHero = () => {
     const heroSection = document.querySelector('.text-center');
@@ -27,12 +29,14 @@ const Navbar = () => {
           
           {/* Desktop and Mobile button */}
           <div className="flex items-center">
-            <button 
-              onClick={scrollToHero}
-              className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 text-base"
-            >
-              Join Waitlist
-            </button>
+            {!isMobile && (
+              <button 
+                onClick={scrollToHero}
+                className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 text-base"
+              >
+                Join Waitlist
+              </button>
+            )}
           </div>
         </div>
       </div>
