@@ -29,7 +29,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center">
             <button 
               onClick={scrollToEmail}
-              className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90"
+              className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 text-base"
             >
               Join Waitlist
             </button>
@@ -52,7 +52,7 @@ const Navbar = () => {
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <button 
                 onClick={scrollToEmail}
-                className="w-full text-left px-3 py-2 text-white bg-primary rounded-md hover:bg-primary/90"
+                className="w-full text-left px-3 py-2 text-white bg-primary rounded-md hover:bg-primary/90 text-base"
               >
                 Join Waitlist
               </button>
