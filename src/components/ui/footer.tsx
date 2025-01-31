@@ -31,8 +31,8 @@ export function Footer({
   copyright,
 }: FooterProps) {
   return (
-    <footer className="bg-primary text-primary-foreground pb-2 pt-6 lg:pb-3 lg:pt-9">
-      <div className="px-4 lg:px-8">
+    <footer className="bg-primary text-primary-foreground pb-1.5 pt-5 lg:pb-2 lg:pt-7">
+      <div className="px-3 lg:px-6">
         <div className="md:flex md:items-start md:justify-between">
           {logo && (
             <a
@@ -44,7 +44,7 @@ export function Footer({
               <span className="font-bold text-xl">{brandName}</span>
             </a>
           )}
-          <ul className="flex list-none mt-2 md:mt-0 space-x-3">
+          <ul className="flex list-none mt-1.5 md:mt-0 space-x-3">
             {socialLinks.map((link, i) => (
               <li key={i}>
                 <Button
@@ -61,7 +61,7 @@ export function Footer({
             ))}
           </ul>
         </div>
-        <div className="border-t border-primary-foreground/10 mt-2 pt-2 md:mt-2 md:pt-3 lg:grid lg:grid-cols-10">
+        <div className="border-t border-primary-foreground/10 mt-1.5 pt-1.5 md:mt-1.5 md:pt-2 lg:grid lg:grid-cols-10">
           <nav className="lg:mt-0 lg:col-[4/11]">
             <ul className="list-none flex flex-wrap -my-1 -mx-2 lg:justify-end">
               {mainLinks.map((link, i) => (
@@ -76,7 +76,7 @@ export function Footer({
               ))}
             </ul>
           </nav>
-          <div className="mt-2 lg:mt-0 lg:col-[4/11]">
+          <div className="mt-1.5 lg:mt-0 lg:col-[4/11]">
             <ul className="list-none flex flex-wrap -my-1 -mx-3 lg:justify-end">
               {legalLinks.map((link, i) => (
                 <li key={i} className="my-1 mx-3 shrink-0">
@@ -90,7 +90,7 @@ export function Footer({
               ))}
             </ul>
           </div>
-          <div className="mt-2 text-sm leading-6 text-primary-foreground/70 whitespace-nowrap lg:mt-0 lg:row-[1/3] lg:col-[1/4]">
+          <div className="mt-1.5 text-sm leading-6 text-primary-foreground/70 whitespace-nowrap lg:mt-0 lg:row-[1/3] lg:col-[1/4]">
             <div>{copyright.text}</div>
             {copyright.license && <div>{copyright.license}</div>}
           </div>
