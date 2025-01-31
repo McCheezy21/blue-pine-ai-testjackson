@@ -3,7 +3,13 @@ import { Footer as UIFooter } from "@/components/ui/footer"
 const Footer = () => {
   return (
     <UIFooter
-      logo={null}
+      logo={
+        <img 
+          src="/lovable-uploads/408a9d6d-f5ef-4982-8932-336aecfb2915.png" 
+          alt="Blue Pine AI Logo" 
+          className="h-12 w-12"
+        />
+      }
       brandName="Blue Pine AI"
       socialLinks={[]}
       mainLinks={[]}
