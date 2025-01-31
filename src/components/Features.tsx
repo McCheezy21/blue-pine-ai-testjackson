@@ -51,7 +51,7 @@ const Features = () => {
             </h3>
             <div className="text-gray-600 space-y-4">
               <p className="mb-4">
-                Why wait 90+ days for payments? Our AI agent streamlines your entire revenue cycle—from authorization to cash collection—cutting billing delays by 50%.
+                Why wait 90+ days for payments? Our AI agent streamlines your entire revenue cycle—from authorization to cash collection—cutting billing delays by over 50%.
               </p>
               <ul className="list-disc pl-5 space-y-2 mb-4">
                 <li>Submit claims in minutes: AI auto-fills forms, attaches documentation, and files directly to payers.</li>
