@@ -4,7 +4,13 @@ import { Footer as UIFooter } from "@/components/ui/footer"
 const Footer = () => {
   return (
     <UIFooter
-      logo={<Hexagon className="h-10 w-10 text-primary-foreground" />}
+      logo={
+        <img 
+          src="/lovable-uploads/da7c17c5-429b-4214-9103-3a18d0b27744.png" 
+          alt="Blue Pine AI Logo" 
+          className="h-12 w-12 brightness-0 invert"  // This makes the dark logo white
+        />
+      }
       brandName="Blue Pine AI"
       socialLinks={[
         {
