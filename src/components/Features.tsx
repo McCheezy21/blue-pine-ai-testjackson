@@ -10,16 +10,16 @@ const Features = () => {
               Slash Claim Denials with AI-Powered Authorization & Coding Accuracy
             </h3>
             <div className="text-gray-600 space-y-4">
-              <p>
+              <p className="mb-4">
                 Stop losing revenue to preventable claim denials. Our AI agent automates insurance authorization workflows and cross-checks medical codes in real time to ensure 100% compliance with payer requirements.
               </p>
-              <p>
+              <p className="mb-4">
                 AI audits documentation to flag missing or mismatched codes (e.g., ICD-10, CPT) before submission.
               </p>
-              <p>
+              <p className="mb-4">
                 Predict denials upfront using historical data and payer-specific rules.
               </p>
-              <p>
+              <p className="mb-4">
                 Guarantee compliant treatments by aligning care plans with pre-authorizations.
               </p>
               <p className="font-semibold">
