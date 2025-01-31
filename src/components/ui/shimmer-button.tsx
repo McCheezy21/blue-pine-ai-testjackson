@@ -46,11 +46,11 @@ const ShimmerButton = React.forwardRef<HTMLButtonElement, ShimmerButtonProps>(
         ref={ref}
         {...props}
       >
-        {/* spark container */}
+        {/* spark container - moved outside the content for border effect */}
         <div
           className={cn(
-            "-z-30 blur-[2px]",
-            "absolute inset-0 overflow-visible [container-type:size]",
+            "absolute inset-0 -z-30 blur-[2px]",
+            "overflow-visible [container-type:size]",
           )}
         >
           {/* spark */}
@@ -59,23 +59,27 @@ const ShimmerButton = React.forwardRef<HTMLButtonElement, ShimmerButtonProps>(
             <div className="animate-spin-around absolute -inset-full w-auto rotate-0 [background:conic-gradient(from_calc(270deg-(var(--spread)*0.5)),transparent_0,var(--shimmer-color)_var(--spread),transparent_var(--spread))] [translate:0_0]" />
           </div>
         </div>
-        {children}
 
-        {/* Highlight */}
+        {/* Solid background container */}
+        <div className="relative z-10 flex items-center justify-center w-full h-full">
+          {children}
+        </div>
+
+        {/* Highlight - modified to be more subtle */}
         <div
           className={cn(
             "insert-0 absolute size-full",
-            "rounded-2xl px-4 py-1.5 text-sm font-medium shadow-[inset_0_-8px_10px_#ffffff1f]",
+            "rounded-2xl px-4 py-1.5 text-sm font-medium shadow-[inset_0_-8px_10px_#ffffff0a]",
             "transform-gpu transition-all duration-300 ease-in-out",
-            "group-hover:shadow-[inset_0_-6px_10px_#ffffff3f]",
-            "group-active:shadow-[inset_0_-10px_10px_#ffffff3f]",
+            "group-hover:shadow-[inset_0_-6px_10px_#ffffff1f]",
+            "group-active:shadow-[inset_0_-10px_10px_#ffffff1f]",
           )}
         />
 
-        {/* backdrop */}
+        {/* Solid backdrop */}
         <div
           className={cn(
-            "absolute -z-20 [background:var(--bg)] [border-radius:var(--radius)] [inset:var(--cut)]",
+            "absolute inset-[2px] -z-20 [background:var(--bg)] [border-radius:calc(var(--radius)-2px)]",
           )}
         />
       </button>
