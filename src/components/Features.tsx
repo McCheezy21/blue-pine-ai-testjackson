@@ -24,14 +24,24 @@ const Features = () => {
             </div>
           </div>
 
-          {/* Revenue Feature */}
+          {/* Second Feature Box */}
           <div className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-up [animation-delay:200ms]">
             <h3 className="text-2xl font-bold text-primary mb-4">
-              Revenue Recovery
+              Automate Medical Coding & Documentation to Avoid Costly Errors
             </h3>
-            <p className="text-gray-600">
-              Identify and fix claim issues before submission, dramatically reducing denial rates. Recover lost revenue and improve cash flow.
-            </p>
+            <div className="text-gray-600 space-y-4">
+              <p className="mb-4">
+                Manual coding errors are draining your resources. Our AI agent scans patient records, visit notes, and treatment logs to auto-generate accurate codes and documentation that meet CMS and payer standards.
+              </p>
+              <ul className="list-disc pl-5 space-y-2 mb-4">
+                <li>AI-driven coding: Instantly map treatments to CPT, ICD-10, and HCPCS codes.</li>
+                <li>Audit-ready reports: Generate compliant records for RAC audits or payer disputes.</li>
+                <li>Real-time compliance alerts: Flag unauthorized treatments before they're performed.</li>
+              </ul>
+              <p className="font-semibold">
+                Result: Eliminate coding mistakes and ensure every bill reflects exactly what's authorized.
+              </p>
+            </div>
           </div>
 
           {/* Compliance Feature */}
