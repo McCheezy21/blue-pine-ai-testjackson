@@ -8,7 +8,12 @@ const Navbar = () => {
     <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
+            <img 
+              src="/lovable-uploads/da7c17c5-429b-4214-9103-3a18d0b27744.png" 
+              alt="Blue Pine AI Logo" 
+              className="h-8 w-8"
+            />
             <span className="text-2xl font-bold text-primary">Blue Pine AI</span>
           </div>
           
