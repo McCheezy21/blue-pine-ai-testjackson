@@ -1,10 +1,11 @@
 const Features = () => {
   return (
-    <section className="py-24 bg-accent">
+    <section className="relative py-24 bg-accent">
+      <div className="absolute inset-x-0 -top-32 h-32 bg-gradient-to-b from-transparent to-accent pointer-events-none" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Automation Feature */}
-          <div className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+          <div className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-up">
             <h3 className="text-2xl font-bold text-primary mb-4">
               Smart Automation
             </h3>
@@ -14,7 +15,7 @@ const Features = () => {
           </div>
 
           {/* Revenue Feature */}
-          <div className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+          <div className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-up [animation-delay:200ms]">
             <h3 className="text-2xl font-bold text-primary mb-4">
               Revenue Recovery
             </h3>
@@ -24,7 +25,7 @@ const Features = () => {
           </div>
 
           {/* Compliance Feature */}
-          <div className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+          <div className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-up [animation-delay:400ms]">
             <h3 className="text-2xl font-bold text-primary mb-4">
               Compliance Assured
             </h3>
