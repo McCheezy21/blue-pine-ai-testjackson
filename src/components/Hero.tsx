@@ -92,6 +92,7 @@ const Hero = () => {
                 className="h-12 px-8 py-3"
                 background="#004466"
                 shimmerColor="#ffffff"
+                borderRadius="0.375rem"
               >
                 <span className="flex items-center gap-2">
                   Join Waitlist
