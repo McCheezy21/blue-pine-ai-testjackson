@@ -44,14 +44,24 @@ const Features = () => {
             </div>
           </div>
 
-          {/* Compliance Feature */}
+          {/* Third Feature Box */}
           <div className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-up [animation-delay:400ms]">
             <h3 className="text-2xl font-bold text-primary mb-4">
-              Compliance Assured
+              Accelerate Cash Flow with Faster, Error-Free Billing
             </h3>
-            <p className="text-gray-600">
-              Stay compliant with ever-changing healthcare regulations. Our system automatically updates to reflect the latest requirements and best practices.
-            </p>
+            <div className="text-gray-600 space-y-4">
+              <p className="mb-4">
+                Why wait 90+ days for payments? Our AI agent streamlines your entire revenue cycle—from authorization to cash collection—cutting billing delays by 50%.
+              </p>
+              <ul className="list-disc pl-5 space-y-2 mb-4">
+                <li>Submit claims in minutes: AI auto-fills forms, attaches documentation, and files directly to payers.</li>
+                <li>Track claims in real time: Resolve rejections faster with AI-powered insights.</li>
+                <li>Predict payment dates: Forecast cash flow with 95% accuracy using payer behavior analytics.</li>
+              </ul>
+              <p className="font-semibold">
+                Result: Reduce AR days, quarterly true-ups, eliminate billing bottlenecks, and get paid faster.
+              </p>
+            </div>
           </div>
         </div>
       </div>
