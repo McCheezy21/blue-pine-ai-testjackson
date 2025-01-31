@@ -19,7 +19,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Tinos', 'serif'],
+        sans: ['Noto Serif', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",
