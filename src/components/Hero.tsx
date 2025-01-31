@@ -59,7 +59,7 @@ const Hero = () => {
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9')] bg-cover bg-center opacity-20 -z-20" />
       <div className="absolute bottom-0 w-full h-32 bg-gradient-to-b from-transparent to-accent" />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+      <div className="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
         <div className="text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-primary mb-6 animate-fade-down">
             AI-Powered Claims Automation <br />For Skilled Nursing Facilities
