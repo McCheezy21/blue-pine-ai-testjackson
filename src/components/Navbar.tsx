@@ -8,7 +8,7 @@ const Navbar = () => {
     const heroSection = document.querySelector('.text-center');
     if (heroSection) {
       heroSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      setIsOpen(false); // Close mobile menu if open
+      setIsOpen(false);
     }
   };
 
@@ -25,8 +25,8 @@ const Navbar = () => {
             <span className="text-2xl font-bold text-primary">Blue Pine AI</span>
           </div>
           
-          {/* Desktop menu */}
-          <div className="hidden md:flex items-center">
+          {/* Desktop and Mobile button */}
+          <div className="flex items-center">
             <button 
               onClick={scrollToHero}
               className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 text-base"
@@ -34,31 +34,7 @@ const Navbar = () => {
               Join Waitlist
             </button>
           </div>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-600 hover:text-primary"
-            >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
         </div>
-
-        {/* Mobile menu */}
-        {isOpen && (
-          <div className="md:hidden bg-white">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              <button 
-                onClick={scrollToHero}
-                className="w-full text-left px-3 py-2 text-white bg-primary rounded-md hover:bg-primary/90 text-base"
-              >
-                Join Waitlist
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </nav>
   );
