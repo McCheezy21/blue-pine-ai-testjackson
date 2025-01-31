@@ -69,7 +69,7 @@ const Hero = () => {
             Stop losing revenue to denied claims. Our AI-powered solution automates your entire billing workflow - from patient authorization to claims resolution. Join leading SNFs already saving thousands in recovered payments each month.
           </p>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up relative z-10">
               <FormField
                 control={form.control}
                 name="email"
