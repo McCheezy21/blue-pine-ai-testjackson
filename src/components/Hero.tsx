@@ -5,6 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "./ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { ShimmerButton } from "./ui/shimmer-button";
 import {
   Form,
   FormControl,
@@ -86,13 +87,17 @@ const Hero = () => {
                   </FormItem>
                 )}
               />
-              <button 
+              <ShimmerButton 
                 type="submit"
-                className="h-12 bg-primary text-white px-8 py-3 rounded-md hover:bg-primary/90 flex items-center gap-2 group"
+                className="h-12 px-8 py-3"
+                background="#004466"
+                shimmerColor="#ffffff"
               >
-                Join Waitlist
-                <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-              </button>
+                <span className="flex items-center gap-2">
+                  Join Waitlist
+                  <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                </span>
+              </ShimmerButton>
             </form>
           </Form>
         </div>
