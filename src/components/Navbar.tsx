@@ -4,6 +4,14 @@ import { Menu, X } from "lucide-react";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const scrollToEmail = () => {
+    const emailInput = document.querySelector('input[type="email"]');
+    if (emailInput) {
+      emailInput.scrollIntoView({ behavior: 'smooth' });
+      setIsOpen(false); // Close mobile menu if open
+    }
+  };
+
   return (
     <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,7 +27,10 @@ const Navbar = () => {
           
           {/* Desktop menu */}
           <div className="hidden md:flex items-center">
-            <button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90">
+            <button 
+              onClick={scrollToEmail}
+              className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90"
+            >
               Join Waitlist
             </button>
           </div>
@@ -39,7 +50,10 @@ const Navbar = () => {
         {isOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              <button className="w-full text-left px-3 py-2 text-white bg-primary rounded-md hover:bg-primary/90">
+              <button 
+                onClick={scrollToEmail}
+                className="w-full text-left px-3 py-2 text-white bg-primary rounded-md hover:bg-primary/90"
+              >
                 Join Waitlist
               </button>
             </div>
