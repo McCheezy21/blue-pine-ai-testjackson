@@ -4,14 +4,28 @@ const Features = () => {
       <div className="absolute inset-x-0 -top-32 h-32 bg-gradient-to-b from-transparent to-accent pointer-events-none" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Automation Feature */}
+          {/* First Feature Box */}
           <div className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-up">
             <h3 className="text-2xl font-bold text-primary mb-4">
-              Smart Automation
+              Slash Claim Denials with AI-Powered Authorization & Coding Accuracy
             </h3>
-            <p className="text-gray-600">
-              Our AI-powered system automatically processes claims, reducing manual work and human error. Save hours of staff time while improving accuracy.
-            </p>
+            <div className="text-gray-600 space-y-4">
+              <p>
+                Stop losing revenue to preventable claim denials. Our AI agent automates insurance authorization workflows and cross-checks medical codes in real time to ensure 100% compliance with payer requirements.
+              </p>
+              <p>
+                AI audits documentation to flag missing or mismatched codes (e.g., ICD-10, CPT) before submission.
+              </p>
+              <p>
+                Predict denials upfront using historical data and payer-specific rules.
+              </p>
+              <p>
+                Guarantee compliant treatments by aligning care plans with pre-authorizations.
+              </p>
+              <p className="font-semibold">
+                Result: Reduce denials by up to 70% and accelerate reimbursements for your skilled nursing facility.
+              </p>
+            </div>
           </div>
 
           {/* Revenue Feature */}
