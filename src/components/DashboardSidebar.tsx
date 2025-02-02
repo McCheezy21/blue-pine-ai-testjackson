@@ -1,4 +1,4 @@
-import { Building2, Users, Link2, Support } from "lucide-react"
+import { Building2, Users, Link2, HelpCircle } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -30,7 +30,7 @@ const menuItems = [
   {
     title: "Support",
     path: "/dashboard/support",
-    icon: Support,
+    icon: HelpCircle,
   },
 ]
 
