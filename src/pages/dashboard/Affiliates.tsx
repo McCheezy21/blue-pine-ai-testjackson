@@ -6,10 +6,10 @@ export default function Affiliates() {
       <h1 className="text-2xl font-bold">Affiliates</h1>
       <Card>
         <CardHeader>
-          <CardTitle>Affiliates Overview</CardTitle>
+          <CardTitle>Coming Soon</CardTitle>
         </CardHeader>
         <CardContent>
-          <p>Manage your affiliates here.</p>
+          <p className="text-muted-foreground">The affiliates feature is currently under development.</p>
         </CardContent>
       </Card>
     </div>
