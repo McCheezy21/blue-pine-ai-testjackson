@@ -17,6 +17,8 @@ import { Separator } from "@/components/ui/separator";
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [facilityName, setFacilityName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
@@ -35,11 +37,29 @@ const Auth = () => {
         if (error) throw error;
         navigate("/dashboard");
       } else {
-        const { error } = await supabase.auth.signUp({
+        // Sign up flow
+        const { data: authData, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
         });
-        if (error) throw error;
+        
+        if (signUpError) throw signUpError;
+
+        if (authData.user) {
+          // Create profile
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .insert([
+              {
+                id: authData.user.id,
+                full_name: fullName,
+                facility_name: facilityName,
+              }
+            ]);
+
+          if (profileError) throw profileError;
+        }
+
         toast({
           title: "Success!",
           description: "Please check your email to verify your account.",
@@ -96,6 +116,28 @@ const Auth = () => {
                 required
               />
             </div>
+            {!isLogin && (
+              <>
+                <div className="space-y-2">
+                  <Input
+                    type="text"
+                    placeholder="Full Name"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Input
+                    type="text"
+                    placeholder="Facility Name"
+                    value={facilityName}
+                    onChange={(e) => setFacilityName(e.target.value)}
+                    required
+                  />
+                </div>
+              </>
+            )}
             <div className="space-y-2">
               <Input
                 type="password"
