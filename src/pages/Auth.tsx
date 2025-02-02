@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { Chrome } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -11,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -54,6 +56,24 @@ const Auth = () => {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth`
+        }
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-accent">
       <Card className="w-[400px]">
@@ -88,6 +108,28 @@ const Auth = () => {
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Loading..." : isLogin ? "Login" : "Sign Up"}
             </Button>
+            
+            <div className="relative my-4">
+              <div className="absolute inset-0 flex items-center">
+                <Separator />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={handleGoogleSignIn}
+            >
+              <Chrome className="mr-2 h-4 w-4" />
+              Continue with Google
+            </Button>
+
             <Button
               type="button"
               variant="link"
@@ -95,7 +137,7 @@ const Auth = () => {
               onClick={() => setIsLogin(!isLogin)}
             >
               {isLogin
-                ? "Don't have an account? Sign up"
+                ? "Don't have an account? Sign Up"
                 : "Already have an account? Login"}
             </Button>
           </form>
