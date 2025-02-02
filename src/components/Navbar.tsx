@@ -1,18 +1,19 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogIn } from "lucide-react";
 import { useIsMobile } from "../hooks/use-mobile";
+import { useNavigate } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
-
-  const scrollToHero = () => {
-    const heroSection = document.querySelector('.text-center');
-    if (heroSection) {
-      heroSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      setIsOpen(false);
-    }
-  };
+  const navigate = useNavigate();
 
   return (
     <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
@@ -27,16 +28,20 @@ const Navbar = () => {
             <span className="text-2xl font-bold text-primary">Blue Pine AI</span>
           </div>
           
-          {/* Desktop and Mobile button */}
           <div className="flex items-center">
-            {!isMobile && (
-              <button 
-                onClick={scrollToHero}
-                className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 text-base"
-              >
-                Join Waitlist
-              </button>
-            )}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <LogIn className="h-4 w-4" />
+                  Account
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem onClick={() => navigate('/auth')}>
+                  Login / Sign Up
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
