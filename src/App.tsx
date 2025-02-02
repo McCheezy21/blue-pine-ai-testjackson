@@ -6,6 +6,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import DashboardLayout from "./layouts/DashboardLayout";
+import Dashboard from "./pages/dashboard/Dashboard";
+import Facility from "./pages/dashboard/Facility";
+import Referrals from "./pages/dashboard/Referrals";
+import Affiliates from "./pages/dashboard/Affiliates";
+import Support from "./pages/dashboard/Support";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +24,13 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="facility" element={<Facility />} />
+            <Route path="referrals" element={<Referrals />} />
+            <Route path="affiliates" element={<Affiliates />} />
+            <Route path="support" element={<Support />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
