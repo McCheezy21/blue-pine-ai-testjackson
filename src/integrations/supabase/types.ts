@@ -11,24 +11,33 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
+          bed_count: number | null
           created_at: string
+          facility_address: string | null
           facility_name: string | null
           full_name: string | null
           id: string
+          referral_code: string | null
           updated_at: string
         }
         Insert: {
+          bed_count?: number | null
           created_at?: string
+          facility_address?: string | null
           facility_name?: string | null
           full_name?: string | null
           id: string
+          referral_code?: string | null
           updated_at?: string
         }
         Update: {
+          bed_count?: number | null
           created_at?: string
+          facility_address?: string | null
           facility_name?: string | null
           full_name?: string | null
           id?: string
+          referral_code?: string | null
           updated_at?: string
         }
         Relationships: []

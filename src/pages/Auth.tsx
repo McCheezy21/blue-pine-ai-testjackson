@@ -58,6 +58,9 @@ const Auth = () => {
             ]);
 
           if (profileError) throw profileError;
+          
+          // Redirect to onboarding page after successful signup
+          navigate("/onboarding");
         }
 
         toast({
