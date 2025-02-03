@@ -15,7 +15,7 @@ export type Database = {
           created_at: string
           facility_address: string | null
           facility_name: string | null
-          full_name: string | null
+          full_name: string
           id: string
           referral_code: string | null
           updated_at: string
@@ -25,7 +25,7 @@ export type Database = {
           created_at?: string
           facility_address?: string | null
           facility_name?: string | null
-          full_name?: string | null
+          full_name: string
           id: string
           referral_code?: string | null
           updated_at?: string
@@ -35,7 +35,7 @@ export type Database = {
           created_at?: string
           facility_address?: string | null
           facility_name?: string | null
-          full_name?: string | null
+          full_name?: string
           id?: string
           referral_code?: string | null
           updated_at?: string
