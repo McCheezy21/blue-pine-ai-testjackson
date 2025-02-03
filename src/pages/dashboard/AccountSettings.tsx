@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/components/ui/use-toast"
+import { Separator } from "@/components/ui/separator"
 
 export default function AccountSettings() {
   const [loading, setLoading] = useState(true)
@@ -13,6 +14,10 @@ export default function AccountSettings() {
   const [facilityName, setFacilityName] = useState("")
   const [facilityAddress, setFacilityAddress] = useState("")
   const [bedCount, setBedCount] = useState("")
+  const [currentPassword, setCurrentPassword] = useState("")
+  const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [isChangingPassword, setIsChangingPassword] = useState(false)
   const { toast } = useToast()
   const navigate = useNavigate()
 
@@ -81,15 +86,63 @@ export default function AccountSettings() {
     }
   }
 
+  async function handlePasswordChange(e: React.FormEvent) {
+    e.preventDefault()
+    if (newPassword !== confirmPassword) {
+      toast({
+        title: "Error",
+        description: "New passwords do not match.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (newPassword.length < 6) {
+      toast({
+        title: "Error",
+        description: "Password must be at least 6 characters long.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setIsChangingPassword(true)
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword
+      })
+
+      if (error) throw error
+
+      toast({
+        title: "Success",
+        description: "Your password has been updated.",
+      })
+      
+      // Clear password fields
+      setCurrentPassword("")
+      setNewPassword("")
+      setConfirmPassword("")
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "There was an error updating your password.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsChangingPassword(false)
+    }
+  }
+
   if (loading) {
     return <div>Loading...</div>
   }
 
   return (
-    <div className="container max-w-2xl mx-auto py-6">
+    <div className="container max-w-2xl mx-auto py-6 space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Account Settings</CardTitle>
+          <CardTitle>Profile Settings</CardTitle>
           <CardDescription>
             Update your personal and facility information
           </CardDescription>
@@ -133,8 +186,46 @@ export default function AccountSettings() {
           </div>
 
           <Button onClick={updateProfile} className="w-full">
-            Save Changes
+            Save Profile Changes
           </Button>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Change Password</CardTitle>
+          <CardDescription>
+            Update your account password
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handlePasswordChange} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="newPassword">New Password</Label>
+              <Input
+                id="newPassword"
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Enter new password"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm New Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm new password"
+              />
+            </div>
+
+            <Button type="submit" className="w-full" disabled={isChangingPassword}>
+              {isChangingPassword ? "Updating Password..." : "Update Password"}
+            </Button>
+          </form>
         </CardContent>
       </Card>
     </div>
