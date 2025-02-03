@@ -13,6 +13,7 @@ import Facility from "./pages/dashboard/Facility";
 import Referrals from "./pages/dashboard/Referrals";
 import Affiliates from "./pages/dashboard/Affiliates";
 import Support from "./pages/dashboard/Support";
+import { AuthGuard } from "./components/AuthGuard";
 
 const queryClient = new QueryClient();
 
@@ -26,7 +27,11 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route path="/dashboard" element={
+            <AuthGuard>
+              <DashboardLayout />
+            </AuthGuard>
+          }>
             <Route index element={<Dashboard />} />
             <Route path="facility" element={<Facility />} />
             <Route path="referrals" element={<Referrals />} />
