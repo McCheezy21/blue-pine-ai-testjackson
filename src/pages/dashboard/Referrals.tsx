@@ -27,8 +27,10 @@ export default function Referrals() {
       const { data: referrals, error } = await supabase
         .from('referral_tracking')
         .select(`
-          *,
-          referred:referred_id(
+          id,
+          created_at,
+          status,
+          profiles!referral_tracking_referred_id_fkey (
             full_name,
             facility_name
           )
@@ -97,8 +99,8 @@ export default function Referrals() {
               <TableBody>
                 {referrals?.map((referral) => (
                   <TableRow key={referral.id}>
-                    <TableCell>{referral.referred.facility_name || 'N/A'}</TableCell>
-                    <TableCell>{referral.referred.full_name}</TableCell>
+                    <TableCell>{referral.profiles.facility_name || 'N/A'}</TableCell>
+                    <TableCell>{referral.profiles.full_name}</TableCell>
                     <TableCell>
                       <span className="flex items-center gap-1">
                         {referral.status === 'completed' ? (
