@@ -11,26 +11,28 @@ export default function DashboardLayout() {
 
   if (isMobile) {
     return (
-      <div className="min-h-screen w-full">
-        <div className="border-b">
-          <div className="flex h-16 items-center px-4">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
-                  <Menu className="h-6 w-6" />
-                  <span className="sr-only">Toggle navigation menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="p-0">
-                <DashboardSidebar />
-              </SheetContent>
-            </Sheet>
+      <SidebarProvider>
+        <div className="min-h-screen w-full">
+          <div className="border-b">
+            <div className="flex h-16 items-center px-4">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="md:hidden">
+                    <Menu className="h-6 w-6" />
+                    <span className="sr-only">Toggle navigation menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="p-0">
+                  <DashboardSidebar />
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
+          <main className="flex-1 p-6">
+            <Outlet />
+          </main>
         </div>
-        <main className="flex-1 p-6">
-          <Outlet />
-        </main>
-      </div>
+      </SidebarProvider>
     )
   }
 
