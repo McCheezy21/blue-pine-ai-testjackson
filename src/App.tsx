@@ -12,6 +12,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import Facility from "./pages/dashboard/Facility";
 import Referrals from "./pages/dashboard/Referrals";
 import Support from "./pages/dashboard/Support";
+import AccountSettings from "./pages/dashboard/AccountSettings";
 import { AuthGuard } from "./components/AuthGuard";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
             <Route path="facility" element={<Facility />} />
             <Route path="referrals" element={<Referrals />} />
             <Route path="support" element={<Support />} />
+            <Route path="settings" element={<AccountSettings />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

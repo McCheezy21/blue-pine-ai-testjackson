@@ -1,4 +1,4 @@
-import { Building2, Users, HelpCircle } from "lucide-react"
+import { Building2, Users, HelpCircle, Settings } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -26,6 +26,11 @@ const menuItems = [
     title: "Support",
     path: "/dashboard/support",
     icon: HelpCircle,
+  },
+  {
+    title: "Account Settings",
+    path: "/dashboard/settings",
+    icon: Settings,
   },
 ]
 
