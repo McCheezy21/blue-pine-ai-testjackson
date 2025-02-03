@@ -13,10 +13,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { PasswordStrength } from "@/components/ui/password-strength";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [facilityName, setFacilityName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -25,10 +28,20 @@ const Auth = () => {
   const { toast } = useToast();
 
   const validatePassword = (password: string) => {
-    if (password.length < 6) {
-      return "Password must be at least 6 characters long";
+    const errors = [];
+    if (password.length < 8) {
+      errors.push("Password must be at least 8 characters long");
     }
-    return null;
+    if (!/[A-Z]/.test(password)) {
+      errors.push("Password must contain at least one uppercase letter");
+    }
+    if (!/[0-9]/.test(password)) {
+      errors.push("Password must contain at least one number");
+    }
+    if (!/[^A-Za-z0-9]/.test(password)) {
+      errors.push("Password must contain at least one special character");
+    }
+    return errors;
   };
 
   const handleAuth = async (e: React.FormEvent) => {
@@ -36,16 +49,29 @@ const Auth = () => {
     setIsLoading(true);
 
     try {
-      // Validate password before submission
-      const passwordError = validatePassword(password);
-      if (passwordError) {
-        toast({
-          title: "Invalid Password",
-          description: passwordError,
-          variant: "destructive",
-        });
-        setIsLoading(false);
-        return;
+      if (!isLogin) {
+        // Validate password requirements
+        const passwordErrors = validatePassword(password);
+        if (passwordErrors.length > 0) {
+          toast({
+            title: "Invalid Password",
+            description: passwordErrors.join(". "),
+            variant: "destructive",
+          });
+          setIsLoading(false);
+          return;
+        }
+
+        // Check if passwords match
+        if (password !== confirmPassword) {
+          toast({
+            title: "Passwords Don't Match",
+            description: "Please ensure both passwords are identical",
+            variant: "destructive",
+          });
+          setIsLoading(false);
+          return;
+        }
       }
 
       if (isLogin) {
@@ -56,7 +82,6 @@ const Auth = () => {
         if (error) throw error;
         navigate("/dashboard");
       } else {
-        // Sign up flow
         const { data: authData, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
@@ -65,7 +90,6 @@ const Auth = () => {
         if (signUpError) throw signUpError;
 
         if (authData.user) {
-          // Create profile
           const { error: profileError } = await supabase
             .from('profiles')
             .insert([
@@ -77,8 +101,6 @@ const Auth = () => {
             ]);
 
           if (profileError) throw profileError;
-          
-          // Redirect to onboarding page after successful signup
           navigate("/onboarding");
         }
 
@@ -163,12 +185,34 @@ const Auth = () => {
             <div className="space-y-2">
               <Input
                 type="password"
-                placeholder="Password (min. 6 characters)"
+                placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                minLength={6}
               />
+              {!isLogin && (
+                <>
+                  <PasswordStrength password={password} />
+                  <Alert className="mt-2">
+                    <AlertDescription>
+                      Password must:
+                      <ul className="list-disc pl-4 mt-2 text-sm">
+                        <li>Be at least 8 characters long</li>
+                        <li>Contain at least one uppercase letter</li>
+                        <li>Contain at least one number</li>
+                        <li>Contain at least one special character</li>
+                      </ul>
+                    </AlertDescription>
+                  </Alert>
+                  <Input
+                    type="password"
+                    placeholder="Confirm Password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </>
+              )}
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Loading..." : isLogin ? "Login" : "Sign Up"}
@@ -199,7 +243,11 @@ const Auth = () => {
               type="button"
               variant="link"
               className="w-full"
-              onClick={() => setIsLogin(!isLogin)}
+              onClick={() => {
+                setIsLogin(!isLogin);
+                setPassword("");
+                setConfirmPassword("");
+              }}
             >
               {isLogin
                 ? "Don't have an account? Sign Up"
