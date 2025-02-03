@@ -36,8 +36,14 @@ const Navbar = () => {
                   Account
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem onClick={() => navigate('/auth')}>
+              <DropdownMenuContent 
+                align="end" 
+                className="w-48 bg-white border shadow-lg z-[100]"
+              >
+                <DropdownMenuItem 
+                  onClick={() => navigate('/auth')}
+                  className="hover:bg-gray-100"
+                >
                   Login / Sign Up
                 </DropdownMenuItem>
               </DropdownMenuContent>
