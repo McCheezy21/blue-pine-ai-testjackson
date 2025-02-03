@@ -10,6 +10,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { useNavigate } from "react-router-dom"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 const menuItems = [
   {
@@ -36,9 +37,22 @@ const menuItems = [
 
 export function DashboardSidebar() {
   const navigate = useNavigate()
+  const isMobile = useIsMobile()
 
-  return (
-    <Sidebar>
+  const handleNavigation = (path: string) => {
+    navigate(path)
+  }
+
+  const sidebarContent = (
+    <div className="flex flex-col h-full">
+      <div className="flex items-center gap-2 p-4 border-b">
+        <img 
+          src="/lovable-uploads/408a9d6d-f5ef-4982-8932-336aecfb2915.png" 
+          alt="Blue Pine AI Logo" 
+          className="h-8 w-8"
+        />
+        <span className="text-lg font-semibold">Blue Pine AI</span>
+      </div>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
@@ -47,7 +61,7 @@ export function DashboardSidebar() {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
-                    onClick={() => navigate(item.path)}
+                    onClick={() => handleNavigation(item.path)}
                   >
                     <item.icon className="h-4 w-4" />
                     <span>{item.title}</span>
@@ -58,6 +72,12 @@ export function DashboardSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-    </Sidebar>
+    </div>
   )
+
+  if (isMobile) {
+    return sidebarContent
+  }
+
+  return <Sidebar>{sidebarContent}</Sidebar>
 }
