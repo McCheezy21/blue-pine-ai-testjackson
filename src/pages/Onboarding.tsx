@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { ArrowLeft } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -119,7 +120,15 @@ const Onboarding = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-accent p-4">
+    <div className="min-h-screen flex items-center justify-center bg-accent p-4 relative">
+      <Button
+        variant="ghost"
+        className="absolute top-4 left-4 gap-2"
+        onClick={() => navigate('/auth')}
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back
+      </Button>
       <Card className="w-full max-w-xl">
         <CardHeader>
           <CardTitle>Complete Your Profile</CardTitle>
