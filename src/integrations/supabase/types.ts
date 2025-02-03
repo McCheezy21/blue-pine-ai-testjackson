@@ -13,6 +13,7 @@ export type Database = {
         Row: {
           bed_count: number | null
           created_at: string
+          email: string | null
           facility_address: string | null
           facility_name: string | null
           full_name: string
@@ -23,6 +24,7 @@ export type Database = {
         Insert: {
           bed_count?: number | null
           created_at?: string
+          email?: string | null
           facility_address?: string | null
           facility_name?: string | null
           full_name: string
@@ -33,6 +35,7 @@ export type Database = {
         Update: {
           bed_count?: number | null
           created_at?: string
+          email?: string | null
           facility_address?: string | null
           facility_name?: string | null
           full_name?: string
@@ -73,11 +76,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "referral_tracking_referred_id_fkey"
+            columns: ["referred_id"]
+            isOneToOne: false
+            referencedRelation: "user_waitlist_status"
+            referencedColumns: ["profile_id"]
+          },
+          {
             foreignKeyName: "referral_tracking_referrer_id_fkey"
             columns: ["referrer_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_tracking_referrer_id_fkey"
+            columns: ["referrer_id"]
+            isOneToOne: false
+            referencedRelation: "user_waitlist_status"
+            referencedColumns: ["profile_id"]
           },
         ]
       }
@@ -101,10 +118,28 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      user_waitlist_status: {
+        Row: {
+          email: string | null
+          profile_id: string | null
+          waitlist_joined_at: string | null
+          was_on_waitlist: boolean | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      get_user_waitlist_status: {
+        Args: {
+          user_id: string
+        }
+        Returns: {
+          profile_id: string
+          email: string
+          was_on_waitlist: boolean
+          waitlist_joined_at: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

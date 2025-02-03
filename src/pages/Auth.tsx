@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Chrome } from "lucide-react";
+import { Chrome, ArrowLeft } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -139,7 +139,15 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-accent">
+    <div className="min-h-screen flex items-center justify-center bg-accent relative">
+      <Button
+        variant="ghost"
+        className="absolute top-4 left-4 gap-2"
+        onClick={() => navigate('/')}
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back
+      </Button>
       <Card className="w-[400px]">
         <CardHeader>
           <CardTitle>{isLogin ? "Login" : "Sign Up"}</CardTitle>
