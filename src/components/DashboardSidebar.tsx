@@ -1,4 +1,4 @@
-import { Building2, Users, HelpCircle, Settings } from "lucide-react"
+import { Building2, Users, HelpCircle, Settings, UserCog } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -11,8 +11,9 @@ import {
 } from "@/components/ui/sidebar"
 import { useNavigate } from "react-router-dom"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { useIsAdmin } from "@/components/AuthGuard"
 
-const menuItems = [
+const baseMenuItems = [
   {
     title: "My Facility",
     path: "/dashboard/facility",
@@ -35,9 +36,20 @@ const menuItems = [
   },
 ]
 
+const adminMenuItems = [
+  {
+    title: "User Management",
+    path: "/dashboard/admin",
+    icon: UserCog,
+  },
+]
+
 export function DashboardSidebar() {
   const navigate = useNavigate()
   const isMobile = useIsMobile()
+  const isAdmin = useIsAdmin()
+
+  const menuItems = isAdmin ? [...adminMenuItems, ...baseMenuItems] : baseMenuItems
 
   const handleNavigation = (path: string) => {
     navigate(path)
