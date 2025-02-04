@@ -1,4 +1,4 @@
-import { UserCog, Settings } from "lucide-react"
+import { Building, Users2, HelpCircle, Settings, UserCog } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -17,12 +17,12 @@ const baseMenuItems = [
   {
     title: "My Facility",
     path: "/dashboard/facility",
-    icon: Building2,
+    icon: Building,
   },
   {
     title: "Referrals",
     path: "/dashboard/referrals",
-    icon: Users,
+    icon: Users2,
   },
   {
     title: "Support",
