@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -28,15 +28,25 @@ interface EditUserDialogProps {
 }
 
 export function EditUserDialog({ user, open, onOpenChange }: EditUserDialogProps) {
-  const [formData, setFormData] = useState<Profile | null>(user);
+  const [formData, setFormData] = useState<Profile | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  useEffect(() => {
+    if (user) {
+      setFormData(user);
+    }
+  }, [user]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => 
-      prev ? { ...prev, [name]: value } : null
-    );
+    setFormData((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        [name]: name === "bed_count" ? (value ? parseInt(value) : null) : value,
+      };
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -72,6 +82,8 @@ export function EditUserDialog({ user, open, onOpenChange }: EditUserDialogProps
     }
   };
 
+  if (!formData) return null;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -84,7 +96,7 @@ export function EditUserDialog({ user, open, onOpenChange }: EditUserDialogProps
             <Input
               id="full_name"
               name="full_name"
-              value={formData?.full_name || ""}
+              value={formData.full_name}
               onChange={handleInputChange}
             />
           </div>
@@ -93,7 +105,7 @@ export function EditUserDialog({ user, open, onOpenChange }: EditUserDialogProps
             <Input
               id="facility_name"
               name="facility_name"
-              value={formData?.facility_name || ""}
+              value={formData.facility_name || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -103,7 +115,7 @@ export function EditUserDialog({ user, open, onOpenChange }: EditUserDialogProps
               id="bed_count"
               name="bed_count"
               type="number"
-              value={formData?.bed_count || ""}
+              value={formData.bed_count || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -112,7 +124,7 @@ export function EditUserDialog({ user, open, onOpenChange }: EditUserDialogProps
             <Input
               id="facility_address"
               name="facility_address"
-              value={formData?.facility_address || ""}
+              value={formData.facility_address || ""}
               onChange={handleInputChange}
             />
           </div>
