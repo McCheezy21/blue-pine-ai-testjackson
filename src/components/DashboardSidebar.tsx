@@ -1,4 +1,4 @@
-import { Building2, Users, HelpCircle, Settings, UserCog } from "lucide-react"
+import { UserCog, Settings } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -42,6 +42,11 @@ const adminMenuItems = [
     path: "/dashboard/admin",
     icon: UserCog,
   },
+  {
+    title: "Account Settings",
+    path: "/dashboard/settings",
+    icon: Settings,
+  },
 ]
 
 export function DashboardSidebar() {
@@ -49,7 +54,7 @@ export function DashboardSidebar() {
   const isMobile = useIsMobile()
   const isAdmin = useIsAdmin()
 
-  const menuItems = isAdmin ? [...adminMenuItems, ...baseMenuItems] : baseMenuItems
+  const menuItems = isAdmin ? adminMenuItems : baseMenuItems
 
   const handleNavigation = (path: string) => {
     navigate(path)
