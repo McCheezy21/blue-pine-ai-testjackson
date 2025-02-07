@@ -59,8 +59,8 @@ const PrivacyPolicy = () => {
                 )
               },
               {
-                title: "3. No Storage of Protected Health Information (PHI)",
-                content: "We do not store or process Protected Health Information (PHI) or any other sensitive patient data. Our Service is designed to facilitate claims automation without retaining or managing PHI in compliance with privacy and security best practices."
+                title: "3. Protected Health Information (PHI)",
+                content: "While we process and manage Protected Health Information (PHI) as part of our claims automation service, we do not store any PHI data on our servers. Our Service is designed to facilitate secure claims processing while ensuring all PHI data handling complies with HIPAA and other relevant healthcare privacy regulations."
               },
               {
                 title: "4. How We Use Your Information",
