@@ -7,50 +7,144 @@ const PrivacyPolicy = () => {
     <>
       <Navbar />
       <div className="max-w-4xl mx-auto px-4 py-16">
-        <h1 className="text-4xl font-bold text-primary mb-8">Privacy Policy</h1>
+        <h1 className="text-4xl font-bold text-primary mb-4">Privacy Policy</h1>
+        <p className="text-sm text-gray-600 mb-8">Last Updated: February 7, 2025</p>
         
-        <div className="space-y-6 text-left">
-          <section>
-            <h2 className="text-2xl font-semibold text-primary mb-4">1. Information We Collect</h2>
+        <div className="prose prose-lg max-w-none space-y-8">
+          {/* Introduction */}
+          <div className="bg-secondary/20 p-6 rounded-lg">
             <p className="text-gray-700">
-              We collect information that you provide directly to us, including when you create an account, 
-              use our services, or communicate with us. This may include your name, email address, and facility information.
+              This privacy notice for Blue Pine AI LLC ("Company," "we," "us," or "our"), describes how and why we might collect, store, use, and/or share ("process") your information when you use our services ("Services"), such as when you:
+            </p>
+            <ul className="list-disc ml-6 mt-4 text-gray-700">
+              <li>Visit our website at https://bluepineai.com/, or any website of ours that links to this privacy notice</li>
+              <li>Engage with us in other related ways, including any sales, marketing, or events</li>
+            </ul>
+            <div className="mt-4 p-4 bg-primary/5 rounded">
+              <p className="text-gray-700">
+                <strong>Questions or concerns?</strong> Reading this privacy notice will help you understand your privacy rights and choices. If you do not agree with our policies and practices, please do not use our Services. If you still have any questions or concerns, please contact us at{" "}
+                <a href="mailto:contact@bluepineai.com" className="text-primary hover:underline">
+                  contact@bluepineai.com
+                </a>
+              </p>
+            </div>
+          </div>
+
+          {/* Summary */}
+          <section className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <h2 className="text-2xl font-semibold text-primary mb-4">Summary</h2>
+            <p className="text-gray-700">
+              This Privacy Policy explains how Blue Pine AI LLC collects, uses, discloses, and protects your information when you use our services. We do not store or process Protected Health Information (PHI) or other sensitive data. Our goal is to ensure transparency and safeguard your privacy. By using our services, you acknowledge and agree to the terms outlined in this policy.
             </p>
           </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold text-primary mb-4">2. How We Use Your Information</h2>
-            <p className="text-gray-700">
-              We use the information we collect to provide, maintain, and improve our services, 
-              to communicate with you, and to comply with legal obligations.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold text-primary mb-4">3. Information Sharing</h2>
-            <p className="text-gray-700">
-              We do not sell your personal information. We may share your information with service providers 
-              who assist us in providing our services, or when required by law.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold text-primary mb-4">4. Data Security</h2>
-            <p className="text-gray-700">
-              We implement appropriate technical and organizational measures to protect your personal information 
-              against unauthorized access, alteration, disclosure, or destruction.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold text-primary mb-4">5. Contact Us</h2>
-            <p className="text-gray-700">
-              If you have any questions about this Privacy Policy, please contact us at{" "}
-              <a href="mailto:contact@bluepineai.com" className="text-primary hover:underline">
-                contact@bluepineai.com
-              </a>
-            </p>
-          </section>
+          {/* Numbered Sections */}
+          <div className="space-y-8">
+            {[
+              {
+                title: "1. Introduction",
+                content: "Welcome to Blue Pine AI LLC ("Company," "we," "our," or "us"). Your privacy is important to us. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our claims automation product for skilled nursing facilities ("Service")."
+              },
+              {
+                title: "2. Information We Collect",
+                content: (
+                  <>
+                    <p>We collect the following types of information:</p>
+                    <ul className="list-disc ml-6 mt-2 space-y-2">
+                      <li><strong>Personal Information:</strong> Name, email address, job title, and contact details.</li>
+                      <li><strong>Facility Information:</strong> Facility name, size, and operational data necessary for claims automation.</li>
+                      <li><strong>Usage Data:</strong> Log files, device information, IP address, browser type, and interaction with our Service.</li>
+                      <li><strong>Cookies and Tracking Technologies:</strong> We use cookies to improve user experience and analytics.</li>
+                    </ul>
+                  </>
+                )
+              },
+              {
+                title: "3. No Storage of Protected Health Information (PHI)",
+                content: "We do not store or process Protected Health Information (PHI) or any other sensitive patient data. Our Service is designed to facilitate claims automation without retaining or managing PHI in compliance with privacy and security best practices."
+              },
+              {
+                title: "4. How We Use Your Information",
+                content: (
+                  <>
+                    <p>We use the collected information to:</p>
+                    <ul className="list-disc ml-6 mt-2 space-y-2">
+                      <li>Provide and improve our Service.</li>
+                      <li>Ensure compliance with relevant regulations.</li>
+                      <li>Communicate with you regarding updates and support.</li>
+                      <li>Enhance security and prevent fraud.</li>
+                      <li>Comply with legal obligations and regulatory requirements.</li>
+                    </ul>
+                  </>
+                )
+              },
+              {
+                title: "5. Data Sharing and Disclosure",
+                content: (
+                  <>
+                    <p>We do not sell your personal information. We may share your information with:</p>
+                    <ul className="list-disc ml-6 mt-2 space-y-2">
+                      <li><strong>Service Providers:</strong> Third-party vendors assisting with business operations.</li>
+                      <li><strong>Legal Authorities:</strong> When required by law or to protect our rights.</li>
+                      <li><strong>Business Transfers:</strong> In case of a merger, sale, or acquisition.</li>
+                      <li><strong>Authorized Personnel:</strong> Only authorized employees and contractors with a need-to-know basis will have access to operational data.</li>
+                    </ul>
+                  </>
+                )
+              },
+              {
+                title: "6. Data Security",
+                content: (
+                  <>
+                    <p>We implement industry-standard security measures, including:</p>
+                    <ul className="list-disc ml-6 mt-2 space-y-2">
+                      <li>Encryption of data in transit and at rest.</li>
+                      <li>Access controls and authentication protocols to restrict unauthorized access.</li>
+                      <li>Regular security assessments and compliance audits.</li>
+                      <li>Incident response plan in place for data breaches, including required reporting to regulatory authorities and affected individuals.</li>
+                    </ul>
+                  </>
+                )
+              },
+              {
+                title: "7. Your Rights and Choices",
+                content: (
+                  <>
+                    <p>You have the right to:</p>
+                    <ul className="list-disc ml-6 mt-2 space-y-2">
+                      <li>Access, correct, or delete your personal data.</li>
+                      <li>Restrict certain data processing activities.</li>
+                      <li>Opt-out of marketing communications.</li>
+                    </ul>
+                  </>
+                )
+              },
+              {
+                title: "8. Third-Party Links",
+                content: "Our Service may contain links to third-party websites. We are not responsible for their privacy practices. We recommend reviewing their privacy policies."
+              },
+              {
+                title: "9. Changes to This Privacy Policy",
+                content: "We may update this Privacy Policy periodically. We will notify you of significant changes through our website or email."
+              },
+              {
+                title: "10. Contact Us",
+                content: (
+                  <p>
+                    If you have any questions about this Privacy Policy, contact us at{" "}
+                    <a href="mailto:contact@bluepineai.com" className="text-primary hover:underline">
+                      contact@bluepineai.com
+                    </a>
+                  </p>
+                )
+              }
+            ].map((section) => (
+              <section key={section.title} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                <h2 className="text-2xl font-semibold text-primary mb-4">{section.title}</h2>
+                <div className="text-gray-700">{section.content}</div>
+              </section>
+            ))}
+          </div>
         </div>
       </div>
       <Footer />
