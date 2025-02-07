@@ -32,8 +32,8 @@ const benefits = [
 
 const WhyNeedUs = () => {
   return (
-    <section className="py-16 bg-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="pt-0 -mt-32 bg-gradient-to-b from-transparent via-accent to-white relative z-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-48">
         <h2 className="text-3xl font-bold text-primary text-center mb-12">
           Why You Need Us
         </h2>
@@ -49,7 +49,7 @@ const WhyNeedUs = () => {
               {benefits.map((benefit, index) => (
                 <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/4">
                   <div className="p-6">
-                    <div className="flex flex-col items-center space-y-4 bg-accent rounded-lg p-6 h-full hover:shadow-lg transition-shadow duration-300">
+                    <div className="flex flex-col items-center space-y-4 bg-white/50 backdrop-blur-sm rounded-lg p-6 h-full hover:shadow-lg transition-shadow duration-300">
                       <benefit.icon className="w-12 h-12 text-primary" />
                       <h3 className="text-lg font-semibold text-primary text-center">{benefit.text}</h3>
                     </div>
