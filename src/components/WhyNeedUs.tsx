@@ -11,6 +11,9 @@ import {
   AlertCircle, ShieldAlert, FileText, PiggyBank, XCircle,
   Zap, CheckCircle2, TrendingUp, DollarSign, Brain
 } from "lucide-react";
+import { useEffect } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 
 const benefits = [
   { icon: TrendingDown, text: "Slash Claim Denials by 65%+" },
@@ -43,6 +46,11 @@ const WhyNeedUs = () => {
               align: "start",
               loop: true,
             }}
+            plugins={[
+              Autoplay({
+                delay: 3000,
+              }),
+            ]}
             className="w-full"
           >
             <CarouselContent>
