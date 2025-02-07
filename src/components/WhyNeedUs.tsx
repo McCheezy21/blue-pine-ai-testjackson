@@ -49,8 +49,8 @@ const WhyNeedUs = () => {
               {benefits.map((benefit, index) => (
                 <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/4">
                   <div className="p-6">
-                    <div className="flex flex-col items-center space-y-4 bg-white rounded-lg p-6 h-full hover:shadow-lg transition-shadow duration-300">
-                      <benefit.icon className="w-12 h-12 text-primary relative z-10" />
+                    <div className="flex flex-col items-center space-y-4 bg-white shadow-md rounded-lg p-6 h-full hover:shadow-lg transition-shadow duration-300 relative z-20">
+                      <benefit.icon className="w-12 h-12 text-primary" />
                       <h3 className="text-lg font-semibold text-primary text-center">{benefit.text}</h3>
                     </div>
                   </div>
