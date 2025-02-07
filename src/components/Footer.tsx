@@ -15,8 +15,8 @@ const Footer = () => {
       socialLinks={[]}
       mainLinks={[]}
       legalLinks={[
-        { href: "mailto:contact@bluepineai.com", label: "contact@bluepineai.com" },
         { href: "/privacy-policy", label: "Privacy Policy" },
+        { href: "mailto:contact@bluepineai.com", label: "contact@bluepineai.com" },
       ]}
       copyright={{
         text: `© ${new Date().getFullYear()} Blue Pine AI`,
