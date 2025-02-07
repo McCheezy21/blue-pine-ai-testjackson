@@ -6,18 +6,15 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Shield, Server, Network, Lock, Award, CheckCircle, FileCheck, Building } from "lucide-react";
+import { Building, Shield, Users, Link } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
 
 const certifications = [
-  { icon: Shield, label: "HIPAA Compliant" },
-  { icon: Server, label: "SOC 2 Certified" },
-  { icon: Network, label: "HL7 Integration" },
-  { icon: Lock, label: "HITRUST Certified" },
-  { icon: Award, label: "CCHIT Certified" },
-  { icon: CheckCircle, label: "ONC-ACB Certified" },
-  { icon: FileCheck, label: "EHNAC Accredited" },
   { icon: Building, label: "PointClickCare Integration" },
+  { icon: Link, label: "Careport Integration" },
+  { icon: Shield, label: "HIPAA Compliant" },
+  { icon: Building, label: "Centers for Medicare & Medicaid Services" },
+  { icon: Users, label: "Your Local Insurance Providers" },
 ];
 
 const ToolsAndIntegrations = () => {
@@ -46,7 +43,7 @@ const ToolsAndIntegrations = () => {
                   <div className="p-6">
                     <div className="flex flex-col items-center space-y-4 bg-accent rounded-lg p-6 h-full hover:shadow-lg transition-shadow duration-300">
                       <cert.icon className="w-12 h-12 text-primary" />
-                      <h3 className="text-lg font-semibold text-primary">{cert.label}</h3>
+                      <h3 className="text-lg font-semibold text-primary text-center">{cert.label}</h3>
                     </div>
                   </div>
                 </CarouselItem>
