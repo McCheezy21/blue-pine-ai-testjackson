@@ -43,7 +43,7 @@ const PrivacyPolicy = () => {
             {[
               {
                 title: "1. Introduction",
-                content: "Welcome to Blue Pine AI LLC ("Company," "we," "our," or "us"). Your privacy is important to us. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our claims automation product for skilled nursing facilities ("Service")."
+                content: 'Welcome to Blue Pine AI LLC ("Company," "we," "our," or "us"). Your privacy is important to us. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our claims automation product for skilled nursing facilities ("Service").'
               },
               {
                 title: "2. Information We Collect",
