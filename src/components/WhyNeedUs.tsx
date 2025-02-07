@@ -32,8 +32,8 @@ const benefits = [
 
 const WhyNeedUs = () => {
   return (
-    <section className="pt-0 -mt-16 bg-gradient-to-b from-transparent via-accent to-white relative z-10">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-32">
+    <section className="pt-16 bg-gradient-to-b from-transparent via-accent to-white relative z-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
         <h2 className="text-3xl font-bold text-primary text-center mb-12">
           Why You Need Us
         </h2>
