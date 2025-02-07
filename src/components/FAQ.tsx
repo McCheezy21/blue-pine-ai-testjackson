@@ -4,6 +4,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
+  AccordionProvider,
 } from "@/components/ui/accordion";
 
 const faqs = [
@@ -36,18 +37,20 @@ const FAQ = () => {
         <h2 className="text-3xl font-bold text-primary text-center mb-12">
           Frequently Asked Questions
         </h2>
-        <Accordion type="single" collapsible className="w-full space-y-4">
-          {faqs.map((faq, index) => (
-            <AccordionItem key={index} value={`item-${index}`} className="bg-white rounded-lg">
-              <AccordionTrigger className="px-6 text-left font-semibold text-primary hover:no-underline">
-                {faq.question}
-              </AccordionTrigger>
-              <AccordionContent className="px-6 text-gray-600">
-                {faq.answer}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+        <AccordionProvider>
+          <Accordion type="single" collapsible className="w-full space-y-4">
+            {faqs.map((faq, index) => (
+              <AccordionItem key={index} value={`item-${index}`} className="bg-white rounded-lg">
+                <AccordionTrigger className="px-6 text-left font-semibold text-primary hover:no-underline">
+                  {faq.question}
+                </AccordionTrigger>
+                <AccordionContent className="px-6 text-gray-600">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </AccordionProvider>
       </div>
     </section>
   );
