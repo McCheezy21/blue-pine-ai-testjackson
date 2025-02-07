@@ -7,30 +7,21 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { 
-  TrendingDown, Clock, FileCheck2, Banknote, Calendar, 
-  AlertCircle, ShieldAlert, FileText, PiggyBank, XCircle,
-  Zap, CheckCircle2, TrendingUp, DollarSign, Brain
+  FileText, Database, CheckSquare, CreditCard, DollarSign,
+  Archive, List
 } from "lucide-react";
 import { useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
 const benefits = [
-  { icon: TrendingDown, text: "Slash Claim Denials by 65%+" },
-  { icon: Clock, text: "Automate Pre-Authorizations in Minutes" },
-  { icon: FileCheck2, text: "Fix Coding Errors Before Claims Are Filed" },
-  { icon: Banknote, text: "Get Paid Faster with 1-Click Submissions" },
-  { icon: Calendar, text: "Predict Payment Dates with 95% Accuracy" },
-  { icon: AlertCircle, text: "Resolve Denials in Hours, Not Weeks" },
-  { icon: ShieldAlert, text: "Block Unauthorized Treatments in Real Time" },
-  { icon: FileText, text: "Generate Audit-Proof Documentation Automatically" },
-  { icon: PiggyBank, text: "Recover Lost Revenue from Past Denials" },
-  { icon: XCircle, text: "Eliminate Billing Errors for Good" },
-  { icon: Zap, text: "Speed Up Claims by 50%" },
-  { icon: CheckCircle2, text: "Ensure 100% Payer Compliance" },
-  { icon: TrendingUp, text: "Unlock 5–15% More Revenue" },
-  { icon: DollarSign, text: "Stop Leaving Money on the Table" },
-  { icon: Brain, text: "Simplify Skilled Nursing Billing with AI" }
+  { icon: FileText, text: "Denial Management" },
+  { icon: Database, text: "EOB Posting" },
+  { icon: CheckSquare, text: "Insurance Eligibility Verification" },
+  { icon: Archive, text: "Pre Authorizations" },
+  { icon: List, text: "Claims Submissions" },
+  { icon: CreditCard, text: "Billing and EDI" },
+  { icon: DollarSign, text: "Claims Status" }
 ];
 
 const WhyNeedUs = () => {
