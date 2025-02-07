@@ -1,4 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
+
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Table,
@@ -9,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit2 } from "lucide-react";
+import { Edit2, ToggleLeft, ToggleRight } from "lucide-react";
 import { useState } from "react";
 import { EditUserDialog } from "@/components/admin/EditUserDialog";
 import { useToast } from "@/hooks/use-toast";
@@ -27,8 +28,9 @@ interface Profile {
 export default function AdminDashboard() {
   const [selectedUser, setSelectedUser] = useState<Profile | null>(null);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  const { data: profiles, isLoading } = useQuery({
+  const { data: profiles, isLoading: isLoadingProfiles } = useQuery({
     queryKey: ["profiles"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -49,13 +51,83 @@ export default function AdminDashboard() {
     },
   });
 
-  if (isLoading) {
+  const { data: settings, isLoading: isLoadingSettings } = useQuery({
+    queryKey: ["system_settings"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("system_settings")
+        .select("*")
+        .eq("key", "require_referral_code")
+        .single();
+
+      if (error) {
+        toast({
+          title: "Error fetching settings",
+          description: error.message,
+          variant: "destructive",
+        });
+        throw error;
+      }
+
+      return data;
+    },
+  });
+
+  const updateSetting = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.rpc(
+        "update_system_setting",
+        {
+          setting_key: "require_referral_code",
+          new_value: !settings?.value
+        }
+      );
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["system_settings"] });
+      toast({
+        title: "Setting updated",
+        description: `Referral code requirement ${settings?.value ? "disabled" : "enabled"}`,
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error updating setting",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  if (isLoadingProfiles || isLoadingSettings) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">User Management</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">User Management</h1>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground">
+            Require referral code
+          </span>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => updateSetting.mutate()}
+            disabled={updateSetting.isPending}
+          >
+            {settings?.value ? (
+              <ToggleRight className="h-6 w-6 text-primary" />
+            ) : (
+              <ToggleLeft className="h-6 w-6" />
+            )}
+          </Button>
+        </div>
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
