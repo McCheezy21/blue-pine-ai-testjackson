@@ -7,6 +7,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Shield, Server, Network, Lock, Award, CheckCircle, FileCheck, Building } from "lucide-react";
+import Autoplay from "embla-carousel-autoplay";
 
 const certifications = [
   { icon: Shield, label: "HIPAA Compliant" },
@@ -32,6 +33,11 @@ const ToolsAndIntegrations = () => {
               align: "start",
               loop: true,
             }}
+            plugins={[
+              Autoplay({
+                delay: 3000,
+              }),
+            ]}
             className="w-full"
           >
             <CarouselContent>
