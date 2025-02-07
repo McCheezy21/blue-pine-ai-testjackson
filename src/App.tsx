@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,6 +16,8 @@ import Referrals from "./pages/dashboard/Referrals";
 import Support from "./pages/dashboard/Support";
 import AccountSettings from "./pages/dashboard/AccountSettings";
 import { AuthGuard } from "./components/AuthGuard";
+import WhyAI from "./pages/WhyAI";
+import SNFROI from "./pages/SNFROI";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +29,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/why-ai" element={<WhyAI />} />
+          <Route path="/snf-roi" element={<SNFROI />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/dashboard" element={

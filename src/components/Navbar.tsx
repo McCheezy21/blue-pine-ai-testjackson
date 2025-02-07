@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Menu, X, LogIn } from "lucide-react";
 import { useIsMobile } from "../hooks/use-mobile";
@@ -28,7 +29,19 @@ const Navbar = () => {
             <span className="text-2xl font-bold text-primary">Blue Pine AI</span>
           </div>
           
-          <div className="flex items-center">
+          <div className="hidden md:flex items-center space-x-4">
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/why-ai')}
+            >
+              Why AI?
+            </Button>
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/snf-roi')}
+            >
+              SNF ROI
+            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="gap-2">
