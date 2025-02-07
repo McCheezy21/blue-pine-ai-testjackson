@@ -1,3 +1,4 @@
+
 import { Footer as UIFooter } from "@/components/ui/footer"
 
 const Footer = () => {
@@ -15,6 +16,7 @@ const Footer = () => {
       mainLinks={[]}
       legalLinks={[
         { href: "mailto:contact@bluepineai.com", label: "contact@bluepineai.com" },
+        { href: "/privacy-policy", label: "Privacy Policy" },
       ]}
       copyright={{
         text: `© ${new Date().getFullYear()} Blue Pine AI`,
