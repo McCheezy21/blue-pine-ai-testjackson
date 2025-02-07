@@ -6,7 +6,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Shield, Server, Network, Lock, Award, CheckCircle, FileCheck } from "lucide-react";
+import { Shield, Server, Network, Lock, Award, CheckCircle, FileCheck, Building } from "lucide-react";
 
 const certifications = [
   { icon: Shield, label: "HIPAA Compliant" },
@@ -16,6 +16,7 @@ const certifications = [
   { icon: Award, label: "CCHIT Certified" },
   { icon: CheckCircle, label: "ONC-ACB Certified" },
   { icon: FileCheck, label: "EHNAC Accredited" },
+  { icon: Building, label: "PointClickCare Integration" },
 ];
 
 const ToolsAndIntegrations = () => {
