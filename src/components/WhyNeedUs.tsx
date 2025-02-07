@@ -57,8 +57,8 @@ const WhyNeedUs = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex text-white border-white hover:bg-white hover:text-primary" />
-            <CarouselNext className="hidden md:flex text-white border-white hover:bg-white hover:text-primary" />
+            <CarouselPrevious className="hidden md:flex text-primary border-primary hover:bg-primary hover:text-white" />
+            <CarouselNext className="hidden md:flex text-primary border-primary hover:bg-primary hover:text-white" />
           </Carousel>
         </div>
       </div>
