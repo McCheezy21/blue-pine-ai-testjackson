@@ -98,6 +98,27 @@ export type Database = {
           },
         ]
       }
+      system_settings: {
+        Row: {
+          key: Database["public"]["Enums"]["system_setting_key"]
+          updated_at: string
+          updated_by: string | null
+          value: boolean
+        }
+        Insert: {
+          key: Database["public"]["Enums"]["system_setting_key"]
+          updated_at?: string
+          updated_by?: string | null
+          value: boolean
+        }
+        Update: {
+          key?: Database["public"]["Enums"]["system_setting_key"]
+          updated_at?: string
+          updated_by?: string | null
+          value?: boolean
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -167,9 +188,17 @@ export type Database = {
         }
         Returns: boolean
       }
+      update_system_setting: {
+        Args: {
+          setting_key: Database["public"]["Enums"]["system_setting_key"]
+          new_value: boolean
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "admin" | "user"
+      system_setting_key: "require_referral_code"
     }
     CompositeTypes: {
       [_ in never]: never
