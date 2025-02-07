@@ -5,6 +5,7 @@ import Features from "../components/Features";
 import WhoNeedsThis from "../components/WhoNeedsThis";
 import FAQ from "../components/FAQ";
 import Testimonials from "../components/Testimonials";
+import ToolsAndIntegrations from "../components/ToolsAndIntegrations";
 import Footer from "../components/Footer";
 
 const Index = () => {
@@ -15,6 +16,7 @@ const Index = () => {
       <Features />
       <WhoNeedsThis />
       <Testimonials />
+      <ToolsAndIntegrations />
       <FAQ />
       <Footer />
     </div>
