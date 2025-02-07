@@ -32,6 +32,12 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-4">
             <Button 
               variant="ghost" 
+              onClick={() => navigate('/')}
+            >
+              Home
+            </Button>
+            <Button 
+              variant="ghost" 
               onClick={() => navigate('/why-ai')}
             >
               Why AI?
