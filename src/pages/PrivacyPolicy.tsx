@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -6,7 +5,7 @@ const PrivacyPolicy = () => {
   return (
     <>
       <Navbar />
-      <div className="max-w-4xl mx-auto px-4 py-16">
+      <div className="max-w-4xl mx-auto px-4 py-24">
         <h1 className="text-4xl font-bold text-primary mb-4">Privacy Policy</h1>
         <p className="text-sm text-gray-600 mb-8">Last Updated: February 7, 2025</p>
         
