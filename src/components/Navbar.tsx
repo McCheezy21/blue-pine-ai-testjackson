@@ -1,14 +1,8 @@
 
 import { useState } from "react";
-import { Menu, X, LogIn } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useIsMobile } from "../hooks/use-mobile";
 import { useNavigate } from "react-router-dom";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
@@ -48,25 +42,12 @@ const Navbar = () => {
             >
               SNF ROI
             </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="gap-2">
-                  <LogIn className="h-4 w-4" />
-                  Account
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent 
-                align="end" 
-                className="w-48 bg-white border shadow-lg z-[100]"
-              >
-                <DropdownMenuItem 
-                  onClick={() => navigate('/auth')}
-                  className="hover:bg-gray-100"
-                >
-                  Login / Sign Up
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/auth')}
+            >
+              Account
+            </Button>
           </div>
         </div>
       </div>
