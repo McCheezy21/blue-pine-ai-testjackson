@@ -1,66 +1,49 @@
-
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Bot, Brain, TrendingUp, Clock, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
 const WhyAI = () => {
   const navigate = useNavigate();
-
-  const roles = [
-    {
-      title: "Medical Coder",
-      traditional: "Spend hours assigning codes",
-      aiReplacement: "AI auto-codes treatments with 99% accuracy in seconds."
-    },
-    {
-      title: "Billing Specialist",
-      traditional: "File claims, track submissions",
-      aiReplacement: "AI auto-files claims in <5 mins and tracks them in real time."
-    },
-    {
-      title: "Denial Manager",
-      traditional: "Investigate + appeal denied claims",
-      aiReplacement: "AI predicts denials upfront and auto-generates appeals."
-    },
-    {
-      title: "Compliance Officer",
-      traditional: "Ensure adherence to CMS/payer rules",
-      aiReplacement: "AI flags unauthorized treatments and ensures 100% compliance."
-    },
-    {
-      title: "AR Specialist",
-      traditional: "Follow up on unpaid claims",
-      aiReplacement: "AI predicts payment dates and auto-follows up with payers."
-    }
-  ];
-
-  const roiPoints = [
-    {
-      icon: CheckCircle,
-      title: "Reduce Claim Denials",
-      description: "Cut denials by 50–70% with AI-powered audits and pre-submission checks."
-    },
-    {
-      icon: TrendingUp,
-      title: "Accelerate Cash Flow",
-      description: "Get paid 20+ days faster with automated claim submissions and denial resolutions."
-    },
-    {
-      icon: Clock,
-      title: "Lower Labor Costs",
-      description: "Replace multiple FTEs with one AI agent, saving $100k+ annually."
-    },
-    {
-      icon: AlertCircle,
-      title: "Boost Revenue",
-      description: "Recover 5–15% more revenue from underpaid or denied claims."
-    }
-  ];
-
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-accent">
+  const roles = [{
+    title: "Medical Coder",
+    traditional: "Spend hours assigning codes",
+    aiReplacement: "AI auto-codes treatments with 99% accuracy in seconds."
+  }, {
+    title: "Billing Specialist",
+    traditional: "File claims, track submissions",
+    aiReplacement: "AI auto-files claims in <5 mins and tracks them in real time."
+  }, {
+    title: "Denial Manager",
+    traditional: "Investigate + appeal denied claims",
+    aiReplacement: "AI predicts denials upfront and auto-generates appeals."
+  }, {
+    title: "Compliance Officer",
+    traditional: "Ensure adherence to CMS/payer rules",
+    aiReplacement: "AI flags unauthorized treatments and ensures 100% compliance."
+  }, {
+    title: "AR Specialist",
+    traditional: "Follow up on unpaid claims",
+    aiReplacement: "AI predicts payment dates and auto-follows up with payers."
+  }];
+  const roiPoints = [{
+    icon: CheckCircle,
+    title: "Reduce Claim Denials",
+    description: "Cut denials by 50–70% with AI-powered audits and pre-submission checks."
+  }, {
+    icon: TrendingUp,
+    title: "Accelerate Cash Flow",
+    description: "Get paid 20+ days faster with automated claim submissions and denial resolutions."
+  }, {
+    icon: Clock,
+    title: "Lower Labor Costs",
+    description: "Replace multiple FTEs with one AI agent, saving $100k+ annually."
+  }, {
+    icon: AlertCircle,
+    title: "Boost Revenue",
+    description: "Recover 5–15% more revenue from underpaid or denied claims."
+  }];
+  return <div className="min-h-screen bg-gradient-to-b from-white to-accent">
       <Navbar />
       <main className="pt-24">
         {/* Hero Section */}
@@ -71,11 +54,7 @@ const WhyAI = () => {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Transform your facility's revenue cycle with AI-powered automation
           </p>
-          <Button 
-            size="lg"
-            onClick={() => navigate("/auth")}
-            className="text-lg px-8 py-6 h-auto"
-          >
+          <Button size="lg" onClick={() => navigate("/auth")} className="text-lg px-8 py-6 h-auto">
             Schedule a Free Demo
           </Button>
         </section>
@@ -90,16 +69,10 @@ const WhyAI = () => {
                   AI agents are like having an extra team member who never sleeps, never makes mistakes, and handles all the tedious tasks you hate. They use artificial intelligence (AI) and machine learning (ML) to:
                 </p>
                 <ul className="space-y-4">
-                  {[
-                    "Automate repetitive tasks (e.g., coding, claims, denials).",
-                    "Learn and adapt to your facility's workflows.",
-                    "Work 24/7 to keep your revenue cycle running smoothly."
-                  ].map((item, index) => (
-                    <li key={index} className="flex items-start gap-3">
+                  {["Automate repetitive tasks (e.g., coding, claims, denials).", "Learn and adapt to your facility's workflows.", "Work 24/7 to keep your revenue cycle running smoothly."].map((item, index) => <li key={index} className="flex items-start gap-3">
                       <Bot className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
                       <span className="text-gray-600">{item}</span>
-                    </li>
-                  ))}
+                    </li>)}
                 </ul>
                 <p className="text-lg font-semibold text-primary">
                   For skilled nursing facilities, AI agents are a game-changer—saving time, reducing errors, and boosting cash flow.
@@ -114,16 +87,10 @@ const WhyAI = () => {
                   As a building office manager or administrator, you're juggling a million things: staffing, patient care, compliance, and—let's be honest—endless paperwork. AI agents take the billing burden off your plate by:
                 </p>
                 <ul className="space-y-4">
-                  {[
-                    "Eliminating Errors: No more missed codes or incorrect claims.",
-                    "Speeding Up Processes: File claims in minutes, not hours.",
-                    "Stopping Denials Before They Happen: Catch mistakes before payers do."
-                  ].map((item, index) => (
-                    <li key={index} className="flex items-start gap-3">
+                  {["Eliminating Errors: No more missed codes or incorrect claims.", "Speeding Up Processes: File claims in minutes, not hours.", "Stopping Denials Before They Happen: Catch mistakes before payers do."].map((item, index) => <li key={index} className="flex items-start gap-3">
                       <CheckCircle className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
                       <span className="text-gray-600">{item}</span>
-                    </li>
-                  ))}
+                    </li>)}
                 </ul>
               </div>
             </div>
@@ -144,19 +111,15 @@ const WhyAI = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {roles.map((role, index) => (
-                    <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
+                  {roles.map((role, index) => <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
                       <td className="px-6 py-4 font-medium">{role.title}</td>
                       <td className="px-6 py-4 text-gray-600">{role.traditional}</td>
                       <td className="px-6 py-4 text-primary">{role.aiReplacement}</td>
-                    </tr>
-                  ))}
+                    </tr>)}
                 </tbody>
               </table>
             </div>
-            <p className="text-lg font-semibold text-primary mt-6">
-              Result: You save 30% on labor costs while improving billing accuracy and speed.
-            </p>
+            <p className="text-lg font-semibold text-primary mt-6">Result: You save over 30% on labor costs while improving billing accuracy and speed.</p>
           </div>
         </section>
 
@@ -165,13 +128,11 @@ const WhyAI = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold text-primary mb-8">AI Agent ROI for Skilled Nursing Facilities</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {roiPoints.map((point, index) => (
-                <div key={index} className="bg-accent p-6 rounded-lg">
+              {roiPoints.map((point, index) => <div key={index} className="bg-accent p-6 rounded-lg">
                   <point.icon className="h-12 w-12 text-primary mb-4" />
                   <h3 className="text-xl font-semibold text-primary mb-2">{point.title}</h3>
                   <p className="text-gray-600">{point.description}</p>
-                </div>
-              ))}
+                </div>)}
             </div>
             <div className="mt-8 p-6 bg-primary text-white rounded-lg">
               <p className="text-lg">
@@ -186,16 +147,10 @@ const WhyAI = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold text-primary mb-8">Why Adopt AI Now?</h2>
             <div className="grid md:grid-cols-3 gap-8">
-              {[
-                "Staffing shortages are making it harder to keep up with billing and coding.",
-                "Payer rules are getting more complex (e.g., Medicare, Medicaid, private insurers).",
-                "Financial pressures are mounting, with 60% of skilled nursing facilities operating at a loss."
-              ].map((challenge, index) => (
-                <div key={index} className="bg-white p-6 rounded-lg shadow-sm">
+              {["Staffing shortages are making it harder to keep up with billing and coding.", "Payer rules are getting more complex (e.g., Medicare, Medicaid, private insurers).", "Financial pressures are mounting, with 60% of skilled nursing facilities operating at a loss."].map((challenge, index) => <div key={index} className="bg-white p-6 rounded-lg shadow-sm">
                   <AlertCircle className="h-8 w-8 text-primary mb-4" />
                   <p className="text-gray-600">{challenge}</p>
-                </div>
-              ))}
+                </div>)}
             </div>
             <p className="text-lg font-semibold text-primary mt-6">
               AI agents aren't just a nice-to-have—they're a must-have to stay competitive and financially healthy.
@@ -211,33 +166,21 @@ const WhyAI = () => {
               Imagine a world where:
             </p>
             <ul className="text-left max-w-2xl mx-auto space-y-4 mb-12">
-              {[
-                "Claims are filed accurately and on time, without you lifting a finger.",
-                "Denials are resolved before they happen, so you get paid faster.",
-                "Your team can focus on patient care, not paperwork."
-              ].map((point, index) => (
-                <li key={index} className="flex items-start gap-3">
+              {["Claims are filed accurately and on time, without you lifting a finger.", "Denials are resolved before they happen, so you get paid faster.", "Your team can focus on patient care, not paperwork."].map((point, index) => <li key={index} className="flex items-start gap-3">
                   <CheckCircle className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
                   <span className="text-gray-600">{point}</span>
-                </li>
-              ))}
+                </li>)}
             </ul>
             <p className="text-lg text-gray-600 mb-8">
               Our AI agent makes this possible—and it's easier to implement than you think.
             </p>
-            <Button 
-              size="lg"
-              onClick={() => navigate("/auth")}
-              className="text-lg px-8 py-6 h-auto"
-            >
+            <Button size="lg" onClick={() => navigate("/auth")} className="text-lg px-8 py-6 h-auto">
               Schedule a Free Demo → See How AI Can Work for You
             </Button>
           </div>
         </section>
       </main>
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default WhyAI;
