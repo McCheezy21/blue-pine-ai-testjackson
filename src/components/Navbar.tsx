@@ -46,13 +46,14 @@ const Navbar = () => {
               variant="ghost" 
               onClick={() => navigate('/auth')}
             >
-              Schedule Demo
+              Account
             </Button>
             <Button 
-              variant="ghost" 
+              variant="outline"
               onClick={() => navigate('/auth')}
+              className="ml-2"
             >
-              Account
+              Schedule Demo
             </Button>
           </div>
         </div>
