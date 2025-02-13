@@ -25,9 +25,6 @@ const Navbar = () => {
             <Button variant="ghost" onClick={() => navigate('/why-ai')}>
               Why AI?
             </Button>
-            <Button variant="ghost" onClick={() => navigate('/snf-roi')}>
-              SNF ROI
-            </Button>
             <Button variant="ghost" onClick={() => navigate('/auth')}>
               Account
             </Button>

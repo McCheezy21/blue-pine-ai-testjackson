@@ -18,7 +18,6 @@ import Support from "./pages/dashboard/Support";
 import AccountSettings from "./pages/dashboard/AccountSettings";
 import { AuthGuard } from "./components/AuthGuard";
 import WhyAI from "./pages/WhyAI";
-import SNFROI from "./pages/SNFROI";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
@@ -32,7 +31,6 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/why-ai" element={<WhyAI />} />
-          <Route path="/snf-roi" element={<SNFROI />} />
           <Route path="/demo" element={<Demo />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/auth" element={<Auth />} />
