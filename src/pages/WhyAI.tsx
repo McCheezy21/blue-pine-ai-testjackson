@@ -1,50 +1,239 @@
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Button } from "@/components/ui/button";
+import { CheckCircle, Bot, Brain, TrendingUp, Clock, AlertCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const WhyAI = () => {
+  const navigate = useNavigate();
+
+  const roles = [
+    {
+      title: "Medical Coder",
+      traditional: "Spend hours assigning codes",
+      aiReplacement: "AI auto-codes treatments with 99% accuracy in seconds."
+    },
+    {
+      title: "Billing Specialist",
+      traditional: "File claims, track submissions",
+      aiReplacement: "AI auto-files claims in <5 mins and tracks them in real time."
+    },
+    {
+      title: "Denial Manager",
+      traditional: "Investigate + appeal denied claims",
+      aiReplacement: "AI predicts denials upfront and auto-generates appeals."
+    },
+    {
+      title: "Compliance Officer",
+      traditional: "Ensure adherence to CMS/payer rules",
+      aiReplacement: "AI flags unauthorized treatments and ensures 100% compliance."
+    },
+    {
+      title: "AR Specialist",
+      traditional: "Follow up on unpaid claims",
+      aiReplacement: "AI predicts payment dates and auto-follows up with payers."
+    }
+  ];
+
+  const roiPoints = [
+    {
+      icon: CheckCircle,
+      title: "Reduce Claim Denials",
+      description: "Cut denials by 50–70% with AI-powered audits and pre-submission checks."
+    },
+    {
+      icon: TrendingUp,
+      title: "Accelerate Cash Flow",
+      description: "Get paid 20+ days faster with automated claim submissions and denial resolutions."
+    },
+    {
+      icon: Clock,
+      title: "Lower Labor Costs",
+      description: "Replace multiple FTEs with one AI agent, saving $100k+ annually."
+    },
+    {
+      icon: AlertCircle,
+      title: "Boost Revenue",
+      description: "Recover 5–15% more revenue from underpaid or denied claims."
+    }
+  ];
+
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-b from-white to-accent">
       <Navbar />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-primary mb-4">Why Choose AI for Healthcare?</h1>
-          <p className="text-xl text-gray-600">Transform your facility's operations with cutting-edge AI technology</p>
-        </div>
+      <main className="pt-24">
+        {/* Hero Section */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-6">
+            Why AI? The Future of Skilled Nursing Billing
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            Transform your facility's revenue cycle with AI-powered automation
+          </p>
+          <Button 
+            size="lg"
+            onClick={() => navigate("/auth")}
+            className="text-lg px-8 py-6 h-auto"
+          >
+            Schedule a Free Demo
+          </Button>
+        </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-16">
-          <div className="space-y-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-2xl font-bold text-primary mb-4">Enhanced Accuracy</h3>
-              <p className="text-gray-600">
-                Our AI systems reduce human error in medical coding and billing, ensuring maximum reimbursement and compliance with healthcare regulations.
-              </p>
+        {/* What Are AI Agents Section */}
+        <section className="bg-white py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-primary mb-8">What Is an AI Agent?</h2>
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="space-y-6">
+                <p className="text-lg text-gray-600">
+                  AI agents are like having an extra team member who never sleeps, never makes mistakes, and handles all the tedious tasks you hate. They use artificial intelligence (AI) and machine learning (ML) to:
+                </p>
+                <ul className="space-y-4">
+                  {[
+                    "Automate repetitive tasks (e.g., coding, claims, denials).",
+                    "Learn and adapt to your facility's workflows.",
+                    "Work 24/7 to keep your revenue cycle running smoothly."
+                  ].map((item, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <Bot className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                      <span className="text-gray-600">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-lg font-semibold text-primary">
+                  For skilled nursing facilities, AI agents are a game-changer—saving time, reducing errors, and boosting cash flow.
+                </p>
+              </div>
+              <div className="bg-accent p-8 rounded-lg">
+                <Brain className="h-24 w-24 text-primary mx-auto mb-6" />
+                <h3 className="text-2xl font-bold text-primary mb-4 text-center">
+                  Why AI Agents Are the Future
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  As a building office manager or administrator, you're juggling a million things: staffing, patient care, compliance, and—let's be honest—endless paperwork. AI agents take the billing burden off your plate by:
+                </p>
+                <ul className="space-y-4">
+                  {[
+                    "Eliminating Errors: No more missed codes or incorrect claims.",
+                    "Speeding Up Processes: File claims in minutes, not hours.",
+                    "Stopping Denials Before They Happen: Catch mistakes before payers do."
+                  ].map((item, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <CheckCircle className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                      <span className="text-gray-600">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
+          </div>
+        </section>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-2xl font-bold text-primary mb-4">Time Savings</h3>
-              <p className="text-gray-600">
-                Automate repetitive tasks and paperwork, allowing your staff to focus on what matters most - patient care.
+        {/* Role Replacement Table */}
+        <section className="py-16 bg-accent">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-primary mb-8">How AI Agents Simplify Your Workload</h2>
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+              <table className="w-full">
+                <thead className="bg-primary text-white">
+                  <tr>
+                    <th className="px-6 py-4 text-left">Traditional Role</th>
+                    <th className="px-6 py-4 text-left">What They Do</th>
+                    <th className="px-6 py-4 text-left">How AI Replaces It</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {roles.map((role, index) => (
+                    <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
+                      <td className="px-6 py-4 font-medium">{role.title}</td>
+                      <td className="px-6 py-4 text-gray-600">{role.traditional}</td>
+                      <td className="px-6 py-4 text-primary">{role.aiReplacement}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-lg font-semibold text-primary mt-6">
+              Result: You save 30% on labor costs while improving billing accuracy and speed.
+            </p>
+          </div>
+        </section>
+
+        {/* ROI Section */}
+        <section className="py-16 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-primary mb-8">AI Agent ROI for Skilled Nursing Facilities</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {roiPoints.map((point, index) => (
+                <div key={index} className="bg-accent p-6 rounded-lg">
+                  <point.icon className="h-12 w-12 text-primary mb-4" />
+                  <h3 className="text-xl font-semibold text-primary mb-2">{point.title}</h3>
+                  <p className="text-gray-600">{point.description}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-8 p-6 bg-primary text-white rounded-lg">
+              <p className="text-lg">
+                Example: [Client X], a 100-bed facility, reduced denials by 65% and recovered $250k in lost revenue within 90 days.
               </p>
             </div>
           </div>
+        </section>
 
-          <div className="space-y-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-2xl font-bold text-primary mb-4">Cost Reduction</h3>
-              <p className="text-gray-600">
-                Minimize claim denials and optimize revenue cycles with AI-powered predictive analytics and real-time verification.
-              </p>
+        {/* Why Now Section */}
+        <section className="py-16 bg-accent">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-primary mb-8">Why Adopt AI Now?</h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                "Staffing shortages are making it harder to keep up with billing and coding.",
+                "Payer rules are getting more complex (e.g., Medicare, Medicaid, private insurers).",
+                "Financial pressures are mounting, with 60% of skilled nursing facilities operating at a loss."
+              ].map((challenge, index) => (
+                <div key={index} className="bg-white p-6 rounded-lg shadow-sm">
+                  <AlertCircle className="h-8 w-8 text-primary mb-4" />
+                  <p className="text-gray-600">{challenge}</p>
+                </div>
+              ))}
             </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <h3 className="text-2xl font-bold text-primary mb-4">Future-Ready</h3>
-              <p className="text-gray-600">
-                Stay ahead of the curve with continuously learning AI systems that adapt to changing healthcare regulations and requirements.
-              </p>
-            </div>
+            <p className="text-lg font-semibold text-primary mt-6">
+              AI agents aren't just a nice-to-have—they're a must-have to stay competitive and financially healthy.
+            </p>
           </div>
-        </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-16 bg-white">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl font-bold text-primary mb-8">Transform Your Revenue Cycle with AI</h2>
+            <p className="text-xl text-gray-600 mb-8">
+              Imagine a world where:
+            </p>
+            <ul className="text-left max-w-2xl mx-auto space-y-4 mb-12">
+              {[
+                "Claims are filed accurately and on time, without you lifting a finger.",
+                "Denials are resolved before they happen, so you get paid faster.",
+                "Your team can focus on patient care, not paperwork."
+              ].map((point, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <CheckCircle className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                  <span className="text-gray-600">{point}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-lg text-gray-600 mb-8">
+              Our AI agent makes this possible—and it's easier to implement than you think.
+            </p>
+            <Button 
+              size="lg"
+              onClick={() => navigate("/auth")}
+              className="text-lg px-8 py-6 h-auto"
+            >
+              Schedule a Free Demo → See How AI Can Work for You
+            </Button>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
