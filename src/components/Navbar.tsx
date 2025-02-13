@@ -46,6 +46,12 @@ const Navbar = () => {
               variant="ghost" 
               onClick={() => navigate('/auth')}
             >
+              Schedule Demo
+            </Button>
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/auth')}
+            >
               Account
             </Button>
           </div>
