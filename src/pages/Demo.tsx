@@ -1,8 +1,12 @@
+
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
+
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Please enter a valid email address"),
@@ -10,21 +14,50 @@ const formSchema = z.object({
   bedCount: z.number().min(0, "Bed count must be 0 or greater"),
   message: z.string().optional()
 });
+
 type FormData = z.infer<typeof formSchema>;
+
 const Demo = () => {
+  const { toast } = useToast();
   const {
     register,
     handleSubmit,
-    formState: {
-      errors
-    }
+    formState: { errors },
+    reset
   } = useForm<FormData>({
     resolver: zodResolver(formSchema)
   });
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    // Handle form submission
+
+  const onSubmit = async (data: FormData) => {
+    try {
+      const { error } = await supabase
+        .from('Waitlist')
+        .insert({
+          email: data.email,
+          full_name: data.name,
+          facility_name: data.facility,
+          bed_count: data.bedCount,
+          additional_info: data.message
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Success!",
+        description: "You've been added to our waitlist. We'll be in touch soon.",
+      });
+
+      reset(); // Clear the form
+    } catch (error) {
+      console.error('Error:', error);
+      toast({
+        title: "Error",
+        description: "There was a problem submitting your request. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
+
   return <div className="min-h-screen bg-gradient-to-b from-white to-accent">
       <Navbar />
       <main className="pt-24">
@@ -90,4 +123,5 @@ const Demo = () => {
       <Footer />
     </div>;
 };
+
 export default Demo;
