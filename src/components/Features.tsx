@@ -7,8 +7,7 @@ const Features = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* First Feature Box */}
           <div className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-up">
-            <h3 className="text-2xl font-bold text-primary mb-4 flex items-center gap-2">
-              <span className="text-3xl">🚫</span>
+            <h3 className="text-2xl font-bold text-primary mb-4">
               Slash Claim Denials by 70% with AI
             </h3>
             <div className="text-gray-600 space-y-4">
@@ -37,8 +36,7 @@ const Features = () => {
 
           {/* Second Feature Box */}
           <div className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-up [animation-delay:200ms]">
-            <h3 className="text-2xl font-bold text-primary mb-4 flex items-center gap-2">
-              <span className="text-3xl">📄</span>
+            <h3 className="text-2xl font-bold text-primary mb-4">
               Eliminate Coding Errors Automatically
             </h3>
             <div className="text-gray-600 space-y-4">
@@ -67,8 +65,7 @@ const Features = () => {
 
           {/* Third Feature Box */}
           <div className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-up [animation-delay:400ms]">
-            <h3 className="text-2xl font-bold text-primary mb-4 flex items-center gap-2">
-              <span className="text-3xl">💸</span>
+            <h3 className="text-2xl font-bold text-primary mb-4">
               Get Paid 2x Faster with AI Automation
             </h3>
             <div className="text-gray-600 space-y-4">
