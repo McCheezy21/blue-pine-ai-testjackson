@@ -1,15 +1,12 @@
-
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useIsMobile } from "../hooks/use-mobile";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
-
   return <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
@@ -25,7 +22,7 @@ const Navbar = () => {
             <Button variant="ghost" onClick={() => navigate('/why-ai')}>
               Why AI?
             </Button>
-            <Button variant="outline" onClick={() => navigate('/demo')} className="ml-2 text-slate-50 px-[22px] py-[23px] mx-[9px] my-0 bg-gray-800 hover:bg-gray-700">
+            <Button variant="outline" onClick={() => navigate('/demo')} className="ml-2 text-slate-50 mx-[9px] my-0 bg-primary-DEFAULT py-[21px] px-[36px]">
               Schedule Demo
             </Button>
           </div>
@@ -33,5 +30,4 @@ const Navbar = () => {
       </div>
     </nav>;
 };
-
 export default Navbar;
