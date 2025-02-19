@@ -1,3 +1,4 @@
+
 import { Brain, CheckCircle, TrendingUp, Clock, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
@@ -26,7 +27,7 @@ const AIExplanationSection = () => {
     aiReplacement: "AI predicts payment dates and auto-follows up with payers."
   }, {
     title: "Administrator",
-    traditional: "Stress",
+    traditional: "Stressed",
     aiReplacement: "Peace of mind"
   }];
 
