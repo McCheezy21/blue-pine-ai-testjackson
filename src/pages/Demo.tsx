@@ -1,3 +1,4 @@
+
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useForm } from "react-hook-form";
@@ -5,6 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Please enter a valid email address"),
@@ -12,7 +14,9 @@ const formSchema = z.object({
   bedCount: z.number().min(0, "Bed count must be 0 or greater"),
   message: z.string().optional()
 });
+
 type FormData = z.infer<typeof formSchema>;
+
 const Demo = () => {
   const {
     toast
@@ -27,6 +31,7 @@ const Demo = () => {
   } = useForm<FormData>({
     resolver: zodResolver(formSchema)
   });
+
   const onSubmit = async (data: FormData) => {
     try {
       const {
@@ -53,6 +58,7 @@ const Demo = () => {
       });
     }
   };
+
   return <div className="min-h-screen bg-gradient-to-b from-white to-accent">
       <Navbar />
       <main className="pt-24">
@@ -108,7 +114,9 @@ const Demo = () => {
                 {errors.message && <p className="mt-1 text-sm text-red-600">{errors.message.message}</p>}
               </div>
               
-              <button type="submit" className="w-full bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition-colors">Join Waitlist</button>
+              <div className="mt-8 sm:mt-6">
+                <button type="submit" className="w-full bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition-colors">Join Waitlist</button>
+              </div>
             </form>
           </div>
         </section>
