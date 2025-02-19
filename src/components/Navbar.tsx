@@ -31,6 +31,7 @@ const Navbar = () => {
         });
       }
     }
+    setIsOpen(false); // Close mobile menu after clicking
   };
 
   return <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
@@ -41,6 +42,7 @@ const Navbar = () => {
             <span className="text-2xl font-bold text-primary">Blue Pine AI</span>
           </div>
           
+          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
             <Button variant="ghost" onClick={() => scrollToSection('features')}>
               Features
@@ -53,7 +55,56 @@ const Navbar = () => {
             </Button>
             <Button variant="outline" onClick={() => navigate('/demo')} className="ml-2 text-slate-50 mx-[9px] my-0 bg-primary hover:bg-primary/90 py-[14px] px-[35px]">Join Waitlist</Button>
           </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-primary p-2 rounded-md hover:bg-gray-100"
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Navigation */}
+        {isOpen && (
+          <div className="md:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
+              <Button 
+                variant="ghost" 
+                className="w-full text-left justify-start" 
+                onClick={() => scrollToSection('features')}
+              >
+                Features
+              </Button>
+              <Button 
+                variant="ghost" 
+                className="w-full text-left justify-start" 
+                onClick={() => scrollToSection('ai-explanation')}
+              >
+                Why AI?
+              </Button>
+              <Button 
+                variant="ghost" 
+                className="w-full text-left justify-start" 
+                onClick={() => scrollToSection('faq')}
+              >
+                FAQ
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  navigate('/demo');
+                  setIsOpen(false);
+                }} 
+                className="w-full text-slate-50 bg-primary hover:bg-primary/90"
+              >
+                Join Waitlist
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </nav>;
 };

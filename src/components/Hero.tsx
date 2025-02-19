@@ -65,7 +65,7 @@ const Hero = () => {
             Cut Denials by 70%, Eliminate Coding Errors & Speed Up Cash Flow 2x Faster—Guaranteed Compliance with AI-Powered Automation
           </p>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up relative z-10">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-8 justify-center items-center animate-fade-up relative z-10">
               <FormField
                 control={form.control}
                 name="email"
