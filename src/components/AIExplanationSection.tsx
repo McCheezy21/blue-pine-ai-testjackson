@@ -1,5 +1,4 @@
-
-import { Bot, Brain, CheckCircle, TrendingUp, Clock, AlertCircle } from "lucide-react";
+import { Brain, CheckCircle, TrendingUp, Clock, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 
@@ -11,7 +10,7 @@ const AIExplanationSection = () => {
     traditional: "Spend hours assigning codes",
     aiReplacement: "AI auto-codes treatments with 99% accuracy in seconds."
   }, {
-    title: "Billing Specialist",
+    title: "Billing Specialist", 
     traditional: "File claims, track submissions",
     aiReplacement: "AI auto-files claims in <5 mins and tracks them in real time."
   }, {
@@ -58,11 +57,10 @@ const AIExplanationSection = () => {
                 <p className="text-lg text-gray-600">
                   AI agents are like having an extra team member who never sleeps, never makes mistakes, and handles all the tedious tasks you hate. They use artificial intelligence (AI) and machine learning (ML) to:
                 </p>
-                <ul className="space-y-4">
+                <ul className="space-y-4 list-disc pl-5">
                   {["Automate repetitive tasks (e.g., coding, claims, denials).", "Learn and adapt to your facility's workflows.", "Work 24/7 to keep your revenue cycle running smoothly."].map((item, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <Bot className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                      <span className="text-gray-600">{item}</span>
+                    <li key={index} className="text-gray-600">
+                      {item}
                     </li>
                   ))}
                 </ul>
@@ -80,7 +78,7 @@ const AIExplanationSection = () => {
                 As a building office manager or administrator, you're juggling a million things: staffing, patient care, compliance, and—let's be honest—endless paperwork. AI agents take the billing burden off your plate by:
               </p>
               <ul className="space-y-4">
-                {["Eliminating Errors: No more missed codes or incorrect claims.", "Speeding Up Processes: File claims in minutes, not hours.", "Stopping Denials Before They Happen: Catch mistakes before payers do."].map((item, index) => (
+                {["Eliminate Errors: No more missed codes or incorrect claims.", "Speed Up Processes: File claims in minutes, not hours.", "Stop Denials Before They Happen: Catch mistakes before payers do."].map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <CheckCircle className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
                     <span className="text-gray-600">{item}</span>
