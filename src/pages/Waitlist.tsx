@@ -1,4 +1,3 @@
-
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useForm } from "react-hook-form";
@@ -6,7 +5,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Please enter a valid email address"),
@@ -14,9 +12,7 @@ const formSchema = z.object({
   bedCount: z.number().min(0, "Bed count must be 0 or greater"),
   message: z.string().optional()
 });
-
 type FormData = z.infer<typeof formSchema>;
-
 const Demo = () => {
   const {
     toast
@@ -31,7 +27,6 @@ const Demo = () => {
   } = useForm<FormData>({
     resolver: zodResolver(formSchema)
   });
-
   const onSubmit = async (data: FormData) => {
     try {
       const {
@@ -58,13 +53,12 @@ const Demo = () => {
       });
     }
   };
-
   return <div className="min-h-screen bg-gradient-to-b from-white to-accent">
       <Navbar />
       <main className="pt-24">
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-6">Join the Waitlist for Early Access</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mb-8">Only 50 Spots Left in Closed Beta -- Get Priority Before Launch</p>
+          <p className="text-xl text-gray-600 max-w-3xl mb-8">Only 13 Spots Left in Closed Beta — Get Priority Before Launch</p>
           
           {/* Contact Form Section */}
           <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl">

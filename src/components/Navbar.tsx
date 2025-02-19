@@ -44,6 +44,9 @@ const Navbar = () => {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
+            <Button variant="ghost" onClick={() => navigate('/')}>
+              Home
+            </Button>
             <Button variant="ghost" onClick={() => scrollToSection('features')}>
               Features
             </Button>
@@ -53,7 +56,7 @@ const Navbar = () => {
             <Button variant="ghost" onClick={() => scrollToSection('faq')}>
               FAQ
             </Button>
-            <Button variant="outline" onClick={() => navigate('/demo')} className="ml-2 text-slate-50 mx-[9px] my-0 bg-primary hover:bg-primary/90 py-[14px] px-[35px]">Join Waitlist</Button>
+            <Button variant="outline" onClick={() => navigate('/waitlist')} className="ml-2 text-slate-50 mx-[9px] my-0 bg-primary hover:bg-primary/90 py-[14px] px-[35px]">Join Waitlist</Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -71,6 +74,16 @@ const Navbar = () => {
         {isOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
+              <Button 
+                variant="ghost" 
+                className="w-full text-left justify-start" 
+                onClick={() => {
+                  navigate('/');
+                  setIsOpen(false);
+                }}
+              >
+                Home
+              </Button>
               <Button 
                 variant="ghost" 
                 className="w-full text-left justify-start" 
@@ -95,7 +108,7 @@ const Navbar = () => {
               <Button 
                 variant="outline" 
                 onClick={() => {
-                  navigate('/demo');
+                  navigate('/waitlist');
                   setIsOpen(false);
                 }} 
                 className="w-full text-slate-50 bg-primary hover:bg-primary/90"
