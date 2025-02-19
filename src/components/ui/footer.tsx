@@ -66,12 +66,12 @@ export function Footer({
           </ul>
         </div>
         <div className="border-t border-primary-foreground/10 mt-1.5 pt-1.5 md:mt-1.5 md:pt-2">
-          <div className="flex flex-col gap-3">
-            <div className="text-sm leading-6 text-primary-foreground/70 text-left">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+            <div className="text-sm leading-6 text-primary-foreground/70">
               <div>{copyright.text}</div>
               {copyright.license && <div>{copyright.license}</div>}
             </div>
-            <div className="flex justify-end">
+            <div>
               <ul className="list-none flex flex-wrap gap-6">
                 {legalLinks.map((link, i) => (
                   <li key={i}>
