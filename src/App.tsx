@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Demo from "./pages/Demo";
 import NotFound from "./pages/NotFound";
-import WhyAI from "./pages/WhyAI";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
@@ -20,7 +19,6 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/why-ai" element={<WhyAI />} />
           <Route path="/demo" element={<Demo />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="*" element={<NotFound />} />
