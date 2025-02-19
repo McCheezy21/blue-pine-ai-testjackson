@@ -51,9 +51,9 @@ const AIExplanationSection = () => {
       {/* What Are AI Agents Section */}
       <section className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-primary mb-8">What Is an AI Agent?</h2>
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="space-y-6">
+          <h2 className="text-3xl font-bold text-primary mb-8 text-center">What Is an AI Agent?</h2>
+          <div className="grid md:grid-cols-2 gap-12 items-stretch">
+            <div className="space-y-6 bg-white p-8 rounded-lg shadow-sm">
               <p className="text-lg text-gray-600">
                 AI agents are like having an extra team member who never sleeps, never makes mistakes, and handles all the tedious tasks you hate. They use artificial intelligence (AI) and machine learning (ML) to:
               </p>
@@ -69,7 +69,7 @@ const AIExplanationSection = () => {
                 For skilled nursing facilities, AI agents are a game-changer—saving time, reducing errors, and boosting cash flow.
               </p>
             </div>
-            <div className="bg-accent p-8 rounded-lg">
+            <div className="bg-accent p-8 rounded-lg shadow-sm">
               <Brain className="h-24 w-24 text-primary mx-auto mb-6" />
               <h3 className="text-2xl font-bold text-primary mb-4 text-center">
                 Why AI Agents Are the Future
