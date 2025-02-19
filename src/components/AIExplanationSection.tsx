@@ -1,4 +1,3 @@
-
 import { Brain, CheckCircle, TrendingUp, Clock, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
@@ -10,7 +9,7 @@ const AIExplanationSection = () => {
     traditional: "Spend hours assigning codes",
     aiReplacement: "AI auto-codes treatments with 99% accuracy in seconds."
   }, {
-    title: "Billing Specialist",
+    title: "Billing Specialist", 
     traditional: "File claims, track submissions",
     aiReplacement: "AI auto-files claims in <5 mins and tracks them in real time."
   }, {
@@ -83,29 +82,55 @@ const AIExplanationSection = () => {
         </div>
       </section>
 
-      {/* Role Replacement Table */}
-      <section className="py-8 md:py-16 bg-accent overflow-x-auto">
+      {/* Role Replacement Section - Redesigned for mobile */}
+      <section className="py-8 md:py-16 bg-accent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-bold text-primary mb-6">How AI Agents Simplify Your Workload</h2>
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden min-w-[768px]">
+          
+          {/* Desktop Table View */}
+          <div className="hidden md:block bg-white rounded-lg shadow-lg overflow-hidden">
             <table className="w-full">
               <thead className="bg-primary text-white">
                 <tr>
-                  <th className="px-4 md:px-6 py-3 md:py-4 text-left">Traditional Role</th>
-                  <th className="px-4 md:px-6 py-3 md:py-4 text-left">What They Do</th>
-                  <th className="px-4 md:px-6 py-3 md:py-4 text-left">How AI Replaces It</th>
+                  <th className="px-6 py-4 text-left">Traditional Role</th>
+                  <th className="px-6 py-4 text-left">What They Do</th>
+                  <th className="px-6 py-4 text-left">How AI Replaces It</th>
                 </tr>
               </thead>
               <tbody>
-                {roles.map((role, index) => <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
-                    <td className="px-4 md:px-6 py-3 md:py-4 font-medium">{role.title}</td>
-                    <td className="px-4 md:px-6 py-3 md:py-4 text-gray-600">{role.traditional}</td>
-                    <td className="px-4 md:px-6 py-3 md:py-4 text-primary">{role.aiReplacement}</td>
-                  </tr>)}
+                {roles.map((role, index) => (
+                  <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
+                    <td className="px-6 py-4 font-medium">{role.title}</td>
+                    <td className="px-6 py-4 text-gray-600">{role.traditional}</td>
+                    <td className="px-6 py-4 text-primary">{role.aiReplacement}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
-          <p className="text-base md:text-lg font-semibold text-primary mt-4 md:mt-6">Result: You save over 30% on labor costs while improving billing accuracy and speed.</p>
+
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-4">
+            {roles.map((role, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-sm p-4">
+                <h3 className="font-semibold text-lg text-primary mb-2">{role.title}</h3>
+                <div className="space-y-2">
+                  <div>
+                    <p className="text-sm text-gray-500">Currently:</p>
+                    <p className="text-gray-600">{role.traditional}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">With AI:</p>
+                    <p className="text-primary">{role.aiReplacement}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-base md:text-lg font-semibold text-primary mt-4 md:mt-6">
+            Result: You save over 30% on labor costs while improving billing accuracy and speed.
+          </p>
         </div>
       </section>
 
