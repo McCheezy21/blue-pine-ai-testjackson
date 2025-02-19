@@ -1,4 +1,3 @@
-
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useForm } from "react-hook-form";
@@ -6,7 +5,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Please enter a valid email address"),
@@ -14,39 +12,37 @@ const formSchema = z.object({
   bedCount: z.number().min(0, "Bed count must be 0 or greater"),
   message: z.string().optional()
 });
-
 type FormData = z.infer<typeof formSchema>;
-
 const Demo = () => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: {
+      errors
+    },
     reset
   } = useForm<FormData>({
     resolver: zodResolver(formSchema)
   });
-
   const onSubmit = async (data: FormData) => {
     try {
-      const { error } = await supabase
-        .from('Waitlist')
-        .insert({
-          email: data.email,
-          full_name: data.name,
-          facility_name: data.facility,
-          bed_count: data.bedCount,
-          additional_info: data.message
-        });
-
+      const {
+        error
+      } = await supabase.from('Waitlist').insert({
+        email: data.email,
+        full_name: data.name,
+        facility_name: data.facility,
+        bed_count: data.bedCount,
+        additional_info: data.message
+      });
       if (error) throw error;
-
       toast({
         title: "Success!",
-        description: "You've been added to our waitlist. We'll be in touch soon.",
+        description: "You've been added to our waitlist. We'll be in touch soon."
       });
-
       reset(); // Clear the form
     } catch (error) {
       console.error('Error:', error);
@@ -57,12 +53,11 @@ const Demo = () => {
       });
     }
   };
-
   return <div className="min-h-screen bg-gradient-to-b from-white to-accent">
       <Navbar />
       <main className="pt-24">
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-6">Join Waitlist</h1>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-6">Join the Waitlist for Early Access</h1>
           <p className="text-xl text-gray-600 max-w-3xl mb-8">
             See how Blue Pine AI can transform your skilled nursing facility's revenue cycle management.
           </p>
@@ -123,5 +118,4 @@ const Demo = () => {
       <Footer />
     </div>;
 };
-
 export default Demo;
