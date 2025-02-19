@@ -7,6 +7,7 @@ import FAQ from "../components/FAQ";
 import Testimonials from "../components/Testimonials";
 import ToolsAndIntegrations from "../components/ToolsAndIntegrations";
 import Footer from "../components/Footer";
+import AIExplanationSection from "../components/AIExplanationSection";
 
 const Index = () => {
   return (
@@ -15,6 +16,7 @@ const Index = () => {
       <Hero />
       <Features />
       <WhyNeedUs />
+      <AIExplanationSection />
       <Testimonials />
       <ToolsAndIntegrations />
       <FAQ />
