@@ -58,9 +58,7 @@ const Demo = () => {
       <main className="pt-24">
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-6">Join the Waitlist for Early Access</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mb-8">
-            See how Blue Pine AI can transform your skilled nursing facility's revenue cycle management.
-          </p>
+          <p className="text-xl text-gray-600 max-w-3xl mb-8">Only 50 Spots Left in Closed Beta -- Get Priority Before Launch</p>
           
           {/* Contact Form Section */}
           <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl">
