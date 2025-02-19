@@ -24,7 +24,12 @@ const AIExplanationSection = () => {
     title: "AR Specialist",
     traditional: "Follow up on unpaid claims",
     aiReplacement: "AI predicts payment dates and auto-follows up with payers."
+  }, {
+    title: "Administrator",
+    traditional: "Stress",
+    aiReplacement: "Peace of mind"
   }];
+
   const roiPoints = [{
     icon: CheckCircle,
     title: "Reduce Claim Denials",
@@ -42,6 +47,7 @@ const AIExplanationSection = () => {
     title: "Boost Revenue",
     description: "Recover 5–15% more revenue from underpaid or denied claims."
   }];
+
   return <>
       {/* What Are AI Agents Section */}
       <section className="bg-white py-8 md:py-16">
