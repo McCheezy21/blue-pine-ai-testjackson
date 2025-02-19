@@ -22,7 +22,7 @@ const Navbar = () => {
             <Button variant="ghost" onClick={() => navigate('/why-ai')}>
               Why AI?
             </Button>
-            <Button variant="outline" onClick={() => navigate('/demo')} className="ml-2 text-slate-50 px-[22px] py-[23px] mx-[9px] my-0 bg-slate-800 hover:bg-slate-700">Join Waitlist</Button>
+            <Button variant="outline" onClick={() => navigate('/demo')} className="ml-2 text-slate-50 px-[22px] py-[23px] mx-[9px] my-0 bg-primary-DEFAULT">Join Waitlist</Button>
           </div>
         </div>
       </div>
