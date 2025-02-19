@@ -15,16 +15,16 @@ const Features = () => {
                 Stop losing revenue to preventable errors.
               </p>
               <ul className="space-y-4 mb-4">
-                <li className="flex items-start gap-2">
-                  <span className="font-semibold min-w-fit">Auto-Audit Documentation:</span>
+                <li className="flex flex-col gap-1">
+                  <span className="font-semibold">Auto-Audit Documentation:</span>
                   Flag missing/mismatched codes (ICD-10, CPT) in real time.
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-semibold min-w-fit">Predict Denials Upfront:</span>
+                <li className="flex flex-col gap-1">
+                  <span className="font-semibold">Predict Denials Upfront:</span>
                   Leverage payer-specific rules + historical data.
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-semibold min-w-fit">Guarantee Compliance:</span>
+                <li className="flex flex-col gap-1">
+                  <span className="font-semibold">Guarantee Compliance:</span>
                   Align treatments with pre-authorizations.
                 </li>
               </ul>
@@ -44,16 +44,16 @@ const Features = () => {
                 AI ensures 100% accurate billing every time.
               </p>
               <ul className="space-y-4 mb-4">
-                <li className="flex items-start gap-2">
-                  <span className="font-semibold min-w-fit">Instant CPT/ICD-10 Mapping:</span>
+                <li className="flex flex-col gap-1">
+                  <span className="font-semibold">Instant CPT/ICD-10 Mapping:</span>
                   Auto-code treatments in seconds.
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-semibold min-w-fit">Audit-Ready Reports:</span>
+                <li className="flex flex-col gap-1">
+                  <span className="font-semibold">Audit-Ready Reports:</span>
                   Generate CMS-compliant records instantly.
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-semibold min-w-fit">Real-Time Alerts:</span>
+                <li className="flex flex-col gap-1">
+                  <span className="font-semibold">Real-Time Alerts:</span>
                   Block unauthorized treatments pre-service.
                 </li>
               </ul>
@@ -73,16 +73,16 @@ const Features = () => {
                 Cut billing delays by 50% and predict payments.
               </p>
               <ul className="space-y-4 mb-4">
-                <li className="flex items-start gap-2">
-                  <span className="font-semibold min-w-fit">1-Click Claims:</span>
+                <li className="flex flex-col gap-1">
+                  <span className="font-semibold">1-Click Claims:</span>
                   Submit error-free claims in &lt;5 minutes.
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-semibold min-w-fit">Real-Time Tracking:</span>
+                <li className="flex flex-col gap-1">
+                  <span className="font-semibold">Real-Time Tracking:</span>
                   Resolve rejections 80% faster.
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-semibold min-w-fit">Payment Forecasting:</span>
+                <li className="flex flex-col gap-1">
+                  <span className="font-semibold">Payment Forecasting:</span>
                   Predict cash flow with 95% accuracy.
                 </li>
               </ul>
