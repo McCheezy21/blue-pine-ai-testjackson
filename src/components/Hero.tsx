@@ -1,3 +1,4 @@
+
 import { ArrowRight } from "lucide-react";
 import { Input } from "./ui/input";
 import { useForm } from "react-hook-form";
@@ -63,7 +64,7 @@ const Hero = () => {
       <div className="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
         <div className="text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-primary mb-6 animate-fade-down">
-            AI-Powered Claims Automation <br />For Skilled Nursing Facilities
+            Skilled Nursing Billing Made Effortless: <br />AI does the work
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-up">
             Stop losing revenue to denied claims. Our AI-powered solution automates your entire billing workflow - from patient authorization to claims resolution. Join leading SNFs already saving thousands in recovered payments each month.
