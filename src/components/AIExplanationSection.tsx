@@ -1,11 +1,8 @@
-
-import { Bot, Brain, CheckCircle, TrendingUp, Clock, AlertCircle } from "lucide-react";
+import { Brain, CheckCircle, TrendingUp, Clock, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
-
 const AIExplanationSection = () => {
   const navigate = useNavigate();
-  
   const roles = [{
     title: "Medical Coder",
     traditional: "Spend hours assigning codes",
@@ -27,7 +24,6 @@ const AIExplanationSection = () => {
     traditional: "Follow up on unpaid claims",
     aiReplacement: "AI predicts payment dates and auto-follows up with payers."
   }];
-
   const roiPoints = [{
     icon: CheckCircle,
     title: "Reduce Claim Denials",
@@ -45,9 +41,7 @@ const AIExplanationSection = () => {
     title: "Boost Revenue",
     description: "Recover 5–15% more revenue from underpaid or denied claims."
   }];
-
-  return (
-    <>
+  return <>
       {/* What Are AI Agents Section */}
       <section className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,13 +52,10 @@ const AIExplanationSection = () => {
                 <p className="text-lg text-gray-600">
                   AI agents are like having an extra team member who never sleeps, never makes mistakes, and handles all the tedious tasks you hate. They use artificial intelligence (AI) and machine learning (ML) to:
                 </p>
-                <ul className="space-y-4">
-                  {["Automate repetitive tasks (e.g., coding, claims, denials).", "Learn and adapt to your facility's workflows.", "Work 24/7 to keep your revenue cycle running smoothly."].map((item, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <Bot className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                      <span className="text-gray-600">{item}</span>
-                    </li>
-                  ))}
+                <ul className="space-y-4 list-disc pl-5">
+                  {["Automate repetitive tasks (e.g., coding, claims, denials).", "Learn and adapt to your facility's workflows.", "Work 24/7 to keep your revenue cycle running smoothly."].map((item, index) => <li key={index} className="text-gray-600">
+                      {item}
+                    </li>)}
                 </ul>
                 <p className="text-lg font-semibold text-primary">
                   For skilled nursing facilities, AI agents are a game-changer—saving time, reducing errors, and boosting cash flow.
@@ -80,12 +71,10 @@ const AIExplanationSection = () => {
                 As a building office manager or administrator, you're juggling a million things: staffing, patient care, compliance, and—let's be honest—endless paperwork. AI agents take the billing burden off your plate by:
               </p>
               <ul className="space-y-4">
-                {["Eliminating Errors: No more missed codes or incorrect claims.", "Speeding Up Processes: File claims in minutes, not hours.", "Stopping Denials Before They Happen: Catch mistakes before payers do."].map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
+                {["Eliminate Errors: No more missed codes or incorrect claims.", "Speed Up Processes: File claims in minutes, not hours.", "Stop Denials Before They Happen: Catch mistakes before payers do."].map((item, index) => <li key={index} className="flex items-start gap-3">
                     <CheckCircle className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
                     <span className="text-gray-600">{item}</span>
-                  </li>
-                ))}
+                  </li>)}
               </ul>
             </div>
           </div>
@@ -106,13 +95,11 @@ const AIExplanationSection = () => {
                 </tr>
               </thead>
               <tbody>
-                {roles.map((role, index) => (
-                  <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
+                {roles.map((role, index) => <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
                     <td className="px-6 py-4 font-medium">{role.title}</td>
                     <td className="px-6 py-4 text-gray-600">{role.traditional}</td>
                     <td className="px-6 py-4 text-primary">{role.aiReplacement}</td>
-                  </tr>
-                ))}
+                  </tr>)}
               </tbody>
             </table>
           </div>
@@ -125,18 +112,14 @@ const AIExplanationSection = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-primary mb-8">AI Agent ROI for Skilled Nursing Facilities</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {roiPoints.map((point, index) => (
-              <div key={index} className="bg-accent p-6 rounded-lg">
+            {roiPoints.map((point, index) => <div key={index} className="bg-accent p-6 rounded-lg">
                 <point.icon className="h-12 w-12 text-primary mb-4" />
                 <h3 className="text-xl font-semibold text-primary mb-2">{point.title}</h3>
                 <p className="text-gray-600">{point.description}</p>
-              </div>
-            ))}
+              </div>)}
           </div>
           <div className="mt-8 p-6 bg-primary text-white rounded-lg">
-            <p className="text-lg">
-              Example: [Client X], a 100-bed facility, reduced denials by 65% and recovered $250k in lost revenue within 90 days.
-            </p>
+            <p className="text-lg">Our clients have seen ROI in 90 days or less</p>
           </div>
         </div>
       </section>
@@ -146,23 +129,16 @@ const AIExplanationSection = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-primary mb-8">Why Adopt AI Now?</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {["Staffing shortages are making it harder to keep up with billing and coding.", 
-              "Payer rules are getting more complex (e.g., Medicare, Medicaid, private insurers).", 
-              "Financial pressures are mounting, with 60% of skilled nursing facilities operating at a loss."
-            ].map((challenge, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-sm">
+            {["Staffing shortages are making it harder to keep up with billing and coding.", "Payer rules are getting more complex (e.g., Medicare, Medicaid, private insurers).", "Financial pressures are mounting, with 60% of skilled nursing facilities operating at a loss."].map((challenge, index) => <div key={index} className="bg-white p-6 rounded-lg shadow-sm">
                 <AlertCircle className="h-8 w-8 text-primary mb-4" />
                 <p className="text-gray-600">{challenge}</p>
-              </div>
-            ))}
+              </div>)}
           </div>
           <p className="text-lg font-semibold text-primary mt-6">
             AI agents aren't just a nice-to-have—they're a must-have to stay competitive and financially healthy.
           </p>
         </div>
       </section>
-    </>
-  );
+    </>;
 };
-
 export default AIExplanationSection;

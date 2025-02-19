@@ -10,8 +10,8 @@ import { Building, Shield, Users, Link } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
 
 const certifications = [
-  { icon: Building, label: "PointClickCare Integration" },
-  { icon: Link, label: "Careport Integration" },
+  { icon: Building, label: "Your EHR Provider Integration" },
+  { icon: Link, label: "Post-Acute Coordination Integration" },
   { icon: Shield, label: "HIPAA Compliant" },
   { icon: Building, label: "Centers for Medicare & Medicaid Services" },
   { icon: Users, label: "Your Local Insurance Providers" },

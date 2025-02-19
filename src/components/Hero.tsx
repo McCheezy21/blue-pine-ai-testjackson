@@ -1,3 +1,4 @@
+
 import { ArrowRight } from "lucide-react";
 import { Input } from "./ui/input";
 import { useForm } from "react-hook-form";
@@ -6,16 +7,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "./ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { ShimmerButton } from "./ui/shimmer-button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "./ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 
 const formSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email("Please enter a valid email address")
 });
 
 const Hero = () => {
@@ -23,8 +18,8 @@ const Hero = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-    },
+      email: ""
+    }
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -36,20 +31,21 @@ const Hero = () => {
         .select();
 
       console.log('Supabase response:', { data, error });
-
+      
       if (error) throw error;
-
+      
       toast({
         title: "Success!",
-        description: "You've been added to our waitlist.",
+        description: "You've been added to our waitlist."
       });
+      
       form.reset();
     } catch (error) {
       console.error('Error:', error);
       toast({
         title: "Error",
         description: "There was a problem adding you to the waitlist. Please try again.",
-        variant: "destructive",
+        variant: "destructive"
       });
     }
   };
@@ -63,10 +59,10 @@ const Hero = () => {
       <div className="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
         <div className="text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-primary mb-6 animate-fade-down">
-            AI-Powered Claims Automation <br />For Skilled Nursing Facilities
+            Skilled Nursing Billing Made Effortless: <br />AI does the work
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-up">
-            Stop losing revenue to denied claims. Our AI-powered solution automates your entire billing workflow - from patient authorization to claims resolution. Join leading SNFs already saving thousands in recovered payments each month.
+          <p className="text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-up text-2xl">
+            Cut Denials by 70%, Eliminate Coding Errors & Speed Up Cash Flow 2x Faster—Guaranteed Compliance with AI-Powered Automation
           </p>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up relative z-10">
@@ -79,8 +75,8 @@ const Hero = () => {
                       <Input 
                         type="email" 
                         placeholder="Enter your email" 
-                        className="w-[300px] h-12"
-                        {...field}
+                        className="w-[300px] h-12 text-base" 
+                        {...field} 
                       />
                     </FormControl>
                     <FormMessage className="absolute text-left text-sm" />
@@ -88,10 +84,10 @@ const Hero = () => {
                 )}
               />
               <ShimmerButton 
-                type="submit"
-                className="h-12 px-8 py-3"
-                background="#004466"
-                shimmerColor="#ffffff"
+                type="submit" 
+                className="h-12 px-8 py-3" 
+                background="#004466" 
+                shimmerColor="#ffffff" 
                 borderRadius="0.375rem"
               >
                 <span className="flex items-center gap-2">
