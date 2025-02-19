@@ -22,6 +22,7 @@ const Footer = () => {
         text: `© ${new Date().getFullYear()} Blue Pine AI`,
         license: "All rights reserved",
       }}
+      className="text-right sm:text-left"
     />
   );
 };

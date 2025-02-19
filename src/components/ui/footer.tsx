@@ -1,4 +1,6 @@
+
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 interface FooterProps {
   logo: React.ReactNode | null
@@ -20,6 +22,7 @@ interface FooterProps {
     text: string
     license?: string
   }
+  className?: string
 }
 
 export function Footer({
@@ -29,6 +32,7 @@ export function Footer({
   mainLinks,
   legalLinks,
   copyright,
+  className
 }: FooterProps) {
   return (
     <footer className="bg-primary text-primary-foreground pb-1.5 pt-5 lg:pb-2 lg:pt-7">
@@ -76,8 +80,8 @@ export function Footer({
               ))}
             </ul>
           </nav>
-          <div className="mt-1.5 lg:mt-0 lg:col-[4/11]">
-            <ul className="list-none flex flex-wrap -my-1 -mx-3 lg:justify-end">
+          <div className={cn("mt-1.5 lg:mt-0 lg:col-[4/11]", className)}>
+            <ul className="list-none flex flex-wrap -my-1 -mx-3 justify-end">
               {legalLinks.map((link, i) => (
                 <li key={i} className="my-1 mx-3 shrink-0">
                   <a
@@ -90,7 +94,7 @@ export function Footer({
               ))}
             </ul>
           </div>
-          <div className="mt-1.5 text-sm leading-6 text-primary-foreground/70 whitespace-nowrap lg:mt-0 lg:row-[1/3] lg:col-[1/4]">
+          <div className="mt-1.5 text-sm leading-6 text-primary-foreground/70 whitespace-nowrap lg:mt-0 lg:row-[1/3] lg:col-[1/4] text-left">
             <div>{copyright.text}</div>
             {copyright.license && <div>{copyright.license}</div>}
           </div>
