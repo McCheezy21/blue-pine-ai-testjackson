@@ -75,7 +75,7 @@ const Hero = () => {
                       <Input 
                         type="email" 
                         placeholder="Enter your email" 
-                        className="w-[300px] h-12 text-base md:text-lg" 
+                        className="w-[300px] h-12 text-base" 
                         {...field} 
                       />
                     </FormControl>
