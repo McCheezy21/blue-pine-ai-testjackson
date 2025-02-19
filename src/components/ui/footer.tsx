@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button"
+import { Link } from "react-router-dom"
 import { cn } from "@/lib/utils"
 
 interface FooterProps {
@@ -39,14 +40,14 @@ export function Footer({
       <div className="px-3 lg:px-6">
         <div className="md:flex md:items-start md:justify-between">
           {logo && (
-            <a
-              href="/"
+            <Link
+              to="/"
               className="flex items-center gap-x-2"
               aria-label={brandName}
             >
               {logo}
               <span className="font-bold text-xl">{brandName}</span>
-            </a>
+            </Link>
           )}
           <ul className="flex list-none mt-1.5 md:mt-0 space-x-3">
             {socialLinks.map((link, i) => (
@@ -75,12 +76,12 @@ export function Footer({
               <ul className="list-none flex flex-wrap gap-6">
                 {legalLinks.map((link, i) => (
                   <li key={i}>
-                    <a
-                      href={link.href}
+                    <Link
+                      to={link.href}
                       className="text-sm text-primary-foreground/70 underline-offset-4 hover:underline"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
