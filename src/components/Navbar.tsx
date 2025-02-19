@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Home } from "lucide-react";
 import { useIsMobile } from "../hooks/use-mobile";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -44,6 +44,10 @@ const Navbar = () => {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
+            <Button variant="ghost" onClick={() => navigate('/')} className="flex items-center gap-2">
+              <Home size={20} />
+              Home
+            </Button>
             <Button variant="ghost" onClick={() => scrollToSection('features')}>
               Features
             </Button>
@@ -71,6 +75,17 @@ const Navbar = () => {
         {isOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
+              <Button 
+                variant="ghost" 
+                className="w-full text-left justify-start flex items-center gap-2" 
+                onClick={() => {
+                  navigate('/');
+                  setIsOpen(false);
+                }}
+              >
+                <Home size={20} />
+                Home
+              </Button>
               <Button 
                 variant="ghost" 
                 className="w-full text-left justify-start" 
