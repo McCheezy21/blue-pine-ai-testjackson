@@ -21,9 +21,10 @@ const Index = () => {
       <section id="ai-explanation">
         <AIExplanationSection />
       </section>
-      <section id="testimonials">
+      {/* Testimonials section temporarily hidden until we have testimonials */}
+      {/* <section id="testimonials">
         <Testimonials />
-      </section>
+      </section> */}
       <ToolsAndIntegrations />
       <section id="faq">
         <FAQ />

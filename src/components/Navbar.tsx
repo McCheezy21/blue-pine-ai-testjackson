@@ -1,13 +1,16 @@
+
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useIsMobile } from "../hooks/use-mobile";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const location = useLocation();
+
   const scrollToSection = (sectionId: string) => {
     if (location.pathname !== '/') {
       navigate('/');
@@ -29,6 +32,7 @@ const Navbar = () => {
       }
     }
   };
+
   return <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
@@ -44,9 +48,6 @@ const Navbar = () => {
             <Button variant="ghost" onClick={() => scrollToSection('ai-explanation')}>
               Why AI?
             </Button>
-            <Button variant="ghost" onClick={() => scrollToSection('testimonials')}>
-              Testimonials
-            </Button>
             <Button variant="ghost" onClick={() => scrollToSection('faq')}>
               FAQ
             </Button>
@@ -56,4 +57,5 @@ const Navbar = () => {
       </div>
     </nav>;
 };
+
 export default Navbar;
