@@ -1,3 +1,4 @@
+
 const Features = () => {
   return (
     <section className="relative py-12 bg-accent -mt-32">
@@ -6,60 +7,90 @@ const Features = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* First Feature Box */}
           <div className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-up">
-            <h3 className="text-2xl font-bold text-primary mb-4">
-              Slash Claim Denials with AI-Powered Authorization & Coding Accuracy
+            <h3 className="text-2xl font-bold text-primary mb-4 flex items-center gap-2">
+              <span className="text-3xl">🚫</span>
+              Slash Claim Denials by 70% with AI
             </h3>
             <div className="text-gray-600 space-y-4">
-              <p className="mb-4">
-                Stop losing revenue to preventable claim denials. Our AI agent automates insurance authorization workflows and cross-checks medical codes in real time to ensure 100% compliance with payer requirements.
+              <p className="mb-4 font-medium">
+                Stop losing revenue to preventable errors.
               </p>
-              <ul className="list-disc pl-5 space-y-2 mb-4">
-                <li>AI audits documentation to flag missing or mismatched codes (e.g., ICD-10, CPT) before submission.</li>
-                <li>Predict denials upfront using historical data and payer-specific rules.</li>
-                <li>Guarantee compliant treatments by aligning care plans with pre-authorizations.</li>
+              <ul className="space-y-4 mb-4">
+                <li className="flex items-start gap-2">
+                  <span className="font-semibold min-w-fit">Auto-Audit Documentation:</span>
+                  Flag missing/mismatched codes (ICD-10, CPT) in real time.
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="font-semibold min-w-fit">Predict Denials Upfront:</span>
+                  Leverage payer-specific rules + historical data.
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="font-semibold min-w-fit">Guarantee Compliance:</span>
+                  Align treatments with pre-authorizations.
+                </li>
               </ul>
-              <p className="font-semibold">
-                Result: Reduce denials by up to 70% and accelerate reimbursements for your skilled nursing facility.
+              <p className="font-semibold text-primary border-t pt-4">
+                → Outcome: Reduce denials by 70% + accelerate reimbursements.
               </p>
             </div>
           </div>
 
           {/* Second Feature Box */}
           <div className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-up [animation-delay:200ms]">
-            <h3 className="text-2xl font-bold text-primary mb-4">
-              Automate Medical Coding & Documentation to Avoid Costly Errors
+            <h3 className="text-2xl font-bold text-primary mb-4 flex items-center gap-2">
+              <span className="text-3xl">📄</span>
+              Eliminate Coding Errors Automatically
             </h3>
             <div className="text-gray-600 space-y-4">
-              <p className="mb-4">
-                Manual coding errors are draining your resources. Our AI agent scans patient records, visit notes, and treatment logs to auto-generate accurate codes and documentation that meet CMS and payer standards.
+              <p className="mb-4 font-medium">
+                AI ensures 100% accurate billing every time.
               </p>
-              <ul className="list-disc pl-5 space-y-2 mb-4">
-                <li>AI-driven coding: Instantly map treatments to CPT, ICD-10, and HCPCS codes.</li>
-                <li>Audit-ready reports: Generate compliant records for RAC audits or payer disputes.</li>
-                <li>Real-time compliance alerts: Flag unauthorized treatments before they're performed.</li>
+              <ul className="space-y-4 mb-4">
+                <li className="flex items-start gap-2">
+                  <span className="font-semibold min-w-fit">Instant CPT/ICD-10 Mapping:</span>
+                  Auto-code treatments in seconds.
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="font-semibold min-w-fit">Audit-Ready Reports:</span>
+                  Generate CMS-compliant records instantly.
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="font-semibold min-w-fit">Real-Time Alerts:</span>
+                  Block unauthorized treatments pre-service.
+                </li>
               </ul>
-              <p className="font-semibold">
-                Result: Eliminate coding mistakes and ensure every bill reflects exactly what's authorized.
+              <p className="font-semibold text-primary border-t pt-4">
+                → Outcome: Zero coding mistakes + 100% compliant claims.
               </p>
             </div>
           </div>
 
           {/* Third Feature Box */}
           <div className="p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-up [animation-delay:400ms]">
-            <h3 className="text-2xl font-bold text-primary mb-4">
-              Accelerate Cash Flow with Faster, Error-Free Billing
+            <h3 className="text-2xl font-bold text-primary mb-4 flex items-center gap-2">
+              <span className="text-3xl">💸</span>
+              Get Paid 2x Faster with AI Automation
             </h3>
             <div className="text-gray-600 space-y-4">
-              <p className="mb-4">
-                Why wait 90+ days for payments? Our AI agent streamlines your entire revenue cycle—from authorization to cash collection—cutting billing delays by over 50%.
+              <p className="mb-4 font-medium">
+                Cut billing delays by 50% and predict payments.
               </p>
-              <ul className="list-disc pl-5 space-y-2 mb-4">
-                <li>Submit claims in minutes: AI auto-fills forms, attaches documentation, and files directly to payers.</li>
-                <li>Track claims in real time: Resolve rejections faster with AI-powered insights.</li>
-                <li>Predict payment dates: Forecast cash flow with 95% accuracy using payer behavior analytics.</li>
+              <ul className="space-y-4 mb-4">
+                <li className="flex items-start gap-2">
+                  <span className="font-semibold min-w-fit">1-Click Claims:</span>
+                  Submit error-free claims in &lt;5 minutes.
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="font-semibold min-w-fit">Real-Time Tracking:</span>
+                  Resolve rejections 80% faster.
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="font-semibold min-w-fit">Payment Forecasting:</span>
+                  Predict cash flow with 95% accuracy.
+                </li>
               </ul>
-              <p className="font-semibold">
-                Result: Reduce AR days, quarterly true-ups, eliminate billing bottlenecks, and get paid faster.
+              <p className="font-semibold text-primary border-t pt-4">
+                → Outcome: Reduce AR days by 20+ + boost cash flow.
               </p>
             </div>
           </div>
