@@ -53,7 +53,7 @@ const Navbar = () => {
             <Button variant="ghost" onClick={() => scrollToSection('faq')}>
               FAQ
             </Button>
-            <Button variant="outline" onClick={() => navigate('/demo')} className="ml-2 text-slate-50 mx-[9px] my-0 bg-primary hover:bg-primary/90 py-[14px] px-[35px]">Join Waitlist</Button>
+            <Button variant="outline" onClick={() => navigate('/waitlist')} className="ml-2 text-slate-50 mx-[9px] my-0 bg-primary hover:bg-primary/90 py-[14px] px-[35px]">Join Waitlist</Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -95,7 +95,7 @@ const Navbar = () => {
               <Button 
                 variant="outline" 
                 onClick={() => {
-                  navigate('/demo');
+                  navigate('/waitlist');
                   setIsOpen(false);
                 }} 
                 className="w-full text-slate-50 bg-primary hover:bg-primary/90"
