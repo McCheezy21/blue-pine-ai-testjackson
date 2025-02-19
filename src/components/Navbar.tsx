@@ -25,7 +25,7 @@ const Navbar = () => {
             <Button variant="ghost" onClick={() => navigate('/why-ai')}>
               Why AI?
             </Button>
-            <Button variant="outline" onClick={() => navigate('/demo')} className="ml-2 text-slate-50 px-[22px] py-[23px] mx-[9px] my-0 bg-gray-800 hover:bg-gray-700">
+            <Button variant="outline" onClick={() => navigate('/demo')} className="ml-2 text-slate-50 px-[22px] py-[23px] mx-[9px] my-0 bg-primary hover:bg-primary/90">
               Schedule Demo
             </Button>
           </div>
