@@ -1,3 +1,4 @@
+
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 const Demo = () => {
@@ -35,6 +36,19 @@ const Demo = () => {
                   Facility Name
                 </label>
                 <input type="text" id="facility" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" placeholder="Your Facility Name" />
+              </div>
+              
+              <div>
+                <label htmlFor="bedCount" className="block text-sm font-medium text-gray-700 mb-1">
+                  Number of Beds
+                </label>
+                <input 
+                  type="number" 
+                  id="bedCount" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" 
+                  placeholder="Enter bed count"
+                  min="0"
+                />
               </div>
               
               <div>
