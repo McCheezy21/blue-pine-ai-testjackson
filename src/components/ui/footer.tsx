@@ -65,38 +65,26 @@ export function Footer({
             ))}
           </ul>
         </div>
-        <div className="border-t border-primary-foreground/10 mt-1.5 pt-1.5 md:mt-1.5 md:pt-2 lg:grid lg:grid-cols-10">
-          <nav className="lg:mt-0 lg:col-[4/11]">
-            <ul className="list-none flex flex-wrap -my-1 -mx-2 lg:justify-end">
-              {mainLinks.map((link, i) => (
-                <li key={i} className="my-1 mx-2 shrink-0">
-                  <a
-                    href={link.href}
-                    className="text-sm text-primary-foreground underline-offset-4 hover:underline"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <div className={cn("mt-1.5 lg:mt-0 lg:col-[4/11]", className)}>
-            <ul className="list-none flex flex-wrap -my-1 -mx-3 justify-end">
-              {legalLinks.map((link, i) => (
-                <li key={i} className="my-1 mx-3 shrink-0">
-                  <a
-                    href={link.href}
-                    className="text-sm text-primary-foreground/70 underline-offset-4 hover:underline"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="mt-1.5 text-sm leading-6 text-primary-foreground/70 whitespace-nowrap lg:mt-0 lg:row-[1/3] lg:col-[1/4] text-left">
-            <div>{copyright.text}</div>
-            {copyright.license && <div>{copyright.license}</div>}
+        <div className="border-t border-primary-foreground/10 mt-1.5 pt-1.5 md:mt-1.5 md:pt-2">
+          <div className="flex flex-col gap-3">
+            <div className="text-sm leading-6 text-primary-foreground/70 text-left">
+              <div>{copyright.text}</div>
+              {copyright.license && <div>{copyright.license}</div>}
+            </div>
+            <div className="flex justify-end">
+              <ul className="list-none flex flex-wrap gap-6">
+                {legalLinks.map((link, i) => (
+                  <li key={i}>
+                    <a
+                      href={link.href}
+                      className="text-sm text-primary-foreground/70 underline-offset-4 hover:underline"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
