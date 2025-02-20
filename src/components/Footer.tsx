@@ -1,6 +1,5 @@
 
 import { Footer as FooterUI } from "@/components/ui/footer"
-import { Github, Twitter } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
 const Footer = () => {
@@ -16,18 +15,7 @@ const Footer = () => {
         />
       }
       brandName="Blue Pine AI"
-      socialLinks={[
-        {
-          icon: <Github className="h-5 w-5" />,
-          href: "https://github.com/bluepineai",
-          label: "GitHub"
-        },
-        {
-          icon: <Twitter className="h-5 w-5" />,
-          href: "https://twitter.com/bluepineai",
-          label: "Twitter"
-        }
-      ]}
+      socialLinks={[]}
       mainLinks={[]}
       legalLinks={[
         { 
