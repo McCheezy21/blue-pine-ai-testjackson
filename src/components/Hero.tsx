@@ -58,7 +58,7 @@ const Hero = () => {
           <h1 className="text-4xl md:text-6xl font-bold text-primary mb-6 animate-fade-down">
             SNF Revenue Cycle Made Effortless: <br />AI does the work
           </h1>
-          <p className="text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-up text-2xl">Say goodbye to revenue leakage and inefficiencies. Our AI-driven agents optimize patient sourcing, verify eligibility, automate claims, recover underpayments, and streamline your entire revenue cycle—without adding headcount</p>
+          <p className="text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-up text-2xl">Say goodbye to revenue loss and inefficiencies. Our AI agents optimize patient sourcing, automate claims, recover underpayments, and streamline your revenue cycle—without extra staff</p>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-8 justify-center items-center animate-fade-up relative z-10">
               <FormField control={form.control} name="email" render={({
