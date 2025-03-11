@@ -1,9 +1,6 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-
 const Features = () => {
-  return (
-    <section className="relative py-12 bg-accent -mt-32 font-sans">
+  return <section className="relative py-12 bg-accent -mt-32 font-sans">
       <div className="absolute inset-x-0 -top-32 h-32 bg-gradient-to-b from-transparent to-accent pointer-events-none" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -87,16 +84,12 @@ const Features = () => {
               </div>
               <div className="bg-primary/5 p-3 rounded-lg">
                 <h4 className="font-semibold text-primary text-base">Outcome:</h4>
-                <p className="text-primary font-medium text-base">
-                  20-40% reduction in staffing costs and overhead.
-                </p>
+                <p className="text-primary font-medium text-base">20+% reduction in staffing costs and overhead.</p>
               </div>
             </CardContent>
           </Card>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Features;
