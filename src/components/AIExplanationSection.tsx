@@ -1,9 +1,7 @@
-
 import { Brain, CheckCircle, TrendingUp, Clock, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { useIsMobile } from "../hooks/use-mobile";
-
 const AIExplanationSection = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
@@ -12,7 +10,7 @@ const AIExplanationSection = () => {
     traditional: "Spend hours assigning codes",
     aiReplacement: "AI auto-codes treatments with 99% accuracy in seconds."
   }, {
-    title: "Billing Specialist", 
+    title: "Billing Specialist",
     traditional: "File claims, track submissions",
     aiReplacement: "AI auto-files claims in <5 mins and tracks them in real time."
   }, {
@@ -32,7 +30,6 @@ const AIExplanationSection = () => {
     traditional: isMobile ? "Stressed" : "Stress",
     aiReplacement: "Peace of mind"
   }];
-
   const roiPoints = [{
     icon: CheckCircle,
     title: "Reduce Claim Denials",
@@ -50,7 +47,6 @@ const AIExplanationSection = () => {
     title: "Boost Revenue",
     description: "Recover 5–15% more revenue from underpaid or denied claims."
   }];
-
   return <>
       {/* What Are AI Agents Section */}
       <section className="bg-white py-8 md:py-16">
@@ -107,21 +103,18 @@ const AIExplanationSection = () => {
                 </tr>
               </thead>
               <tbody>
-                {roles.map((role, index) => (
-                  <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
+                {roles.map((role, index) => <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
                     <td className="px-6 py-4 font-medium">{role.title}</td>
                     <td className="px-6 py-4 text-gray-600">{role.traditional}</td>
                     <td className="px-6 py-4 text-primary">{role.aiReplacement}</td>
-                  </tr>
-                ))}
+                  </tr>)}
               </tbody>
             </table>
           </div>
 
           {/* Mobile Card View */}
           <div className="md:hidden space-y-4">
-            {roles.map((role, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-sm p-4">
+            {roles.map((role, index) => <div key={index} className="bg-white rounded-lg shadow-sm p-4">
                 <h3 className="font-semibold text-lg text-primary mb-2">{role.title}</h3>
                 <div className="space-y-2">
                   <div>
@@ -133,13 +126,10 @@ const AIExplanationSection = () => {
                     <p className="text-primary">{role.aiReplacement}</p>
                   </div>
                 </div>
-              </div>
-            ))}
+              </div>)}
           </div>
 
-          <p className="text-base md:text-lg font-semibold text-primary mt-4 md:mt-6">
-            Result: You save over 30% on labor costs while improving billing accuracy and speed.
-          </p>
+          <p className="text-base md:text-lg font-semibold text-primary mt-4 md:mt-6">Result: You save over 20% on labor costs while improving billing accuracy and speed.</p>
         </div>
       </section>
 
@@ -177,5 +167,4 @@ const AIExplanationSection = () => {
       </section>
     </>;
 };
-
 export default AIExplanationSection;
