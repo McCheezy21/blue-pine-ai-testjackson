@@ -1,96 +1,102 @@
 
+import { TrendingUp, AlertTriangle, DollarSign } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+
 const Features = () => {
   return (
     <section className="relative py-12 bg-accent -mt-32">
       <div className="absolute inset-x-0 -top-32 h-32 bg-gradient-to-b from-transparent to-accent pointer-events-none" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* First Feature Box */}
-          <div className="p-8 bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 animate-fade-up">
-            <h3 className="text-2xl md:text-3xl font-bold text-primary mb-6 leading-tight">
-              Slash Claim Denials by 70% with AI
-            </h3>
-            <div className="text-gray-600 space-y-6">
-              <p className="text-lg font-medium text-primary/90">
-                Stop losing revenue to preventable errors.
-              </p>
-              <ul className="space-y-6">
-                <li className="flex flex-col gap-2">
-                  <span className="font-bold text-primary/80">Auto-Audit Documentation</span>
-                  <p className="text-gray-600 leading-relaxed">Flag missing/mismatched codes (ICD-10, CPT) in real time.</p>
-                </li>
-                <li className="flex flex-col gap-2">
-                  <span className="font-bold text-primary/80">Predict Denials Upfront</span>
-                  <p className="text-gray-600 leading-relaxed">Leverage payer-specific rules + historical data.</p>
-                </li>
-                <li className="flex flex-col gap-2">
-                  <span className="font-bold text-primary/80">Guarantee Compliance</span>
-                  <p className="text-gray-600 leading-relaxed">Align treatments with pre-authorizations.</p>
-                </li>
-              </ul>
-              <p className="font-bold text-primary border-t pt-6 mt-6">
-                → Outcome: Reduce denials by 70% + accelerate reimbursements.
-              </p>
-            </div>
-          </div>
+          {/* Revenue & Payments Card */}
+          <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-up overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 pb-2">
+              <CardTitle className="flex items-center gap-2 text-2xl md:text-2xl font-bold text-primary">
+                <TrendingUp className="h-6 w-6" />
+                Increase Revenue & Maximize Payments
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-6">
+              <div className="space-y-2">
+                <h4 className="font-semibold text-gray-800">Challenge:</h4>
+                <p className="text-gray-600">
+                  Underpayments, missed billing opportunities, and claim errors reduce total revenue.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h4 className="font-semibold text-gray-800">Solution:</h4>
+                <p className="text-gray-600">
+                  AI-driven accuracy identifies and recovers lost revenue while preventing errors.
+                </p>
+              </div>
+              <div className="bg-primary/5 p-4 rounded-lg">
+                <h4 className="font-semibold text-primary">Outcome:</h4>
+                <p className="text-primary font-medium">
+                  5-10% increase in revenue recovery per facility.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
-          {/* Second Feature Box */}
-          <div className="p-8 bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 animate-fade-up [animation-delay:200ms]">
-            <h3 className="text-2xl md:text-3xl font-bold text-primary mb-6 leading-tight">
-              Eliminate Coding Errors Automatically
-            </h3>
-            <div className="text-gray-600 space-y-6">
-              <p className="text-lg font-medium text-primary/90">
-                AI ensures 100% accurate billing every time.
-              </p>
-              <ul className="space-y-6">
-                <li className="flex flex-col gap-2">
-                  <span className="font-bold text-primary/80">Instant CPT/ICD-10 Mapping</span>
-                  <p className="text-gray-600 leading-relaxed">Auto-code treatments in seconds.</p>
-                </li>
-                <li className="flex flex-col gap-2">
-                  <span className="font-bold text-primary/80">Audit-Ready Reports</span>
-                  <p className="text-gray-600 leading-relaxed">Generate CMS-compliant records instantly.</p>
-                </li>
-                <li className="flex flex-col gap-2">
-                  <span className="font-bold text-primary/80">Real-Time Alerts</span>
-                  <p className="text-gray-600 leading-relaxed">Block unauthorized treatments pre-service.</p>
-                </li>
-              </ul>
-              <p className="font-bold text-primary border-t pt-6 mt-6">
-                → Outcome: Zero coding mistakes + 100% compliant claims.
-              </p>
-            </div>
-          </div>
+          {/* Bad Debt Card */}
+          <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-up [animation-delay:200ms] overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 pb-2">
+              <CardTitle className="flex items-center gap-2 text-2xl md:text-2xl font-bold text-primary">
+                <AlertTriangle className="h-6 w-6" />
+                Reduce Bad Debt & Write-Offs
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-6">
+              <div className="space-y-2">
+                <h4 className="font-semibold text-gray-800">Challenge:</h4>
+                <p className="text-gray-600">
+                  High denial rates lead to increased write-offs and lost reimbursements.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h4 className="font-semibold text-gray-800">Solution:</h4>
+                <p className="text-gray-600">
+                  AI automates denial recovery, ensures proper coding, and reduces claim errors.
+                </p>
+              </div>
+              <div className="bg-primary/5 p-4 rounded-lg">
+                <h4 className="font-semibold text-primary">Outcome:</h4>
+                <p className="text-primary font-medium">
+                  30-50% fewer denials and a significant reduction in bad debt.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
-          {/* Third Feature Box */}
-          <div className="p-8 bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 animate-fade-up [animation-delay:400ms]">
-            <h3 className="text-2xl md:text-3xl font-bold text-primary mb-6 leading-tight">
-              Get Paid 2x Faster with AI Automation
-            </h3>
-            <div className="text-gray-600 space-y-6">
-              <p className="text-lg font-medium text-primary/90">
-                Cut billing delays by 50% and predict payments.
-              </p>
-              <ul className="space-y-6">
-                <li className="flex flex-col gap-2">
-                  <span className="font-bold text-primary/80">1-Click Claims</span>
-                  <p className="text-gray-600 leading-relaxed">Submit error-free claims in &lt;5 minutes.</p>
-                </li>
-                <li className="flex flex-col gap-2">
-                  <span className="font-bold text-primary/80">Real-Time Tracking</span>
-                  <p className="text-gray-600 leading-relaxed">Resolve rejections 80% faster.</p>
-                </li>
-                <li className="flex flex-col gap-2">
-                  <span className="font-bold text-primary/80">Payment Forecasting</span>
-                  <p className="text-gray-600 leading-relaxed">Predict cash flow with 95% accuracy.</p>
-                </li>
-              </ul>
-              <p className="font-bold text-primary border-t pt-6 mt-6">
-                → Outcome: Reduce AR days by 20+ + boost cash flow.
-              </p>
-            </div>
-          </div>
+          {/* Cost Efficiency Card */}
+          <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-up [animation-delay:400ms] overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 pb-2">
+              <CardTitle className="flex items-center gap-2 text-2xl md:text-2xl font-bold text-primary">
+                <DollarSign className="h-6 w-6" />
+                Cut Costs & Scale Efficiently
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-6">
+              <div className="space-y-2">
+                <h4 className="font-semibold text-gray-800">Challenge:</h4>
+                <p className="text-gray-600">
+                  Rising labor costs and inefficient workflows drain operational budgets.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h4 className="font-semibold text-gray-800">Solution:</h4>
+                <p className="text-gray-600">
+                  AI replaces repetitive tasks, optimizes staff workflows, and prevents unauthorized treatments.
+                </p>
+              </div>
+              <div className="bg-primary/5 p-4 rounded-lg">
+                <h4 className="font-semibold text-primary">Outcome:</h4>
+                <p className="text-primary font-medium">
+                  20-40% reduction in staffing costs and overhead.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </section>
