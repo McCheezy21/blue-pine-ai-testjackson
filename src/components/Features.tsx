@@ -1,5 +1,4 @@
 
-import { TrendingUp, AlertTriangle, DollarSign } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 const Features = () => {
@@ -11,8 +10,7 @@ const Features = () => {
           {/* Revenue & Payments Card */}
           <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-up overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 pb-2">
-              <CardTitle className="flex items-center gap-2 text-2xl md:text-2xl font-bold text-primary">
-                <TrendingUp className="h-6 w-6" />
+              <CardTitle className="text-2xl md:text-2xl font-bold text-primary">
                 Increase Revenue & Maximize Payments
               </CardTitle>
             </CardHeader>
@@ -41,8 +39,7 @@ const Features = () => {
           {/* Bad Debt Card */}
           <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-up [animation-delay:200ms] overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 pb-2">
-              <CardTitle className="flex items-center gap-2 text-2xl md:text-2xl font-bold text-primary">
-                <AlertTriangle className="h-6 w-6" />
+              <CardTitle className="text-2xl md:text-2xl font-bold text-primary">
                 Reduce Bad Debt & Write-Offs
               </CardTitle>
             </CardHeader>
@@ -71,8 +68,7 @@ const Features = () => {
           {/* Cost Efficiency Card */}
           <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-up [animation-delay:400ms] overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 pb-2">
-              <CardTitle className="flex items-center gap-2 text-2xl md:text-2xl font-bold text-primary">
-                <DollarSign className="h-6 w-6" />
+              <CardTitle className="text-2xl md:text-2xl font-bold text-primary">
                 Cut Costs & Scale Efficiently
               </CardTitle>
             </CardHeader>
