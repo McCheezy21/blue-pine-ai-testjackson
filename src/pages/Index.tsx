@@ -2,6 +2,7 @@
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import Features from "../components/Features";
+import RevenueChallenges from "../components/RevenueChallenges";
 import WhyNeedUs from "../components/WhyNeedUs";
 import FAQ from "../components/FAQ";
 import Testimonials from "../components/Testimonials";
@@ -17,6 +18,7 @@ const Index = () => {
       <section id="features">
         <Features />
       </section>
+      <RevenueChallenges />
       <WhyNeedUs />
       <section id="ai-explanation">
         <AIExplanationSection />
