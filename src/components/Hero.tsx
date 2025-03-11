@@ -1,3 +1,4 @@
+
 import { ArrowRight } from "lucide-react";
 import { Input } from "./ui/input";
 import { useForm } from "react-hook-form";
@@ -7,9 +8,11 @@ import { useToast } from "./ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { ShimmerButton } from "./ui/shimmer-button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
+
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address")
 });
+
 const Hero = () => {
   const {
     toast
@@ -60,7 +63,7 @@ const Hero = () => {
           </h1>
           <div className="flex justify-center mb-6 animate-fade-up">
             <p className="text-primary font-medium tracking-wide text-2xl">
-              Maximize Revenue <span className="text-gray-400 mx-2">|</span> Reduce Denials <span className="text-gray-400 mx-2">|</span> Automate Workflows
+              Maximize Revenue <span className="text-gray-400 mx-2">|</span> Reduce Denials <span className="text-gray-400 mx-2">|</span> Automate Cashflow
             </p>
           </div>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-up text-2xl">Say goodbye to revenue loss and inefficiencies. Our AI agents optimize patient sourcing, automate claims, recover underpayments, and streamline your revenue cycle—without extra staff</p>
