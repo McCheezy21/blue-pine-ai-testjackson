@@ -59,7 +59,7 @@ const Hero = () => {
       <div className="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
         <div className="text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-primary mb-6 animate-fade-down">
-            Skilled Nursing Billing Made Effortless: <br />AI does the work
+            SNF Revenue Cycle Made Effortless: <br />AI does the work
           </h1>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-up text-2xl">
             Cut Denials by 70%, Eliminate Coding Errors & Speed Up Cash Flow 2x Faster—Guaranteed Compliance with AI-Powered Automation
