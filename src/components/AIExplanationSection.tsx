@@ -2,9 +2,11 @@
 import { Brain, CheckCircle, TrendingUp, Clock, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
+import { useIsMobile } from "../hooks/use-mobile";
 
 const AIExplanationSection = () => {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const roles = [{
     title: "Medical Coder",
     traditional: "Spend hours assigning codes",
@@ -27,7 +29,7 @@ const AIExplanationSection = () => {
     aiReplacement: "AI predicts payment dates and auto-follows up with payers."
   }, {
     title: "Administrator",
-    traditional: "Stressed",
+    traditional: isMobile ? "Stressed" : "Stress",
     aiReplacement: "Peace of mind"
   }];
 
