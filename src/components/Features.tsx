@@ -16,20 +16,20 @@ const Features = () => {
             </CardHeader>
             <CardContent className="pt-4 space-y-4">
               <div className="space-y-1">
-                <h4 className="font-semibold text-gray-800 text-sm">Challenge:</h4>
-                <p className="text-gray-600 text-sm">
+                <h4 className="font-semibold text-gray-800 text-base">Challenge:</h4>
+                <p className="text-gray-600 text-base">
                   Underpayments, missed billing opportunities, and claim errors reduce total revenue.
                 </p>
               </div>
               <div className="space-y-1">
-                <h4 className="font-semibold text-gray-800 text-sm">Solution:</h4>
-                <p className="text-gray-600 text-sm">
+                <h4 className="font-semibold text-gray-800 text-base">Solution:</h4>
+                <p className="text-gray-600 text-base">
                   AI-driven accuracy identifies and recovers lost revenue while preventing errors.
                 </p>
               </div>
               <div className="bg-primary/5 p-3 rounded-lg">
-                <h4 className="font-semibold text-primary text-sm">Outcome:</h4>
-                <p className="text-primary font-medium text-sm">
+                <h4 className="font-semibold text-primary text-base">Outcome:</h4>
+                <p className="text-primary font-medium text-base">
                   5-10% increase in revenue recovery per facility.
                 </p>
               </div>
@@ -45,20 +45,20 @@ const Features = () => {
             </CardHeader>
             <CardContent className="pt-4 space-y-4">
               <div className="space-y-1">
-                <h4 className="font-semibold text-gray-800 text-sm">Challenge:</h4>
-                <p className="text-gray-600 text-sm">
+                <h4 className="font-semibold text-gray-800 text-base">Challenge:</h4>
+                <p className="text-gray-600 text-base">
                   High denial rates lead to increased write-offs and lost reimbursements.
                 </p>
               </div>
               <div className="space-y-1">
-                <h4 className="font-semibold text-gray-800 text-sm">Solution:</h4>
-                <p className="text-gray-600 text-sm">
+                <h4 className="font-semibold text-gray-800 text-base">Solution:</h4>
+                <p className="text-gray-600 text-base">
                   AI automates denial recovery, ensures proper coding, and reduces claim errors.
                 </p>
               </div>
               <div className="bg-primary/5 p-3 rounded-lg">
-                <h4 className="font-semibold text-primary text-sm">Outcome:</h4>
-                <p className="text-primary font-medium text-sm">
+                <h4 className="font-semibold text-primary text-base">Outcome:</h4>
+                <p className="text-primary font-medium text-base">
                   30-50% fewer denials and a significant reduction in bad debt.
                 </p>
               </div>
@@ -74,20 +74,20 @@ const Features = () => {
             </CardHeader>
             <CardContent className="pt-4 space-y-4">
               <div className="space-y-1">
-                <h4 className="font-semibold text-gray-800 text-sm">Challenge:</h4>
-                <p className="text-gray-600 text-sm">
+                <h4 className="font-semibold text-gray-800 text-base">Challenge:</h4>
+                <p className="text-gray-600 text-base">
                   Rising labor costs and inefficient workflows drain operational budgets.
                 </p>
               </div>
               <div className="space-y-1">
-                <h4 className="font-semibold text-gray-800 text-sm">Solution:</h4>
-                <p className="text-gray-600 text-sm">
+                <h4 className="font-semibold text-gray-800 text-base">Solution:</h4>
+                <p className="text-gray-600 text-base">
                   AI replaces repetitive tasks, optimizes staff workflows, and prevents unauthorized treatments.
                 </p>
               </div>
               <div className="bg-primary/5 p-3 rounded-lg">
-                <h4 className="font-semibold text-primary text-sm">Outcome:</h4>
-                <p className="text-primary font-medium text-sm">
+                <h4 className="font-semibold text-primary text-base">Outcome:</h4>
+                <p className="text-primary font-medium text-base">
                   20-40% reduction in staffing costs and overhead.
                 </p>
               </div>
