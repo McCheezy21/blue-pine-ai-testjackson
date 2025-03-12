@@ -26,9 +26,7 @@ const Features = () => {
               </div>
               <div className="bg-primary/5 p-3 rounded-lg">
                 <h4 className="font-semibold text-primary text-base">Outcome:</h4>
-                <p className="text-primary font-medium text-base">
-                  5-10% increase in revenue recovery per facility.
-                </p>
+                <p className="text-primary font-medium text-base">3-8% increase in revenue recovery per facility.</p>
               </div>
             </CardContent>
           </Card>
