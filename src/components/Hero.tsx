@@ -55,7 +55,7 @@ const Hero = () => {
       
       <div className="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
         <div className="text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-primary mb-6 animate-fade-down">
+          <h1 className="text-4xl font-bold text-primary mb-6 animate-fade-down py-[30px] md:text-6xl">
             SNF Revenue Cycle Made Effortless: <br />AI does the work
           </h1>
           <div className="flex justify-center mb-6 animate-fade-up">
