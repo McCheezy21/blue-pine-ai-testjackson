@@ -2,9 +2,11 @@ import { Brain, CheckCircle, TrendingUp, Clock, AlertCircle } from "lucide-react
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { useIsMobile } from "../hooks/use-mobile";
+
 const AIExplanationSection = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  
   const roles = [{
     title: "Medical Coder",
     traditional: "Spend hours assigning codes",
@@ -30,10 +32,11 @@ const AIExplanationSection = () => {
     traditional: isMobile ? "Stressed" : "Stress",
     aiReplacement: "Peace of mind"
   }];
+
   const roiPoints = [{
     icon: CheckCircle,
     title: "Reduce Claim Denials",
-    description: "Cut denials by 50–70% with AI-powered audits and pre-submission checks."
+    description: "Cut denials by 30-50% with AI-powered audits and pre-submission checks."
   }, {
     icon: TrendingUp,
     title: "Accelerate Cash Flow",
@@ -47,6 +50,7 @@ const AIExplanationSection = () => {
     title: "Boost Revenue",
     description: "Recover 5–15% more revenue from underpaid or denied claims."
   }];
+
   return <>
       {/* What Are AI Agents Section */}
       <section className="bg-white py-8 md:py-16">
@@ -167,4 +171,5 @@ const AIExplanationSection = () => {
       </section>
     </>;
 };
+
 export default AIExplanationSection;
