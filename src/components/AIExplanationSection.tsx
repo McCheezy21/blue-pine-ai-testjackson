@@ -48,7 +48,7 @@ const AIExplanationSection = () => {
   }, {
     icon: AlertCircle,
     title: "Boost Revenue",
-    description: "Recover 5–15% more revenue from underpaid or denied claims."
+    description: "Recover 3–8% more revenue from underpaid or denied claims."
   }];
 
   return <>
