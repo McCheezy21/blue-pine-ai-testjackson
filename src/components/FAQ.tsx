@@ -1,4 +1,3 @@
-
 import {
   Accordion,
   AccordionContent,
@@ -17,7 +16,7 @@ const faqs = [
   },
   {
     question: "What's the ROI? How soon will we see results?",
-    answer: "Our clients reduce claim denials by 50-70% within 90 days and accelerate cash flow by 30%. This service pays for itself."
+    answer: "Our clients reduce claim denials by 30-50% within 90 days and accelerate cash flow by 30%. This service pays for itself."
   },
   {
     question: "How difficult is it for our staff to learn this system?",
