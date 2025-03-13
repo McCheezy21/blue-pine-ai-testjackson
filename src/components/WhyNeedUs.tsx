@@ -28,7 +28,7 @@ const benefits = [{
 const WhyNeedUs = () => {
   return <section className="py-16 bg-primary">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-white text-center mb-12">AI Automated Features</h2>
+        <h2 className="text-3xl font-bold text-white text-center mb-12">AI Agent Features</h2>
         <div className="relative">
           <Carousel opts={{
           align: "start",

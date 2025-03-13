@@ -1,16 +1,18 @@
-
 import { Brain, CheckCircle, TrendingUp, Clock, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
+import { useIsMobile } from "../hooks/use-mobile";
 
 const AIExplanationSection = () => {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
+  
   const roles = [{
     title: "Medical Coder",
     traditional: "Spend hours assigning codes",
     aiReplacement: "AI auto-codes treatments with 99% accuracy in seconds."
   }, {
-    title: "Billing Specialist", 
+    title: "Billing Specialist",
     traditional: "File claims, track submissions",
     aiReplacement: "AI auto-files claims in <5 mins and tracks them in real time."
   }, {
@@ -27,14 +29,14 @@ const AIExplanationSection = () => {
     aiReplacement: "AI predicts payment dates and auto-follows up with payers."
   }, {
     title: "Administrator",
-    traditional: "Stressed",
+    traditional: isMobile ? "Stressed" : "Stress",
     aiReplacement: "Peace of mind"
   }];
 
   const roiPoints = [{
     icon: CheckCircle,
     title: "Reduce Claim Denials",
-    description: "Cut denials by 50–70% with AI-powered audits and pre-submission checks."
+    description: "Cut denials by 30-50% with AI-powered audits and pre-submission checks."
   }, {
     icon: TrendingUp,
     title: "Accelerate Cash Flow",
@@ -46,7 +48,7 @@ const AIExplanationSection = () => {
   }, {
     icon: AlertCircle,
     title: "Boost Revenue",
-    description: "Recover 5–15% more revenue from underpaid or denied claims."
+    description: "Recover 3–8% more revenue from underpaid or denied claims."
   }];
 
   return <>
@@ -105,21 +107,18 @@ const AIExplanationSection = () => {
                 </tr>
               </thead>
               <tbody>
-                {roles.map((role, index) => (
-                  <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
+                {roles.map((role, index) => <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
                     <td className="px-6 py-4 font-medium">{role.title}</td>
                     <td className="px-6 py-4 text-gray-600">{role.traditional}</td>
                     <td className="px-6 py-4 text-primary">{role.aiReplacement}</td>
-                  </tr>
-                ))}
+                  </tr>)}
               </tbody>
             </table>
           </div>
 
           {/* Mobile Card View */}
           <div className="md:hidden space-y-4">
-            {roles.map((role, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-sm p-4">
+            {roles.map((role, index) => <div key={index} className="bg-white rounded-lg shadow-sm p-4">
                 <h3 className="font-semibold text-lg text-primary mb-2">{role.title}</h3>
                 <div className="space-y-2">
                   <div>
@@ -131,13 +130,10 @@ const AIExplanationSection = () => {
                     <p className="text-primary">{role.aiReplacement}</p>
                   </div>
                 </div>
-              </div>
-            ))}
+              </div>)}
           </div>
 
-          <p className="text-base md:text-lg font-semibold text-primary mt-4 md:mt-6">
-            Result: You save over 30% on labor costs while improving billing accuracy and speed.
-          </p>
+          <p className="text-base md:text-lg font-semibold text-primary mt-4 md:mt-6">Result: You save over 20% on labor costs while improving billing accuracy and speed.</p>
         </div>
       </section>
 

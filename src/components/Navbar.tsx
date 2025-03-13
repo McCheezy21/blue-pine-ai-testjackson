@@ -1,16 +1,13 @@
-
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useIsMobile } from "../hooks/use-mobile";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const location = useLocation();
-
   const scrollToSection = (sectionId: string) => {
     if (location.pathname !== '/') {
       navigate('/');
@@ -33,7 +30,6 @@ const Navbar = () => {
     }
     setIsOpen(false); // Close mobile menu after clicking
   };
-
   return <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
@@ -50,9 +46,7 @@ const Navbar = () => {
             <Button variant="ghost" onClick={() => scrollToSection('features')}>
               Features
             </Button>
-            <Button variant="ghost" onClick={() => scrollToSection('ai-explanation')}>
-              Why AI?
-            </Button>
+            <Button variant="ghost" onClick={() => scrollToSection('ai-explanation')}>AI Agent?</Button>
             <Button variant="ghost" onClick={() => scrollToSection('faq')}>
               FAQ
             </Button>
@@ -61,65 +55,39 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-primary p-2 rounded-md hover:bg-gray-100"
-            >
+            <button onClick={() => setIsOpen(!isOpen)} className="text-primary p-2 rounded-md hover:bg-gray-100">
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
 
         {/* Mobile Navigation */}
-        {isOpen && (
-          <div className="md:hidden">
+        {isOpen && <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
-              <Button 
-                variant="ghost" 
-                className="w-full text-left justify-start" 
-                onClick={() => {
-                  navigate('/');
-                  setIsOpen(false);
-                }}
-              >
+              <Button variant="ghost" className="w-full text-left justify-start" onClick={() => {
+            navigate('/');
+            setIsOpen(false);
+          }}>
                 Home
               </Button>
-              <Button 
-                variant="ghost" 
-                className="w-full text-left justify-start" 
-                onClick={() => scrollToSection('features')}
-              >
+              <Button variant="ghost" className="w-full text-left justify-start" onClick={() => scrollToSection('features')}>
                 Features
               </Button>
-              <Button 
-                variant="ghost" 
-                className="w-full text-left justify-start" 
-                onClick={() => scrollToSection('ai-explanation')}
-              >
+              <Button variant="ghost" className="w-full text-left justify-start" onClick={() => scrollToSection('ai-explanation')}>
                 Why AI?
               </Button>
-              <Button 
-                variant="ghost" 
-                className="w-full text-left justify-start" 
-                onClick={() => scrollToSection('faq')}
-              >
+              <Button variant="ghost" className="w-full text-left justify-start" onClick={() => scrollToSection('faq')}>
                 FAQ
               </Button>
-              <Button 
-                variant="outline" 
-                onClick={() => {
-                  navigate('/waitlist');
-                  setIsOpen(false);
-                }} 
-                className="w-full text-slate-50 bg-primary hover:bg-primary/90"
-              >
+              <Button variant="outline" onClick={() => {
+            navigate('/waitlist');
+            setIsOpen(false);
+          }} className="w-full text-slate-50 bg-primary hover:bg-primary/90">
                 Join Waitlist
               </Button>
             </div>
-          </div>
-        )}
+          </div>}
       </div>
     </nav>;
 };
-
 export default Navbar;
