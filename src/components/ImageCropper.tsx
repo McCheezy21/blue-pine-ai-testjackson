@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { fabric } from 'fabric';
+import { Canvas, Image } from 'fabric';
 
 interface ImageCropperProps {
   imageUrl: string;
@@ -9,13 +9,13 @@ interface ImageCropperProps {
 
 const ImageCropper: React.FC<ImageCropperProps> = ({ imageUrl, onCrop }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
+  const [canvas, setCanvas] = useState<Canvas | null>(null);
   
   useEffect(() => {
     if (!canvasRef.current) return;
     
     // Initialize canvas
-    const fabricCanvas = new fabric.Canvas(canvasRef.current, {
+    const fabricCanvas = new Canvas(canvasRef.current, {
       width: 200,
       height: 200,
       backgroundColor: '#ffffff'
@@ -24,7 +24,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ imageUrl, onCrop }) => {
     setCanvas(fabricCanvas);
     
     // Load the image
-    fabric.Image.fromURL(imageUrl, (img) => {
+    Image.fromURL(imageUrl, (img) => {
       // Scale the image to fit the canvas while maintaining aspect ratio
       const scale = Math.min(
         fabricCanvas.getWidth() / img.width!,
