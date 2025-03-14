@@ -17,7 +17,7 @@ export const updateFavicon = (imageUrl: string) => {
     
     // Determine the crop area to focus on the tree
     // For this specific image, we'll crop a bit from all sides to zoom in on the tree
-    const cropFactor = 0.3; // Adjusted to make the tree fill more space
+    const cropFactor = 0.25; // Adjusted to make the tree fill even more space
     const cropWidth = img.width * cropFactor;
     const cropHeight = img.height * cropFactor;
     const cropX = (img.width - cropWidth) / 2;

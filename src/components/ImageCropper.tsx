@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Canvas, Image } from 'fabric';
+import { Canvas, Image, ImageOptions } from 'fabric';
 
 interface ImageCropperProps {
   imageUrl: string;
@@ -23,8 +23,12 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ imageUrl, onCrop }) => {
     
     setCanvas(fabricCanvas);
     
-    // Load the image
-    Image.fromURL(imageUrl, (img) => {
+    // Load the image - use the correct API for Fabric.js v6
+    const imgOptions: ImageOptions = {
+      crossOrigin: 'anonymous'
+    };
+    
+    Image.fromURL(imageUrl, imgOptions).then((img) => {
       // Scale the image to fit the canvas while maintaining aspect ratio
       const scale = Math.min(
         fabricCanvas.getWidth() / img.width!,
@@ -49,7 +53,8 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ imageUrl, onCrop }) => {
       setTimeout(() => {
         const dataUrl = fabricCanvas.toDataURL({
           format: 'png',
-          quality: 1
+          quality: 1,
+          multiplier: 1 // Required property for TDataUrlOptions
         });
         onCrop(dataUrl);
       }, 500);
