@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Canvas, Image, ImageOptions } from 'fabric';
+import { Canvas, Image } from 'fabric';
 
 interface ImageCropperProps {
   imageUrl: string;
@@ -24,7 +24,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ imageUrl, onCrop }) => {
     setCanvas(fabricCanvas);
     
     // Load the image - use the correct API for Fabric.js v6
-    const imgOptions: ImageOptions = {
+    const imgOptions = {
       crossOrigin: 'anonymous'
     };
     
