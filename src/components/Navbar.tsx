@@ -4,11 +4,13 @@ import { Menu, X } from "lucide-react";
 import { useIsMobile } from "../hooks/use-mobile";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const location = useLocation();
+
   const scrollToSection = (sectionId: string) => {
     if (location.pathname !== '/') {
       navigate('/');
@@ -31,6 +33,7 @@ const Navbar = () => {
     }
     setIsOpen(false); // Close mobile menu after clicking
   };
+
   return <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
@@ -51,7 +54,7 @@ const Navbar = () => {
             <Button variant="ghost" onClick={() => scrollToSection('faq')}>
               FAQ
             </Button>
-            <Button variant="outline" onClick={() => navigate('/signin')} className="mr-2">
+            <Button variant="ghost" onClick={() => navigate('/signin')}>
               Sign In
             </Button>
             <Button variant="outline" onClick={() => navigate('/waitlist')} className="text-slate-50 mx-[9px] my-0 bg-primary hover:bg-primary/90 py-[14px] px-[35px]">Join Waitlist</Button>
@@ -100,4 +103,5 @@ const Navbar = () => {
       </div>
     </nav>;
 };
+
 export default Navbar;
