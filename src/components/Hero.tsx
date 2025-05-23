@@ -1,3 +1,4 @@
+
 import { ArrowRight } from "lucide-react";
 import { Input } from "./ui/input";
 import { useForm } from "react-hook-form";
@@ -7,19 +8,21 @@ import { useToast } from "./ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { ShimmerButton } from "./ui/shimmer-button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
+
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address")
 });
+
 const Hero = () => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: ""
     }
   });
+  
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log('Submitting email:', values.email);
     try {
@@ -48,6 +51,7 @@ const Hero = () => {
       });
     }
   };
+  
   return <div className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0 md:bg-gradient-to-br from-primary/10 to-secondary/10 -z-10" />
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9')] bg-cover bg-center opacity-35 -z-20" />
@@ -74,7 +78,13 @@ const Hero = () => {
                     </FormControl>
                     <FormMessage className="absolute text-left text-sm" />
                   </FormItem>} />
-              <ShimmerButton type="submit" className="h-12 px-8 py-3" background="#004466" shimmerColor="#ffffff" borderRadius="0.375rem">
+              <ShimmerButton 
+                to="/waitlist" 
+                className="h-12 px-8 py-3" 
+                background="#004466" 
+                shimmerColor="#ffffff" 
+                borderRadius="0.375rem"
+              >
                 <span className="flex items-center gap-2">
                   Join Waitlist
                   <ArrowRight className="group-hover:translate-x-1 transition-transform" />
@@ -86,4 +96,5 @@ const Hero = () => {
       </div>
     </div>;
 };
+
 export default Hero;
