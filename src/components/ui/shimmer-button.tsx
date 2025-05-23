@@ -1,5 +1,6 @@
 import React, { CSSProperties } from "react";
 import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
 
 export interface ShimmerButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -10,6 +11,7 @@ export interface ShimmerButtonProps
   background?: string;
   className?: string;
   children?: React.ReactNode;
+  to?: string; // Added to support navigation
 }
 
 const ShimmerButton = React.forwardRef<HTMLButtonElement, ShimmerButtonProps>(
@@ -22,30 +24,13 @@ const ShimmerButton = React.forwardRef<HTMLButtonElement, ShimmerButtonProps>(
       background = "rgba(0, 0, 0, 1)",
       className,
       children,
+      to,
       ...props
     },
     ref,
   ) => {
-    return (
-      <button
-        style={
-          {
-            "--spread": "90deg",
-            "--shimmer-color": shimmerColor,
-            "--radius": borderRadius,
-            "--speed": shimmerDuration,
-            "--cut": shimmerSize,
-            "--bg": background,
-          } as CSSProperties
-        }
-        className={cn(
-          "group relative z-0 flex cursor-pointer items-center justify-center overflow-hidden whitespace-nowrap border border-white/10 px-6 py-3 text-white [background:var(--bg)] [border-radius:var(--radius)] dark:text-black",
-          "transform-gpu transition-transform duration-300 ease-in-out active:translate-y-px",
-          className,
-        )}
-        ref={ref}
-        {...props}
-      >
+    const buttonContent = (
+      <>
         {/* spark container - moved outside the content for border effect */}
         <div
           className={cn(
@@ -82,6 +67,46 @@ const ShimmerButton = React.forwardRef<HTMLButtonElement, ShimmerButtonProps>(
             "absolute inset-[2px] -z-20 [background:var(--bg)] [border-radius:calc(var(--radius)-2px)]",
           )}
         />
+      </>
+    );
+
+    const commonStyles = {
+      "--spread": "90deg",
+      "--shimmer-color": shimmerColor,
+      "--radius": borderRadius,
+      "--speed": shimmerDuration,
+      "--cut": shimmerSize,
+      "--bg": background,
+    } as CSSProperties;
+
+    const commonClassNames = cn(
+      "group relative z-0 flex cursor-pointer items-center justify-center overflow-hidden whitespace-nowrap border border-white/10 px-6 py-3 text-white [background:var(--bg)] [border-radius:var(--radius)] dark:text-black",
+      "transform-gpu transition-transform duration-300 ease-in-out active:translate-y-px",
+      className,
+    );
+
+    // If a "to" prop is provided, render as a Link
+    if (to) {
+      return (
+        <Link 
+          to={to}
+          style={commonStyles}
+          className={commonClassNames}
+        >
+          {buttonContent}
+        </Link>
+      );
+    }
+
+    // Otherwise render as a button
+    return (
+      <button
+        style={commonStyles}
+        className={commonClassNames}
+        ref={ref}
+        {...props}
+      >
+        {buttonContent}
       </button>
     );
   },
