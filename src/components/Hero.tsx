@@ -7,28 +7,19 @@ import { useToast } from "./ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { ShimmerButton } from "./ui/shimmer-button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
-import { useEffect } from "react";
-import { updateFavicon } from "@/utils/faviconUtils";
-
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address")
 });
-
 const Hero = () => {
-  const { toast } = useToast();
-  
-  useEffect(() => {
-    // Update the favicon to make the tree fill more of the space
-    updateFavicon('/lovable-uploads/da7c17c5-429b-4214-9103-3a18d0b27744.png');
-  }, []);
-  
+  const {
+    toast
+  } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: ""
     }
   });
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log('Submitting email:', values.email);
     try {
@@ -57,7 +48,6 @@ const Hero = () => {
       });
     }
   };
-
   return <div className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0 md:bg-gradient-to-br from-primary/10 to-secondary/10 -z-10" />
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9')] bg-cover bg-center opacity-35 -z-20" />
@@ -65,7 +55,7 @@ const Hero = () => {
       
       <div className="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-primary mb-6 animate-fade-down py-[30px] md:text-6xl">
+          <h1 className="text-4xl md:text-6xl font-bold text-primary mb-6 animate-fade-down">
             SNF Revenue Cycle Made Effortless: <br />AI does the work
           </h1>
           <div className="flex justify-center mb-6 animate-fade-up">
@@ -96,5 +86,4 @@ const Hero = () => {
       </div>
     </div>;
 };
-
 export default Hero;
