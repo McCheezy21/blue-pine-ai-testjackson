@@ -22,7 +22,7 @@ const Hero = () => {
           <div className="flex justify-center animate-fade-up">
             <ShimmerButton 
               to="/waitlist" 
-              className="h-12 px-8 py-3 w-[130%]" 
+              className="h-12 px-8 py-3 w-[110%]" 
               background="#004466" 
               shimmerColor="#ffffff" 
               borderRadius="0.375rem"
