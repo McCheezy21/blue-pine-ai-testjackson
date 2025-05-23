@@ -22,12 +22,12 @@ const Hero = () => {
           <div className="flex justify-center animate-fade-up">
             <ShimmerButton 
               to="/waitlist" 
-              className="h-12 px-8 py-3 w-[150%]" 
+              className="h-12 px-8 py-3" 
               background="#004466" 
               shimmerColor="#ffffff" 
               borderRadius="0.375rem"
             >
-              <span className="flex items-center justify-center gap-2 w-full">
+              <span className="flex items-center gap-2">
                 Join Waitlist
                 <ArrowRight className="group-hover:translate-x-1 transition-transform" />
               </span>
