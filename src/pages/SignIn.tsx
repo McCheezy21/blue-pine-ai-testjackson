@@ -1,8 +1,8 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { initiateCognitoLogin } from "@/utils/cognitoAuth";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -10,10 +10,12 @@ const SignIn = () => {
 
   const handleCognitoLogin = () => {
     setIsLoading(true);
-    // Use dynamic redirect URI based on current domain
-    const redirectUri = encodeURIComponent(window.location.origin + '/dashboard');
-    const cognitoUrl = `https://us-west-1p6qgk8fq3.auth.us-west-1.amazoncognito.com/login?client_id=lg92qnkko2jl523bffuumh7pb&response_type=code&scope=email+openid+phone&redirect_uri=${redirectUri}`;
-    window.location.href = cognitoUrl;
+    try {
+      initiateCognitoLogin();
+    } catch (error) {
+      console.error('Error initiating Cognito login:', error);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -48,7 +50,14 @@ const SignIn = () => {
                 className="w-full bg-primary text-white hover:bg-primary/90"
                 disabled={isLoading}
               >
-                {isLoading ? "Redirecting..." : "Continue with Blue Pine AI"}
+                {isLoading ? (
+                  <span className="flex items-center gap-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    Redirecting...
+                  </span>
+                ) : (
+                  "Continue with Blue Pine AI"
+                )}
               </Button>
             </div>
             
