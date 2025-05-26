@@ -19,15 +19,15 @@ const SignIn = () => {
     setError("");
 
     try {
-      // TODO: Implement actual authentication logic here once Supabase is integrated
+      // TODO: Implement actual authentication logic here once AWS Cognito is integrated
       console.log("Sign in attempt with:", { email, password });
       
-      // For now, just simulate a delay
+      // For now, just simulate a delay and redirect to dashboard
       await new Promise((resolve) => setTimeout(resolve, 1000));
       
-      // Mock success response
+      // Mock success response - redirect to dashboard
       console.log("Sign in successful");
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       console.error("Sign in error:", err);
       setError("Failed to sign in. Please check your credentials and try again.");
