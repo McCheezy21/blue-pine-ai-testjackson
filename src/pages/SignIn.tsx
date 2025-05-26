@@ -15,9 +15,9 @@ const SignIn = () => {
 
   // AWS Cognito configuration
   const cognitoConfig = {
-    authority: 'https://cognito-idp.us-west-1.amazonaws.com/us-west-1_9PggkJZsQ',
-    clientId: '2pq6naf36qj1sj5qugiss1pt3l',
-    redirectUri: window.location.origin + '/dashboard', // This will redirect back to your dashboard
+    authority: 'https://cognito-idp.us-west-1.amazonaws.com/us-west-1_CHWkkt0Oh',
+    clientId: '5nrb8a78t44mpek2rn77p9vhgq',
+    redirectUri: window.location.origin + '/dashboard',
     scope: 'phone openid email'
   };
 
