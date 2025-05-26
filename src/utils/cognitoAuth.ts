@@ -1,8 +1,9 @@
+
 // Utility functions for AWS Cognito authentication
 export const cognitoConfig = {
   authority: 'https://cognito-idp.us-west-1.amazonaws.com/us-west-1_p6qGk8fQ3',
   clientId: 'lg92qnkko2jl523bffuumh7pb',
-  redirectUri: 'https://bluepineai.com/dashboard',
+  redirectUri: window.location.origin + '/dashboard',
   scope: 'phone openid email',
   region: 'us-west-1',
   userPoolId: 'us-west-1_p6qGk8fQ3'
