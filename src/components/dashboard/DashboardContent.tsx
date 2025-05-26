@@ -1,6 +1,5 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, Users, FileText, Clock } from "lucide-react";
+import { TrendingUp, Users, FileText, Clock, Zap } from "lucide-react";
 
 interface User {
   firstName: string;
