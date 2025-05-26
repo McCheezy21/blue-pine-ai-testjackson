@@ -6,6 +6,7 @@ import Waitlist from "./pages/Waitlist";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import SignIn from "./pages/SignIn";
+import Dashboard from "./pages/Dashboard";
 
 const AppRoutes = () => {
   return (
@@ -16,6 +17,7 @@ const AppRoutes = () => {
         <Route path="/waitlist" element={<Waitlist />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

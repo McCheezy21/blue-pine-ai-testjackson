@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -13,31 +13,42 @@ const SignIn = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  // AWS Cognito configuration
+  const cognitoConfig = {
+    authority: 'https://cognito-idp.us-west-1.amazonaws.com/us-west-1_9PggkJZsQ',
+    clientId: '2pq6naf36qj1sj5qugiss1pt3l',
+    redirectUri: window.location.origin + '/dashboard', // This will redirect back to your dashboard
+    scope: 'phone openid email'
+  };
+
+  const handleCognitoLogin = () => {
+    const authUrl = `${cognitoConfig.authority}/oauth2/authorize?` +
+      `client_id=${cognitoConfig.clientId}&` +
+      `response_type=code&` +
+      `scope=${encodeURIComponent(cognitoConfig.scope)}&` +
+      `redirect_uri=${encodeURIComponent(cognitoConfig.redirectUri)}`;
+    
+    // Redirect to AWS Cognito hosted UI
+    window.location.href = authUrl;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
 
     try {
-      // TODO: Implement actual authentication logic here once Supabase is integrated
-      console.log("Sign in attempt with:", { email, password });
-      
-      // For now, just simulate a delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      
-      // Mock success response
-      console.log("Sign in successful");
-      navigate("/");
+      // For development purposes, we'll redirect to Cognito instead of local auth
+      handleCognitoLogin();
     } catch (err) {
       console.error("Sign in error:", err);
       setError("Failed to sign in. Please check your credentials and try again.");
-    } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-accent/10">
+    <div className="min-h-screen flex flex-col bg-accent/10 font-sans">
       <div className="py-4 px-6">
         <Button 
           variant="ghost" 
@@ -68,46 +79,66 @@ const SignIn = () => {
               </div>
             )}
             
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  required
-                  className="w-full"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <Link to="/forgot-password" className="text-sm text-primary hover:underline">
-                    Forgot password?
-                  </Link>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                  className="w-full"
-                />
-              </div>
-              
+            <div className="space-y-4">
               <Button 
-                type="submit" 
-                className="w-full bg-primary text-white"
+                onClick={handleCognitoLogin}
+                className="w-full bg-primary text-white hover:bg-primary/90"
                 disabled={isLoading}
               >
-                {isLoading ? "Signing in..." : "Sign In"}
+                {isLoading ? "Redirecting..." : "Continue with Blue Pine AI"}
               </Button>
-            </form>
+              
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-white px-2 text-muted-foreground">Or continue with email</span>
+                </div>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="your@email.com"
+                    required
+                    className="w-full"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <Label htmlFor="password">Password</Label>
+                    <Link to="/forgot-password" className="text-sm text-primary hover:underline">
+                      Forgot password?
+                    </Link>
+                  </div>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                    className="w-full"
+                  />
+                </div>
+                
+                <Button 
+                  type="submit" 
+                  className="w-full bg-primary text-white"
+                  disabled={isLoading}
+                  variant="outline"
+                >
+                  {isLoading ? "Signing in..." : "Sign In with Email"}
+                </Button>
+              </form>
+            </div>
             
             <div className="mt-6 text-center text-sm">
               <p>
