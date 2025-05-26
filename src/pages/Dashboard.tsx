@@ -13,9 +13,9 @@ const Dashboard = () => {
 
   // Mock user data - replace with actual auth data later
   const user = {
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com"
+    firstName: "Sarah",
+    lastName: "Johnson",
+    email: "sarah.johnson@example.com"
   };
 
   const renderContent = () => {
@@ -27,7 +27,12 @@ const Dashboard = () => {
       case 'automation':
         return <AutomationServices />;
       case 'services':
-        return <div className="p-6">Other Services - Coming Soon</div>;
+        return (
+          <div className="p-6 bg-gray-50 min-h-screen">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Reports & Analytics</h1>
+            <p className="text-gray-600">Coming Soon - Advanced reporting and analytics dashboard</p>
+          </div>
+        );
       default:
         return <DashboardContent user={user} />;
     }
@@ -41,7 +46,7 @@ const Dashboard = () => {
         expanded={sidebarExpanded}
         setExpanded={setSidebarExpanded}
       />
-      <main className={`flex-1 transition-all duration-300 ${sidebarExpanded ? 'ml-64' : 'ml-16'}`}>
+      <main className={`flex-1 transition-all duration-300 ${sidebarExpanded ? 'ml-64' : 'ml-20'}`}>
         {renderContent()}
       </main>
     </div>
