@@ -40,7 +40,7 @@ export const Sidebar = ({ activeView, setActiveView, expanded, setExpanded }: Si
 
   return (
     <div 
-      className={`fixed left-0 top-0 h-full bg-white shadow-xl transition-all duration-300 z-50 border-r border-gray-100 ${
+      className={`fixed left-0 top-0 h-full bg-white shadow-xl transition-all duration-300 z-50 border-r border-gray-100 font-sans ${
         expanded ? 'w-64' : 'w-20'
       }`}
       onMouseEnter={() => setExpanded(true)}
@@ -54,7 +54,7 @@ export const Sidebar = ({ activeView, setActiveView, expanded, setExpanded }: Si
           </div>
           {expanded && (
             <div>
-              <div className="text-lg font-bold text-gray-900">HealthAI</div>
+              <div className="text-lg font-bold text-gray-900">Blue Pine AI</div>
               <div className="text-sm text-gray-500">Automation Portal</div>
             </div>
           )}
@@ -99,7 +99,7 @@ export const Sidebar = ({ activeView, setActiveView, expanded, setExpanded }: Si
             </div>
             <div className="flex-1 min-w-0">
               <div className="font-medium text-gray-900">Sarah Johnson</div>
-              <div className="text-xs text-gray-500">Healthcare Admin</div>
+              <div className="text-xs text-gray-500">Blue Pine AI User</div>
             </div>
           </div>
         </div>

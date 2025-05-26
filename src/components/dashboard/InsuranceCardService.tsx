@@ -102,7 +102,7 @@ export const InsuranceCardService = () => {
   );
 
   return (
-    <div className="p-6">
+    <div className="p-8 font-sans">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Insurance Card Services</h1>
         <p className="text-gray-600">Upload new insurance cards or fetch existing ones from our system.</p>

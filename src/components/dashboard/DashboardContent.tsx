@@ -70,15 +70,15 @@ export const DashboardContent = ({ user }: DashboardContentProps) => {
   ];
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-gray-50 min-h-screen font-sans">
       {/* Welcome Header with Gradient */}
       <div className="mb-8 bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl p-8 text-white relative overflow-hidden">
         <div className="relative z-10">
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-            Hello, {user.firstName}! 👋
+          <h1 className="text-4xl font-bold mb-2 flex items-center gap-2">
+            Hello, {user.firstName}
           </h1>
           <p className="text-blue-100 text-lg">
-            Welcome back to your Healthcare AI Automation Portal
+            Welcome back to your Blue Pine AI Automation Portal
           </p>
         </div>
         {/* Decorative circle */}

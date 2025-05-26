@@ -51,7 +51,7 @@ export const AutomationServices = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-8 font-sans">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Automation Services</h1>
         <p className="text-gray-600">Run automated workflows to streamline your healthcare operations and improve efficiency.</p>
