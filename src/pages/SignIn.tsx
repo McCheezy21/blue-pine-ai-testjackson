@@ -10,8 +10,8 @@ const SignIn = () => {
 
   const handleCognitoLogin = () => {
     setIsLoading(true);
-    // Direct redirect to your specific Cognito hosted UI URL
-    window.location.href = "https://us-west-1chwkkt0oh.auth.us-west-1.amazoncognito.com/login?client_id=5nrb8a78t44mpek2rn77p9vhgq&redirect_uri=https://lovable.dev/projects/2395e933-3a1b-46dc-9eac-cec6408ceee8/dashboard&response_type=code&scope=email+openid+phone";
+    // Direct redirect to your new Cognito hosted UI URL
+    window.location.href = "https://us-west-1p6qgk8fq3.auth.us-west-1.amazoncognito.com/login?client_id=lg92qnkko2jl523bffuumh7pb&response_type=code&scope=email+openid+phone&redirect_uri=https://bluepineai.com/dashboard";
   };
 
   return (

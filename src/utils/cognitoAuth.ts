@@ -1,11 +1,11 @@
 // Utility functions for AWS Cognito authentication
 export const cognitoConfig = {
-  authority: 'https://cognito-idp.us-west-1.amazonaws.com/us-west-1_CHWkkt0Oh',
-  clientId: '5nrb8a78t44mpek2rn77p9vhgq',
-  redirectUri: window.location.origin + '/dashboard',
+  authority: 'https://cognito-idp.us-west-1.amazonaws.com/us-west-1_p6qGk8fQ3',
+  clientId: 'lg92qnkko2jl523bffuumh7pb',
+  redirectUri: 'https://bluepineai.com/dashboard',
   scope: 'phone openid email',
   region: 'us-west-1',
-  userPoolId: 'us-west-1_CHWkkt0Oh'
+  userPoolId: 'us-west-1_p6qGk8fQ3'
 };
 
 export const handleCognitoCallback = async () => {
