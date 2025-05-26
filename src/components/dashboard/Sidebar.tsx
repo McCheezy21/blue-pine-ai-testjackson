@@ -1,7 +1,7 @@
-
 import { useState } from "react";
-import { Home, Image, Settings, Zap, ChevronRight, Activity } from "lucide-react";
+import { Home, Image, Settings, Zap, ChevronRight, Activity, LogOut } from "lucide-react";
 import { DashboardView } from "@/pages/Dashboard";
+import { logout, getUserInfo } from "@/utils/cognitoAuth";
 
 interface SidebarProps {
   activeView: DashboardView;
@@ -11,6 +11,8 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ activeView, setActiveView, expanded, setExpanded }: SidebarProps) => {
+  const user = getUserInfo();
+  
   const menuItems = [
     { 
       id: 'home' as DashboardView, 
@@ -38,6 +40,16 @@ export const Sidebar = ({ activeView, setActiveView, expanded, setExpanded }: Si
     },
   ];
 
+  const handleLogout = () => {
+    if (confirm('Are you sure you want to log out?')) {
+      logout();
+    }
+  };
+
+  const getInitials = (firstName: string, lastName: string) => {
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  };
+
   return (
     <div 
       className={`fixed left-0 top-0 h-full bg-white shadow-xl transition-all duration-300 z-50 border-r border-gray-100 font-sans ${
@@ -62,7 +74,7 @@ export const Sidebar = ({ activeView, setActiveView, expanded, setExpanded }: Si
       </div>
       
       {/* Navigation */}
-      <nav className="mt-6 px-2">
+      <nav className="mt-6 px-2 flex-1">
         {menuItems.map((item) => (
           <button
             key={item.id}
@@ -91,16 +103,23 @@ export const Sidebar = ({ activeView, setActiveView, expanded, setExpanded }: Si
       </nav>
 
       {/* User Profile */}
-      {expanded && (
+      {expanded && user && (
         <div className="absolute bottom-6 left-4 right-4">
           <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
-            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-medium">
-              SJ
+            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
+              {getInitials(user.firstName, user.lastName)}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="font-medium text-gray-900">Sarah Johnson</div>
-              <div className="text-xs text-gray-500">Blue Pine AI User</div>
+              <div className="font-medium text-gray-900">{user.firstName} {user.lastName}</div>
+              <div className="text-xs text-gray-500 truncate">{user.email}</div>
             </div>
+            <button
+              onClick={handleLogout}
+              className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+              title="Logout"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
           </div>
         </div>
       )}
