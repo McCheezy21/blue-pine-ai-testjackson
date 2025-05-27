@@ -103,16 +103,16 @@ export const AutomationHistory = () => {
       </CardHeader>
       <CardContent>
         {showProPrompt && (
-          <Alert className="mb-4 border-orange-200 bg-orange-50">
-            <Crown className="h-4 w-4 text-orange-600" />
-            <AlertDescription className="text-orange-800">
+          <Alert className="mb-4 border-blue-200 bg-blue-50">
+            <Crown className="h-4 w-4 text-blue-600" />
+            <AlertDescription className="text-blue-800">
               <div className="flex items-center justify-between">
                 <span>Access to historical logs beyond two weeks requires Blue Pine AI Pro</span>
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm" onClick={() => setShowProPrompt(false)}>
                     Dismiss
                   </Button>
-                  <Button size="sm" className="bg-orange-600 hover:bg-orange-700">
+                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
                     Upgrade to Pro
                   </Button>
                 </div>
@@ -148,7 +148,7 @@ export const AutomationHistory = () => {
               variant="outline" 
               size="sm" 
               onClick={handleViewOlderLogs}
-              className="w-full"
+              className="w-full border-blue-200 text-blue-600 hover:bg-blue-50"
             >
               View {olderLogsCount} older log{olderLogsCount !== 1 ? 's' : ''} (Pro Feature)
             </Button>
