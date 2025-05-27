@@ -54,7 +54,11 @@ const globalChatState = {
   }
 };
 
-export const ChatInterface = () => {
+interface ChatInterfaceProps {
+  showInputBar?: boolean;
+}
+
+export const ChatInterface = ({ showInputBar = false }: ChatInterfaceProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>(globalChatState.messages);
   const [isOpen, setIsOpen] = useState(globalChatState.isOpen);
   const [isMinimized, setIsMinimized] = useState(globalChatState.isMinimized);
@@ -149,47 +153,61 @@ export const ChatInterface = () => {
     });
   };
 
+  const handleOpenChat = () => {
+    if (!hasActiveChat) {
+      globalChatState.setState({ 
+        isOpen: true, 
+        isMinimized: false,
+        hasActiveChat: true 
+      });
+    } else {
+      globalChatState.setState({ isOpen: true, isMinimized: false });
+    }
+  };
+
   return (
     <>
-      {/* Chat Bar */}
-      <div className="bg-white rounded-lg shadow-sm border p-4 mb-6">
-        <form onSubmit={handleSubmit} className="flex gap-3 items-center">
-          <div className="flex-1 relative">
-            <Input
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Ask Blue Pine AI anything..."
-              className="pr-12 text-gray-700 placeholder-gray-500"
-            />
-            <Button
-              type="submit"
-              size="sm"
-              className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
-              disabled={!inputValue.trim() || isLoading}
-            >
-              <Send className="h-4 w-4" />
-            </Button>
-          </div>
-          {hasActiveChat && (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={handleToggleChat}
-              className="flex items-center gap-2"
-            >
-              <MessageCircle className="h-4 w-4" />
-              {isMinimized ? 'Show' : 'Hide'} Chat
-            </Button>
-          )}
-        </form>
-      </div>
+      {/* Chat Input Bar - only show on dashboard */}
+      {showInputBar && (
+        <div className="bg-white rounded-lg shadow-sm border p-4 mb-6">
+          <form onSubmit={handleSubmit} className="flex gap-3 items-center">
+            <div className="flex-1 relative">
+              <Input
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="Ask Blue Pine AI anything..."
+                className="pr-12 text-gray-700 placeholder-gray-500"
+              />
+              <Button
+                type="submit"
+                size="sm"
+                className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
+                disabled={!inputValue.trim() || isLoading}
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
+            {hasActiveChat && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleToggleChat}
+                className="flex items-center gap-2"
+              >
+                <MessageCircle className="h-4 w-4" />
+                {isMinimized ? 'Show' : 'Hide'} Chat
+              </Button>
+            )}
+          </form>
+        </div>
+      )}
 
       {/* Floating Chat Widget (when minimized) */}
-      {isMinimized && hasActiveChat && (
-        <div className="fixed bottom-4 right-4 z-50">
+      {(isMinimized || (!isOpen && !hasActiveChat)) && (
+        <div className="fixed top-20 right-4 z-50">
           <Button
-            onClick={() => globalChatState.setState({ isMinimized: false, isOpen: true })}
+            onClick={handleOpenChat}
             className="h-12 w-12 rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg"
             size="icon"
           >
@@ -198,9 +216,9 @@ export const ChatInterface = () => {
         </div>
       )}
 
-      {/* Chat Popup Window with Opaque Background */}
+      {/* Chat Window - positioned at top-right */}
       {isOpen && !isMinimized && hasActiveChat && (
-        <div className="fixed bottom-4 right-4 w-96 h-96 z-50">
+        <div className="fixed top-20 right-4 w-96 h-96 z-50">
           <Card className="h-full flex flex-col shadow-lg bg-white border border-gray-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 bg-white border-b">
               <CardTitle className="text-lg">Blue Pine AI Chat</CardTitle>
@@ -261,7 +279,7 @@ export const ChatInterface = () => {
               <div ref={messagesEndRef} />
             </CardContent>
             
-            {/* Chat Input in Popup */}
+            {/* Chat Input in Window */}
             <div className="border-t bg-white p-3">
               <form onSubmit={handleSubmit} className="flex gap-2">
                 <Input

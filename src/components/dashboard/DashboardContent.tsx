@@ -99,8 +99,8 @@ export const DashboardContent = ({ user, onNavigate }: DashboardContentProps) =>
         </div>
       </div>
 
-      {/* Chat Interface */}
-      <ChatInterface />
+      {/* Chat Interface with input bar */}
+      <ChatInterface showInputBar={true} />
 
       {/* Weekly Activity Overview */}
       <div className="mb-8">

@@ -155,6 +155,8 @@ const Dashboard = () => {
       />
       <main className={`flex-1 transition-all duration-300 ${sidebarExpanded ? 'ml-64' : 'ml-20'}`}>
         {renderContent()}
+        {/* Global Chat Interface - shows floating icon on all pages except home */}
+        {activeView !== 'home' && <ChatInterface />}
       </main>
       
       <ReportsModal 

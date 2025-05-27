@@ -21,7 +21,6 @@ const App = () => (
         <Toaster />
         <Sonner />
         <AppRoutes />
-        <ChatInterface />
         <Analytics />
       </TooltipProvider>
     </QueryClientProvider>
