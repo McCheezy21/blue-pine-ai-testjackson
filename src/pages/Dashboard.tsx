@@ -5,6 +5,7 @@ import { Sidebar } from "@/components/dashboard/Sidebar";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
 import { InsuranceCardService } from "@/components/dashboard/InsuranceCardService";
 import { AutomationServices } from "@/components/dashboard/AutomationServices";
+import { ReportsModal } from "@/components/dashboard/ReportsModal";
 // import { handleCognitoCallback, getUserInfo, isAuthenticated } from "@/utils/cognitoAuth";
 
 export type DashboardView = 'home' | 'insurance' | 'automation' | 'services';
@@ -12,6 +13,7 @@ export type DashboardView = 'home' | 'insurance' | 'automation' | 'services';
 const Dashboard = () => {
   const [activeView, setActiveView] = useState<DashboardView>('home');
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const [showReportsModal, setShowReportsModal] = useState(false);
   // Temporary mock user data for testing
   const [user, setUser] = useState({
     firstName: "John",
@@ -115,10 +117,18 @@ const Dashboard = () => {
     );
   }
 
+  const handleNavigation = (view: DashboardView) => {
+    if (view === 'services') {
+      setShowReportsModal(true);
+    } else {
+      setActiveView(view);
+    }
+  };
+
   const renderContent = () => {
     switch (activeView) {
       case 'home':
-        return <DashboardContent user={user} />;
+        return <DashboardContent user={user} onNavigate={handleNavigation} />;
       case 'insurance':
         return <InsuranceCardService />;
       case 'automation':
@@ -131,7 +141,7 @@ const Dashboard = () => {
           </div>
         );
       default:
-        return <DashboardContent user={user} />;
+        return <DashboardContent user={user} onNavigate={handleNavigation} />;
     }
   };
 
@@ -139,13 +149,18 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gray-50 flex font-sans">
       <Sidebar 
         activeView={activeView}
-        setActiveView={setActiveView}
+        setActiveView={handleNavigation}
         expanded={sidebarExpanded}
         setExpanded={setSidebarExpanded}
       />
       <main className={`flex-1 transition-all duration-300 ${sidebarExpanded ? 'ml-64' : 'ml-20'}`}>
         {renderContent()}
       </main>
+      
+      <ReportsModal 
+        isOpen={showReportsModal} 
+        onClose={() => setShowReportsModal(false)} 
+      />
     </div>
   );
 };

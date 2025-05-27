@@ -3,6 +3,16 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { 
+  AlertDialog, 
+  AlertDialogAction, 
+  AlertDialogCancel, 
+  AlertDialogContent, 
+  AlertDialogDescription, 
+  AlertDialogFooter, 
+  AlertDialogHeader, 
+  AlertDialogTitle 
+} from "@/components/ui/alert-dialog";
 import { X, Send, MessageCircle, Minimize2 } from "lucide-react";
 
 interface ChatMessage {
@@ -12,12 +22,42 @@ interface ChatMessage {
   timestamp: Date;
 }
 
+// Global chat state to persist across pages
+const globalChatState = {
+  messages: [] as ChatMessage[],
+  isOpen: false,
+  subscribers: new Set<(state: any) => void>(),
+  
+  subscribe(callback: (state: any) => void) {
+    this.subscribers.add(callback);
+    return () => this.subscribers.delete(callback);
+  },
+  
+  setState(updates: Partial<{ messages: ChatMessage[]; isOpen: boolean }>) {
+    if (updates.messages) this.messages = updates.messages;
+    if (updates.isOpen !== undefined) this.isOpen = updates.isOpen;
+    this.subscribers.forEach(callback => callback({ 
+      messages: this.messages, 
+      isOpen: this.isOpen 
+    }));
+  }
+};
+
 export const ChatInterface = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>(globalChatState.messages);
+  const [isOpen, setIsOpen] = useState(globalChatState.isOpen);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showCloseConfirm, setShowCloseConfirm] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Subscribe to global state changes
+  useEffect(() => {
+    return globalChatState.subscribe((state) => {
+      setMessages(state.messages);
+      setIsOpen(state.isOpen);
+    });
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -38,7 +78,9 @@ export const ChatInterface = () => {
       timestamp: new Date()
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
+    globalChatState.setState({ messages: newMessages, isOpen: true });
     setInputValue("");
     setIsLoading(true);
     setIsOpen(true);
@@ -51,9 +93,28 @@ export const ChatInterface = () => {
         sender: 'ai',
         timestamp: new Date()
       };
-      setMessages(prev => [...prev, aiMessage]);
+      const updatedMessages = [...newMessages, aiMessage];
+      setMessages(updatedMessages);
+      globalChatState.setState({ messages: updatedMessages });
       setIsLoading(false);
     }, 1500);
+  };
+
+  const handleToggleChat = () => {
+    const newIsOpen = !isOpen;
+    setIsOpen(newIsOpen);
+    globalChatState.setState({ isOpen: newIsOpen });
+  };
+
+  const handleCloseAttempt = () => {
+    setShowCloseConfirm(true);
+  };
+
+  const handleConfirmClose = () => {
+    setMessages([]);
+    setIsOpen(false);
+    setShowCloseConfirm(false);
+    globalChatState.setState({ messages: [], isOpen: false });
   };
 
   return (
@@ -82,7 +143,7 @@ export const ChatInterface = () => {
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={handleToggleChat}
               className="flex items-center gap-2"
             >
               <MessageCircle className="h-4 w-4" />
@@ -92,17 +153,17 @@ export const ChatInterface = () => {
         </form>
       </div>
 
-      {/* Chat Popup Window */}
+      {/* Chat Popup Window with Opaque Background */}
       {isOpen && messages.length > 0 && (
         <div className="fixed bottom-4 right-4 w-96 h-96 z-50">
-          <Card className="h-full flex flex-col shadow-lg">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+          <Card className="h-full flex flex-col shadow-lg bg-white">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 bg-white">
               <CardTitle className="text-lg">Blue Pine AI Chat</CardTitle>
               <div className="flex gap-1">
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setIsOpen(false)}
+                  onClick={handleToggleChat}
                   className="h-8 w-8 p-0"
                 >
                   <Minimize2 className="h-4 w-4" />
@@ -110,17 +171,14 @@ export const ChatInterface = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => {
-                    setIsOpen(false);
-                    setMessages([]);
-                  }}
+                  onClick={handleCloseAttempt}
                   className="h-8 w-8 p-0"
                 >
                   <X className="h-4 w-4" />
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="flex-1 overflow-y-auto space-y-3">
+            <CardContent className="flex-1 overflow-y-auto space-y-3 bg-white">
               {messages.map((message) => (
                 <div
                   key={message.id}
@@ -160,6 +218,26 @@ export const ChatInterface = () => {
           </Card>
         </div>
       )}
+
+      {/* Close Confirmation Dialog */}
+      <AlertDialog open={showCloseConfirm} onOpenChange={setShowCloseConfirm}>
+        <AlertDialogContent className="bg-white">
+          <AlertDialogHeader>
+            <AlertDialogTitle>End Chat Session?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Do you want to end this chat? This will close the conversation and clear the chat history.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowCloseConfirm(false)}>
+              No, Continue Chat
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmClose}>
+              Yes, End Chat
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };
