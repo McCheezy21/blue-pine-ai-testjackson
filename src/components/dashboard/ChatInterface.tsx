@@ -203,9 +203,9 @@ export const ChatInterface = ({ showInputBar = false }: ChatInterfaceProps) => {
         </div>
       )}
 
-      {/* Floating Chat Widget (when minimized) */}
+      {/* Floating Chat Widget (when minimized or no active chat) */}
       {(isMinimized || (!isOpen && !hasActiveChat)) && (
-        <div className="fixed top-20 right-4 z-50">
+        <div className="fixed bottom-4 right-4 z-50">
           <Button
             onClick={handleOpenChat}
             className="h-12 w-12 rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg"
@@ -216,9 +216,9 @@ export const ChatInterface = ({ showInputBar = false }: ChatInterfaceProps) => {
         </div>
       )}
 
-      {/* Chat Window - positioned at top-right */}
+      {/* Chat Window - positioned at bottom-right */}
       {isOpen && !isMinimized && hasActiveChat && (
-        <div className="fixed top-20 right-4 w-96 h-96 z-50">
+        <div className="fixed bottom-4 right-4 w-96 h-96 z-50">
           <Card className="h-full flex flex-col shadow-lg bg-white border border-gray-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 bg-white border-b">
               <CardTitle className="text-lg">Blue Pine AI Chat</CardTitle>
