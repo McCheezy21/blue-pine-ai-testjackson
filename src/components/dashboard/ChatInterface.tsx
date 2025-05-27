@@ -13,7 +13,7 @@ import {
   AlertDialogHeader, 
   AlertDialogTitle 
 } from "@/components/ui/alert-dialog";
-import { X, Send, MessageCircle, Minimize2 } from "lucide-react";
+import { X, Send, MessageCircle, Minimize2, Maximize2 } from "lucide-react";
 
 interface ChatMessage {
   id: string;
@@ -26,6 +26,8 @@ interface ChatMessage {
 const globalChatState = {
   messages: [] as ChatMessage[],
   isOpen: false,
+  isMinimized: false,
+  hasActiveChat: false,
   subscribers: new Set<(state: any) => void>(),
   
   subscribe(callback: (state: any) => void) {
@@ -33,12 +35,21 @@ const globalChatState = {
     return () => this.subscribers.delete(callback);
   },
   
-  setState(updates: Partial<{ messages: ChatMessage[]; isOpen: boolean }>) {
+  setState(updates: Partial<{ 
+    messages: ChatMessage[]; 
+    isOpen: boolean; 
+    isMinimized: boolean;
+    hasActiveChat: boolean;
+  }>) {
     if (updates.messages) this.messages = updates.messages;
     if (updates.isOpen !== undefined) this.isOpen = updates.isOpen;
+    if (updates.isMinimized !== undefined) this.isMinimized = updates.isMinimized;
+    if (updates.hasActiveChat !== undefined) this.hasActiveChat = updates.hasActiveChat;
     this.subscribers.forEach(callback => callback({ 
       messages: this.messages, 
-      isOpen: this.isOpen 
+      isOpen: this.isOpen,
+      isMinimized: this.isMinimized,
+      hasActiveChat: this.hasActiveChat
     }));
   }
 };
@@ -46,6 +57,8 @@ const globalChatState = {
 export const ChatInterface = () => {
   const [messages, setMessages] = useState<ChatMessage[]>(globalChatState.messages);
   const [isOpen, setIsOpen] = useState(globalChatState.isOpen);
+  const [isMinimized, setIsMinimized] = useState(globalChatState.isMinimized);
+  const [hasActiveChat, setHasActiveChat] = useState(globalChatState.hasActiveChat);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
@@ -56,6 +69,8 @@ export const ChatInterface = () => {
     return globalChatState.subscribe((state) => {
       setMessages(state.messages);
       setIsOpen(state.isOpen);
+      setIsMinimized(state.isMinimized);
+      setHasActiveChat(state.hasActiveChat);
     });
   }, []);
 
@@ -80,10 +95,14 @@ export const ChatInterface = () => {
 
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
-    globalChatState.setState({ messages: newMessages, isOpen: true });
+    globalChatState.setState({ 
+      messages: newMessages, 
+      isOpen: true, 
+      isMinimized: false,
+      hasActiveChat: true 
+    });
     setInputValue("");
     setIsLoading(true);
-    setIsOpen(true);
 
     // Mock AI response - replace with actual Amazon Bedrock integration later
     setTimeout(() => {
@@ -101,9 +120,17 @@ export const ChatInterface = () => {
   };
 
   const handleToggleChat = () => {
-    const newIsOpen = !isOpen;
-    setIsOpen(newIsOpen);
-    globalChatState.setState({ isOpen: newIsOpen });
+    if (isMinimized) {
+      // Restore from minimized state
+      globalChatState.setState({ isOpen: true, isMinimized: false });
+    } else {
+      // Minimize the chat
+      globalChatState.setState({ isMinimized: true, isOpen: true });
+    }
+  };
+
+  const handleMinimize = () => {
+    globalChatState.setState({ isMinimized: true, isOpen: true });
   };
 
   const handleCloseAttempt = () => {
@@ -114,7 +141,12 @@ export const ChatInterface = () => {
     setMessages([]);
     setIsOpen(false);
     setShowCloseConfirm(false);
-    globalChatState.setState({ messages: [], isOpen: false });
+    globalChatState.setState({ 
+      messages: [], 
+      isOpen: false, 
+      isMinimized: false,
+      hasActiveChat: false 
+    });
   };
 
   return (
@@ -138,7 +170,7 @@ export const ChatInterface = () => {
               <Send className="h-4 w-4" />
             </Button>
           </div>
-          {messages.length > 0 && (
+          {hasActiveChat && (
             <Button
               type="button"
               variant="outline"
@@ -147,23 +179,36 @@ export const ChatInterface = () => {
               className="flex items-center gap-2"
             >
               <MessageCircle className="h-4 w-4" />
-              {isOpen ? 'Hide' : 'Show'} Chat
+              {isMinimized ? 'Show' : 'Hide'} Chat
             </Button>
           )}
         </form>
       </div>
 
+      {/* Floating Chat Widget (when minimized) */}
+      {isMinimized && hasActiveChat && (
+        <div className="fixed bottom-4 right-4 z-50">
+          <Button
+            onClick={() => globalChatState.setState({ isMinimized: false, isOpen: true })}
+            className="h-12 w-12 rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg"
+            size="icon"
+          >
+            <MessageCircle className="h-6 w-6" />
+          </Button>
+        </div>
+      )}
+
       {/* Chat Popup Window with Opaque Background */}
-      {isOpen && messages.length > 0 && (
+      {isOpen && !isMinimized && hasActiveChat && (
         <div className="fixed bottom-4 right-4 w-96 h-96 z-50">
-          <Card className="h-full flex flex-col shadow-lg bg-white">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 bg-white">
+          <Card className="h-full flex flex-col shadow-lg bg-white border border-gray-200">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 bg-white border-b">
               <CardTitle className="text-lg">Blue Pine AI Chat</CardTitle>
               <div className="flex gap-1">
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={handleToggleChat}
+                  onClick={handleMinimize}
                   className="h-8 w-8 p-0"
                 >
                   <Minimize2 className="h-4 w-4" />
@@ -178,7 +223,7 @@ export const ChatInterface = () => {
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="flex-1 overflow-y-auto space-y-3 bg-white">
+            <CardContent className="flex-1 overflow-y-auto space-y-3 bg-white p-4">
               {messages.map((message) => (
                 <div
                   key={message.id}
@@ -188,7 +233,7 @@ export const ChatInterface = () => {
                     className={`max-w-[80%] p-3 rounded-lg ${
                       message.sender === 'user'
                         ? 'bg-blue-500 text-white'
-                        : 'bg-gray-100 text-gray-900'
+                        : 'bg-gray-100 text-gray-900 border'
                     }`}
                   >
                     <p className="text-sm">{message.text}</p>
@@ -202,7 +247,7 @@ export const ChatInterface = () => {
               ))}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-gray-100 text-gray-900 p-3 rounded-lg">
+                  <div className="bg-gray-100 text-gray-900 p-3 rounded-lg border">
                     <div className="flex items-center space-x-1">
                       <div className="flex space-x-1">
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
@@ -215,6 +260,27 @@ export const ChatInterface = () => {
               )}
               <div ref={messagesEndRef} />
             </CardContent>
+            
+            {/* Chat Input in Popup */}
+            <div className="border-t bg-white p-3">
+              <form onSubmit={handleSubmit} className="flex gap-2">
+                <Input
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  placeholder="Type your message..."
+                  className="flex-1 text-sm"
+                  disabled={isLoading}
+                />
+                <Button
+                  type="submit"
+                  size="sm"
+                  disabled={!inputValue.trim() || isLoading}
+                  className="px-3"
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </form>
+            </div>
           </Card>
         </div>
       )}
