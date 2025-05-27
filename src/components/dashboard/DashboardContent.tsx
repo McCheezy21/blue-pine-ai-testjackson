@@ -1,6 +1,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Users, FileText, Clock, Zap, Upload, Activity, DollarSign } from "lucide-react";
+import { ChatInterface } from "./ChatInterface";
+import { AutomationHistory } from "./AutomationHistory";
 
 interface User {
   firstName: string;
@@ -87,6 +89,9 @@ export const DashboardContent = ({ user }: DashboardContentProps) => {
         </div>
       </div>
 
+      {/* Chat Interface */}
+      <ChatInterface />
+
       {/* Weekly Activity Overview */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Weekly Activity Overview</h2>
@@ -132,6 +137,9 @@ export const DashboardContent = ({ user }: DashboardContentProps) => {
           ))}
         </div>
       </div>
+
+      {/* Enhanced Automation History */}
+      <AutomationHistory />
     </div>
   );
 };
