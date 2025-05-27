@@ -1,9 +1,9 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Users, FileText, Clock, Zap, Upload, Activity, DollarSign } from "lucide-react";
 import { AutomationHistory } from "./AutomationHistory";
 import { ProcessedCardsView } from "./ProcessedCardsView";
+import { ChatInterface } from "./ChatInterface";
 
 interface User {
   firstName: string;
@@ -98,6 +98,9 @@ export const DashboardContent = ({ user, onNavigate }: DashboardContentProps) =>
           <Activity className="h-10 w-10 text-white" />
         </div>
       </div>
+
+      {/* Chat Interface */}
+      <ChatInterface />
 
       {/* Weekly Activity Overview */}
       <div className="mb-8">
