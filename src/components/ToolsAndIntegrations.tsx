@@ -7,7 +7,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Building, Shield, Users, Link } from "lucide-react";
-import Autoplay from "embla-carousel-autoplay";
 
 const certifications = [
   { icon: Building, label: "Your EHR Provider Integration" },
@@ -30,11 +29,6 @@ const ToolsAndIntegrations = () => {
               align: "start",
               loop: true,
             }}
-            plugins={[
-              Autoplay({
-                delay: 3000,
-              }),
-            ]}
             className="w-full"
           >
             <CarouselContent>
