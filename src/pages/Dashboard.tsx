@@ -1,25 +1,29 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
 import { InsuranceCardService } from "@/components/dashboard/InsuranceCardService";
 import { AutomationServices } from "@/components/dashboard/AutomationServices";
-import { handleCognitoCallback, getUserInfo, isAuthenticated } from "@/utils/cognitoAuth";
+// import { handleCognitoCallback, getUserInfo, isAuthenticated } from "@/utils/cognitoAuth";
 
 export type DashboardView = 'home' | 'insurance' | 'automation' | 'services';
 
 const Dashboard = () => {
   const [activeView, setActiveView] = useState<DashboardView>('home');
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  // Temporary mock user data for testing
   const [user, setUser] = useState({
-    firstName: "Loading...",
-    lastName: "",
-    email: ""
+    firstName: "John",
+    lastName: "Doe",
+    email: "john.doe@example.com"
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // Set to false to skip loading
   const [authError, setAuthError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  // Commented out authentication logic for testing
+  /*
   useEffect(() => {
     const initAuth = async () => {
       try {
@@ -76,6 +80,7 @@ const Dashboard = () => {
 
     initAuth();
   }, [navigate]);
+  */
 
   // Show loading screen while processing authentication
   if (isLoading) {
