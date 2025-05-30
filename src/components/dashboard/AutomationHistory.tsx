@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Clock, CheckCircle, AlertCircle, PlayCircle, Crown } from "lucide-react";
+import { Clock, CheckCircle, AlertCircle, PlayCircle, Crown, Loader2 } from "lucide-react";
 
 interface AutomationLog {
   id: string;
@@ -14,31 +14,35 @@ interface AutomationLog {
   details?: string;
 }
 
-export const AutomationHistory = () => {
-  const [logs, setLogs] = useState<AutomationLog[]>([]);
-  const [showProPrompt, setShowProPrompt] = useState(false);
+interface AutomationHistoryProps {
+  logs: AutomationLog[];
+}
 
-  // Mock data generation for demonstration
+export const AutomationHistory = ({ logs }: AutomationHistoryProps) => {
+  const [showProPrompt, setShowProPrompt] = useState(false);
+  const [mockLogs, setMockLogs] = useState<AutomationLog[]>([]);
+
+  // Generate mock historical data only once
   useEffect(() => {
     const generateMockLogs = () => {
-      const mockLogs: AutomationLog[] = [];
+      const mockLogsData: AutomationLog[] = [];
       const titles = [
         "Revenue Cycle Automation",
         "Patient Sourcing Claims",
         "Medical Coder Automation", 
         "Debt & Write-offs Automation"
       ];
-      const statuses: Array<'completed' | 'running' | 'failed'> = ['completed', 'running', 'failed'];
+      const statuses: Array<'completed' | 'running' | 'failed'> = ['completed', 'failed'];
 
       // Generate logs for the past 2 weeks
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < 10; i++) {
         const date = new Date();
-        date.setDate(date.getDate() - i);
+        date.setDate(date.getDate() - Math.floor(i / 2) - 1);
         date.setHours(Math.floor(Math.random() * 24));
         date.setMinutes(Math.floor(Math.random() * 60));
 
-        mockLogs.push({
-          id: `log-${i}`,
+        mockLogsData.push({
+          id: `mock-log-${i}`,
           title: titles[Math.floor(Math.random() * titles.length)],
           status: statuses[Math.floor(Math.random() * statuses.length)],
           timestamp: date,
@@ -46,18 +50,21 @@ export const AutomationHistory = () => {
         });
       }
 
-      return mockLogs.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+      return mockLogsData.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
     };
 
-    setLogs(generateMockLogs());
+    setMockLogs(generateMockLogs());
   }, []);
+
+  // Combine new logs with mock historical logs
+  const allLogs = [...logs, ...mockLogs].sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
 
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed':
         return <CheckCircle className="h-4 w-4 text-green-600" />;
       case 'running':
-        return <PlayCircle className="h-4 w-4 text-blue-600" />;
+        return <Loader2 className="h-4 w-4 text-blue-600 animate-spin" />;
       case 'failed':
         return <AlertCircle className="h-4 w-4 text-red-600" />;
       default:
@@ -84,11 +91,28 @@ export const AutomationHistory = () => {
     return date >= twoWeeksAgo;
   };
 
-  const recentLogs = logs.filter(log => isWithinTwoWeeks(log.timestamp));
-  const olderLogsCount = logs.length - recentLogs.length;
+  const recentLogs = allLogs.filter(log => isWithinTwoWeeks(log.timestamp));
+  const olderLogsCount = allLogs.length - recentLogs.length;
 
   const handleViewOlderLogs = () => {
     setShowProPrompt(true);
+  };
+
+  const formatTimestamp = (timestamp: Date) => {
+    const now = new Date();
+    const diffInMinutes = Math.floor((now.getTime() - timestamp.getTime()) / (1000 * 60));
+    
+    if (diffInMinutes < 1) {
+      return 'Just now';
+    } else if (diffInMinutes < 60) {
+      return `${diffInMinutes} minute${diffInMinutes !== 1 ? 's' : ''} ago`;
+    } else if (diffInMinutes < 1440) {
+      const hours = Math.floor(diffInMinutes / 60);
+      return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+    } else {
+      const days = Math.floor(diffInMinutes / 1440);
+      return `${days} day${days !== 1 ? 's' : ''} ago`;
+    }
   };
 
   return (
@@ -122,24 +146,29 @@ export const AutomationHistory = () => {
         )}
 
         <div className="space-y-3 max-h-64 overflow-y-auto">
-          {recentLogs.map((log) => (
-            <div key={log.id} className="flex justify-between items-center py-2 border-b last:border-b-0">
-              <div className="flex items-center gap-3">
-                {getStatusIcon(log.status)}
-                <div>
-                  <span className="font-medium">{log.title}</span>
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
-                    <span>{log.timestamp.toLocaleDateString()}</span>
-                    <span>{log.timestamp.toLocaleTimeString()}</span>
-                    {log.duration && <span>• {log.duration}</span>}
+          {recentLogs.length === 0 ? (
+            <div className="text-center text-gray-500 py-8">
+              No automation history yet. Run your first automation to see it here.
+            </div>
+          ) : (
+            recentLogs.map((log) => (
+              <div key={log.id} className="flex justify-between items-center py-2 border-b last:border-b-0">
+                <div className="flex items-center gap-3">
+                  {getStatusIcon(log.status)}
+                  <div>
+                    <span className="font-medium">{log.title}</span>
+                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                      <span>{formatTimestamp(log.timestamp)}</span>
+                      {log.duration && log.status === 'completed' && <span>• {log.duration}</span>}
+                    </div>
                   </div>
                 </div>
+                <span className={`text-sm font-medium capitalize ${getStatusColor(log.status)}`}>
+                  {log.status}
+                </span>
               </div>
-              <span className={`text-sm font-medium capitalize ${getStatusColor(log.status)}`}>
-                {log.status}
-              </span>
-            </div>
-          ))}
+            ))
+          )}
         </div>
 
         {olderLogsCount > 0 && (
