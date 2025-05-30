@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Zap, TrendingUp, DollarSign, FileText, Users } from "lucide-react";
 import { AutomationModal } from "./AutomationModal";
 import { AutomationHistory } from "./AutomationHistory";
+import { useAutomationData } from "@/hooks/useAutomationData";
+import { useToast } from "@/hooks/use-toast";
 
 interface AutomationFormData {
   patientName: string;
@@ -16,19 +18,11 @@ interface AutomationFormData {
   automationType: string;
 }
 
-interface AutomationLog {
-  id: string;
-  title: string;
-  status: 'completed' | 'running' | 'failed';
-  timestamp: Date;
-  duration?: string;
-  details?: string;
-}
-
 export const AutomationServices = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAutomationType, setSelectedAutomationType] = useState("");
-  const [automationLogs, setAutomationLogs] = useState<AutomationLog[]>([]);
+  const { automationLogs, createAutomationLog } = useAutomationData();
+  const { toast } = useToast();
 
   const automationJobs = [
     {
@@ -67,33 +61,18 @@ export const AutomationServices = () => {
   };
 
   const handleModalSubmit = async (data: AutomationFormData) => {
-    const newLog: AutomationLog = {
-      id: `log-${Date.now()}`,
-      title: data.automationType,
-      status: 'running',
-      timestamp: new Date(),
-    };
+    try {
+      await createAutomationLog(data);
+      
+      toast({
+        title: "Automation Started",
+        description: `${data.automationType} has been started successfully.`,
+      });
 
-    // Add new log to the beginning of the array
-    setAutomationLogs(prev => [newLog, ...prev]);
-
-    // Simulate automation process
-    setTimeout(() => {
-      setAutomationLogs(prev => 
-        prev.map(log => 
-          log.id === newLog.id 
-            ? { 
-                ...log, 
-                status: 'completed' as const, 
-                duration: `${Math.floor(Math.random() * 5) + 1}m ${Math.floor(Math.random() * 60)}s`,
-                timestamp: new Date()
-              }
-            : log
-        )
-      );
-    }, Math.random() * 30000 + 10000); // Random duration between 10-40 seconds
-
-    console.log(`Running automation: ${data.automationType}`, data);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Error starting automation:', error);
+    }
   };
 
   const getColorClasses = (color: string) => {

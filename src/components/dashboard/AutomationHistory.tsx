@@ -7,11 +7,12 @@ import { Clock, CheckCircle, AlertCircle, PlayCircle, Crown, Loader2 } from "luc
 
 interface AutomationLog {
   id: string;
-  title: string;
+  automation_type: string;
   status: 'completed' | 'running' | 'failed';
-  timestamp: Date;
-  duration?: string;
-  details?: string;
+  created_at: string;
+  completed_at: string | null;
+  duration_seconds: number | null;
+  time_saved_minutes: number;
 }
 
 interface AutomationHistoryProps {
@@ -20,44 +21,6 @@ interface AutomationHistoryProps {
 
 export const AutomationHistory = ({ logs }: AutomationHistoryProps) => {
   const [showProPrompt, setShowProPrompt] = useState(false);
-  const [mockLogs, setMockLogs] = useState<AutomationLog[]>([]);
-
-  // Generate mock historical data only once
-  useEffect(() => {
-    const generateMockLogs = () => {
-      const mockLogsData: AutomationLog[] = [];
-      const titles = [
-        "Revenue Cycle Automation",
-        "Patient Sourcing Claims",
-        "Medical Coder Automation", 
-        "Debt & Write-offs Automation"
-      ];
-      const statuses: Array<'completed' | 'running' | 'failed'> = ['completed', 'failed'];
-
-      // Generate logs for the past 2 weeks
-      for (let i = 0; i < 10; i++) {
-        const date = new Date();
-        date.setDate(date.getDate() - Math.floor(i / 2) - 1);
-        date.setHours(Math.floor(Math.random() * 24));
-        date.setMinutes(Math.floor(Math.random() * 60));
-
-        mockLogsData.push({
-          id: `mock-log-${i}`,
-          title: titles[Math.floor(Math.random() * titles.length)],
-          status: statuses[Math.floor(Math.random() * statuses.length)],
-          timestamp: date,
-          duration: `${Math.floor(Math.random() * 5) + 1}m ${Math.floor(Math.random() * 60)}s`
-        });
-      }
-
-      return mockLogsData.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
-    };
-
-    setMockLogs(generateMockLogs());
-  }, []);
-
-  // Combine new logs with mock historical logs
-  const allLogs = [...logs, ...mockLogs].sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -85,20 +48,22 @@ export const AutomationHistory = ({ logs }: AutomationHistoryProps) => {
     }
   };
 
-  const isWithinTwoWeeks = (date: Date) => {
+  const isWithinTwoWeeks = (dateString: string) => {
+    const date = new Date(dateString);
     const twoWeeksAgo = new Date();
     twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
     return date >= twoWeeksAgo;
   };
 
-  const recentLogs = allLogs.filter(log => isWithinTwoWeeks(log.timestamp));
-  const olderLogsCount = allLogs.length - recentLogs.length;
+  const recentLogs = logs.filter(log => isWithinTwoWeeks(log.created_at));
+  const olderLogsCount = logs.length - recentLogs.length;
 
   const handleViewOlderLogs = () => {
     setShowProPrompt(true);
   };
 
-  const formatTimestamp = (timestamp: Date) => {
+  const formatTimestamp = (timestampString: string) => {
+    const timestamp = new Date(timestampString);
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - timestamp.getTime()) / (1000 * 60));
     
@@ -113,6 +78,13 @@ export const AutomationHistory = ({ logs }: AutomationHistoryProps) => {
       const days = Math.floor(diffInMinutes / 1440);
       return `${days} day${days !== 1 ? 's' : ''} ago`;
     }
+  };
+
+  const formatDuration = (seconds: number | null) => {
+    if (!seconds) return '';
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}m ${remainingSeconds}s`;
   };
 
   return (
@@ -156,10 +128,12 @@ export const AutomationHistory = ({ logs }: AutomationHistoryProps) => {
                 <div className="flex items-center gap-3">
                   {getStatusIcon(log.status)}
                   <div>
-                    <span className="font-medium">{log.title}</span>
+                    <span className="font-medium">{log.automation_type}</span>
                     <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <span>{formatTimestamp(log.timestamp)}</span>
-                      {log.duration && log.status === 'completed' && <span>• {log.duration}</span>}
+                      <span>{formatTimestamp(log.created_at)}</span>
+                      {log.duration_seconds && log.status === 'completed' && (
+                        <span>• {formatDuration(log.duration_seconds)}</span>
+                      )}
                     </div>
                   </div>
                 </div>

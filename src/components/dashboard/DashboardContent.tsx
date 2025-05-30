@@ -6,6 +6,7 @@ import { AutomationHistory } from "./AutomationHistory";
 import { ProcessedCardsView } from "./ProcessedCardsView";
 import { ChatInterface } from "./ChatInterface";
 import { useAnimatedCounter } from "@/hooks/useAnimatedCounter";
+import { useAutomationData } from "@/hooks/useAutomationData";
 
 interface User {
   firstName: string;
@@ -18,38 +19,27 @@ interface DashboardContentProps {
   onNavigate: (view: string) => void;
 }
 
-interface WeeklyMetrics {
-  cardsProcessed: number;
-  automationsRun: number;
-  claimsProcessed: number;
-  timeSavedMinutes: number;
-}
-
 export const DashboardContent = ({ user, onNavigate }: DashboardContentProps) => {
   const [showProcessedCards, setShowProcessedCards] = useState(false);
-  const [weeklyMetrics, setWeeklyMetrics] = useState<WeeklyMetrics>({
-    cardsProcessed: 127,
-    automationsRun: 45,
-    claimsProcessed: 89,
-    timeSavedMinutes: 2340, // 39 hours in minutes
-  });
-  const [animateCounters, setAnimateCounters] = useState(true);
+  const [animateCounters, setAnimateCounters] = useState(false);
+  
+  const { weeklyMetrics, automationLogs, isLoading } = useAutomationData();
 
   // Animated counter values
   const animatedCardsProcessed = useAnimatedCounter({ 
-    targetValue: weeklyMetrics.cardsProcessed, 
+    targetValue: weeklyMetrics.cards_processed, 
     startAnimation: animateCounters 
   });
   const animatedAutomationsRun = useAnimatedCounter({ 
-    targetValue: weeklyMetrics.automationsRun, 
+    targetValue: weeklyMetrics.automations_run, 
     startAnimation: animateCounters 
   });
   const animatedClaimsProcessed = useAnimatedCounter({ 
-    targetValue: weeklyMetrics.claimsProcessed, 
+    targetValue: weeklyMetrics.claims_processed, 
     startAnimation: animateCounters 
   });
   const animatedTimeSaved = useAnimatedCounter({ 
-    targetValue: weeklyMetrics.timeSavedMinutes, 
+    targetValue: weeklyMetrics.time_saved_minutes, 
     startAnimation: animateCounters 
   });
 
@@ -62,39 +52,14 @@ export const DashboardContent = ({ user, onNavigate }: DashboardContentProps) =>
     return `${hours}hr ${remainingMinutes}min`;
   };
 
-  // Function to update metrics when automation completes
-  const updateMetricsOnAutomation = (automationType: string) => {
-    setWeeklyMetrics(prev => {
-      const updated = {
-        ...prev,
-        automationsRun: prev.automationsRun + 1,
-        cardsProcessed: prev.cardsProcessed + Math.floor(Math.random() * 3) + 1, // 1-3 cards per automation
-        claimsProcessed: prev.claimsProcessed + Math.floor(Math.random() * 2) + 1, // 1-2 claims per automation
-        timeSavedMinutes: prev.timeSavedMinutes + getTimeSavedForAutomation(automationType),
-      };
-      return updated;
-    });
-    setAnimateCounters(true);
-  };
-
-  // Calculate time saved based on automation type
-  const getTimeSavedForAutomation = (automationType: string): number => {
-    const timeSavings = {
-      'Patient Sourcing Claims': 45, // 45 minutes
-      'Revenue Cycle Automation': 120, // 2 hours
-      'Debt & Write-offs Automation': 90, // 1.5 hours
-      'Medical Coder Automation': 60, // 1 hour
-    };
-    return timeSavings[automationType as keyof typeof timeSavings] || 30;
-  };
-
-  // Reset animation trigger after animation completes
+  // Trigger animation when metrics change
   useEffect(() => {
-    if (animateCounters) {
+    if (!isLoading) {
+      setAnimateCounters(true);
       const timer = setTimeout(() => setAnimateCounters(false), 1200);
       return () => clearTimeout(timer);
     }
-  }, [animateCounters]);
+  }, [weeklyMetrics, isLoading]);
 
   const metrics = [
     { 
@@ -239,7 +204,7 @@ export const DashboardContent = ({ user, onNavigate }: DashboardContentProps) =>
       </div>
 
       {/* Enhanced Automation History */}
-      <AutomationHistory logs={[]} />
+      <AutomationHistory logs={automationLogs} />
     </div>
   );
 };
