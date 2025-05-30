@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Users, FileText, Clock, Zap, Upload, Activity, DollarSign } from "lucide-react";
@@ -159,7 +160,7 @@ export const DashboardContent = ({ user, onNavigate }: DashboardContentProps) =>
       </div>
 
       {/* Enhanced Automation History */}
-      <AutomationHistory />
+      <AutomationHistory logs={[]} />
     </div>
   );
 };
