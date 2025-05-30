@@ -4,16 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Clock, CheckCircle, AlertCircle, PlayCircle, Crown, Loader2 } from "lucide-react";
-
-interface AutomationLog {
-  id: string;
-  automation_type: string;
-  status: 'completed' | 'running' | 'failed';
-  created_at: string;
-  completed_at: string | null;
-  duration_seconds: number | null;
-  time_saved_minutes: number;
-}
+import { AutomationLog } from "@/hooks/useAutomationData";
 
 interface AutomationHistoryProps {
   logs: AutomationLog[];
@@ -48,22 +39,20 @@ export const AutomationHistory = ({ logs }: AutomationHistoryProps) => {
     }
   };
 
-  const isWithinTwoWeeks = (dateString: string) => {
-    const date = new Date(dateString);
+  const isWithinTwoWeeks = (date: Date) => {
     const twoWeeksAgo = new Date();
     twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
     return date >= twoWeeksAgo;
   };
 
-  const recentLogs = logs.filter(log => isWithinTwoWeeks(log.created_at));
+  const recentLogs = logs.filter(log => isWithinTwoWeeks(log.timestamp));
   const olderLogsCount = logs.length - recentLogs.length;
 
   const handleViewOlderLogs = () => {
     setShowProPrompt(true);
   };
 
-  const formatTimestamp = (timestampString: string) => {
-    const timestamp = new Date(timestampString);
+  const formatTimestamp = (timestamp: Date) => {
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - timestamp.getTime()) / (1000 * 60));
     
@@ -80,7 +69,7 @@ export const AutomationHistory = ({ logs }: AutomationHistoryProps) => {
     }
   };
 
-  const formatDuration = (seconds: number | null) => {
+  const formatDuration = (seconds: number | undefined) => {
     if (!seconds) return '';
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -128,11 +117,11 @@ export const AutomationHistory = ({ logs }: AutomationHistoryProps) => {
                 <div className="flex items-center gap-3">
                   {getStatusIcon(log.status)}
                   <div>
-                    <span className="font-medium">{log.automation_type}</span>
+                    <span className="font-medium">{log.automationType}</span>
                     <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <span>{formatTimestamp(log.created_at)}</span>
-                      {log.duration_seconds && log.status === 'completed' && (
-                        <span>• {formatDuration(log.duration_seconds)}</span>
+                      <span>{formatTimestamp(log.timestamp)}</span>
+                      {log.duration && log.status === 'completed' && (
+                        <span>• {formatDuration(log.duration)}</span>
                       )}
                     </div>
                   </div>
