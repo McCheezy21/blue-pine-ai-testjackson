@@ -16,17 +16,22 @@ const Dashboard = () => {
   const [showReports, setShowReports] = useState(false);
   const navigate = useNavigate();
 
+  // Temporarily disable auth check
+  /*
   useEffect(() => {
     if (!isAuthenticated()) {
       navigate('/signin');
     }
   }, [navigate]);
+  */
 
-  const user = getUserInfo();
-
-  if (!user) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
-  }
+  // Mock user data for testing when auth is disabled
+  const user = getUserInfo() || {
+    firstName: 'Test',
+    lastName: 'User',
+    email: 'test@example.com',
+    sub: 'test-user-id'
+  };
 
   const handleNavigate = (view: string) => {
     if (view === 'services') {
