@@ -1,30 +1,37 @@
 
-import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { getUserInfo } from "@/utils/cognitoAuth";
 
-interface AutomationLog {
+export interface AutomationLog {
   id: string;
-  automation_type: string;
-  patient_name: string;
-  patient_id: string;
-  facility_name: string;
-  service_date: string;
-  provider_name: string;
-  automation_notes: string;
-  status: 'running' | 'completed' | 'failed';
-  created_at: string;
-  completed_at: string | null;
-  duration_seconds: number | null;
-  time_saved_minutes: number;
+  automationType: string;
+  patientName: string;
+  patientId: string;
+  facilityName: string;
+  serviceDate: Date;
+  providerName: string;
+  automationNotes: string;
+  status: "running" | "completed" | "failed";
+  timestamp: Date;
+  duration?: number;
+  timeSavedMinutes: number;
 }
 
-interface WeeklyMetrics {
+export interface WeeklyMetrics {
   automations_run: number;
   cards_processed: number;
   claims_processed: number;
   time_saved_minutes: number;
 }
+
+// Time saving values for different automation types (in minutes)
+const TIME_SAVING_MAP: Record<string, number> = {
+  "Patient Sourcing Claims": 45,
+  "Revenue Cycle Automation": 30,
+  "Debt & Write-offs Automation": 25,
+  "Medical Coder Automation": 20,
+};
 
 export const useAutomationData = () => {
   const [automationLogs, setAutomationLogs] = useState<AutomationLog[]>([]);
@@ -35,60 +42,66 @@ export const useAutomationData = () => {
     time_saved_minutes: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
-  const { toast } = useToast();
 
-  // Calculate time saved for different automation types
-  const getTimeSavedForAutomation = (automationType: string): number => {
-    const timeSavings = {
-      'Patient Sourcing Claims': 45,
-      'Revenue Cycle Automation': 120,
-      'Debt & Write-offs Automation': 90,
-      'Medical Coder Automation': 60,
-    };
-    return timeSavings[automationType as keyof typeof timeSavings] || 30;
-  };
+  const user = getUserInfo();
+
+  // Convert database record to AutomationLog
+  const convertDbToLog = (dbRecord: any): AutomationLog => ({
+    id: dbRecord.id,
+    automationType: dbRecord.automation_type,
+    patientName: dbRecord.patient_name,
+    patientId: dbRecord.patient_id,
+    facilityName: dbRecord.facility_name,
+    serviceDate: new Date(dbRecord.service_date),
+    providerName: dbRecord.provider_name,
+    automationNotes: dbRecord.automation_notes,
+    status: dbRecord.status as "running" | "completed" | "failed",
+    timestamp: new Date(dbRecord.created_at),
+    duration: dbRecord.duration_seconds,
+    timeSavedMinutes: dbRecord.time_saved_minutes || 0,
+  });
 
   // Fetch automation logs
-  const fetchAutomationLogs = async () => {
+  const fetchLogs = async () => {
+    if (!user?.sub) return;
+
     try {
       const { data, error } = await supabase
         .from('automation_logs')
         .select('*')
+        .eq('user_id', user.sub)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setAutomationLogs(data || []);
+
+      const convertedLogs = (data || []).map(convertDbToLog);
+      setAutomationLogs(convertedLogs);
     } catch (error) {
       console.error('Error fetching automation logs:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load automation history",
-        variant: "destructive",
-      });
     }
   };
 
   // Fetch weekly metrics
   const fetchWeeklyMetrics = async () => {
+    if (!user?.sub) return;
+
     try {
       const { data, error } = await supabase
-        .rpc('get_week_start')
-        .then(({ data: weekStart }) => 
-          supabase
-            .from('weekly_metrics')
-            .select('*')
-            .eq('week_start', weekStart)
-            .single()
-        );
+        .from('weekly_metrics')
+        .select('*')
+        .eq('user_id', user.sub)
+        .order('week_start', { ascending: false })
+        .limit(1);
 
-      if (error && error.code !== 'PGRST116') throw error;
-      
-      if (data) {
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        const metrics = data[0];
         setWeeklyMetrics({
-          automations_run: data.automations_run || 0,
-          cards_processed: data.cards_processed || 0,
-          claims_processed: data.claims_processed || 0,
-          time_saved_minutes: data.time_saved_minutes || 0,
+          automations_run: metrics.automations_run || 0,
+          cards_processed: metrics.cards_processed || 0,
+          claims_processed: metrics.claims_processed || 0,
+          time_saved_minutes: metrics.time_saved_minutes || 0,
         });
       }
     } catch (error) {
@@ -98,124 +111,127 @@ export const useAutomationData = () => {
     }
   };
 
-  // Create new automation log
-  const createAutomationLog = async (automationData: any) => {
+  // Create automation log
+  const createAutomationLog = async (data: {
+    patientName: string;
+    patientId: string;
+    facilityName: string;
+    serviceDate: Date;
+    providerName: string;
+    automationNotes: string;
+    automationType: string;
+  }) => {
+    if (!user?.sub) throw new Error('User not authenticated');
+
+    const timeSavedMinutes = TIME_SAVING_MAP[data.automationType] || 15;
+
     try {
-      const timeSaved = getTimeSavedForAutomation(automationData.automationType);
-      
-      const { data, error } = await supabase
+      // Insert automation log
+      const { data: logData, error: logError } = await supabase
         .from('automation_logs')
         .insert({
-          automation_type: automationData.automationType,
-          patient_name: automationData.patientName,
-          patient_id: automationData.patientId,
-          facility_name: automationData.facilityName,
-          service_date: automationData.serviceDate.toISOString().split('T')[0],
-          provider_name: automationData.providerName,
-          automation_notes: automationData.automationNotes,
-          time_saved_minutes: timeSaved,
-          status: 'running'
+          user_id: user.sub,
+          automation_type: data.automationType,
+          patient_name: data.patientName,
+          patient_id: data.patientId,
+          facility_name: data.facilityName,
+          service_date: data.serviceDate.toISOString().split('T')[0],
+          provider_name: data.providerName,
+          automation_notes: data.automationNotes,
+          status: 'running',
+          time_saved_minutes: timeSavedMinutes,
         })
         .select()
         .single();
 
-      if (error) throw error;
+      if (logError) throw logError;
 
-      // Update local state immediately
-      setAutomationLogs(prev => [data, ...prev]);
+      // Add to local state immediately
+      const newLog = convertDbToLog(logData);
+      setAutomationLogs(prev => [newLog, ...prev]);
 
-      // Update weekly metrics
-      await updateWeeklyMetrics(1, 
-        Math.floor(Math.random() * 3) + 1, // 1-3 cards processed
-        Math.floor(Math.random() * 2) + 1, // 1-2 claims processed
-        timeSaved
-      );
+      // Update metrics (simulate some card/claim processing)
+      const cardsProcessed = Math.floor(Math.random() * 3) + 1; // 1-3 cards
+      const claimsProcessed = Math.floor(Math.random() * 2) + 1; // 1-2 claims
 
-      // Simulate automation completion after random delay
+      await supabase.rpc('update_weekly_metrics', {
+        p_user_id: user.sub,
+        p_automations_increment: 1,
+        p_cards_increment: cardsProcessed,
+        p_claims_increment: claimsProcessed,
+        p_time_saved_increment: timeSavedMinutes,
+      });
+
+      // Update local metrics state
+      setWeeklyMetrics(prev => ({
+        automations_run: prev.automations_run + 1,
+        cards_processed: prev.cards_processed + cardsProcessed,
+        claims_processed: prev.claims_processed + claimsProcessed,
+        time_saved_minutes: prev.time_saved_minutes + timeSavedMinutes,
+      }));
+
+      // Simulate completion after 3-8 seconds
+      const completionTime = Math.random() * 5000 + 3000;
       setTimeout(async () => {
-        await completeAutomation(data.id);
-      }, Math.random() * 30000 + 10000); // 10-40 seconds
+        try {
+          const duration = Math.floor(completionTime / 1000);
+          
+          const { data: updatedData, error: updateError } = await supabase
+            .from('automation_logs')
+            .update({
+              status: 'completed',
+              completed_at: new Date().toISOString(),
+              duration_seconds: duration,
+            })
+            .eq('id', logData.id)
+            .select()
+            .single();
 
-      return data;
+          if (updateError) throw updateError;
+
+          // Update local state
+          setAutomationLogs(prev => 
+            prev.map(log => 
+              log.id === logData.id 
+                ? convertDbToLog(updatedData)
+                : log
+            )
+          );
+        } catch (error) {
+          console.error('Error updating automation status:', error);
+          // Update to failed state
+          setAutomationLogs(prev => 
+            prev.map(log => 
+              log.id === logData.id 
+                ? { ...log, status: 'failed' as const }
+                : log
+            )
+          );
+        }
+      }, completionTime);
+
+      return newLog;
     } catch (error) {
       console.error('Error creating automation log:', error);
-      toast({
-        title: "Error",
-        description: "Failed to start automation",
-        variant: "destructive",
-      });
       throw error;
     }
   };
 
-  // Complete automation
-  const completeAutomation = async (logId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('automation_logs')
-        .update({
-          status: 'completed',
-          completed_at: new Date().toISOString(),
-          duration_seconds: Math.floor(Math.random() * 300) + 60 // 1-5 minutes
-        })
-        .eq('id', logId)
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      // Update local state
-      setAutomationLogs(prev => 
-        prev.map(log => log.id === logId ? { ...log, ...data } : log)
-      );
-    } catch (error) {
-      console.error('Error completing automation:', error);
-    }
-  };
-
-  // Update weekly metrics
-  const updateWeeklyMetrics = async (
-    automationsIncrement: number = 0,
-    cardsIncrement: number = 0,
-    claimsIncrement: number = 0,
-    timeSavedIncrement: number = 0
-  ) => {
-    try {
-      const { error } = await supabase.rpc('update_weekly_metrics', {
-        p_user_id: (await supabase.auth.getUser()).data.user?.id,
-        p_automations_increment: automationsIncrement,
-        p_cards_increment: cardsIncrement,
-        p_claims_increment: claimsIncrement,
-        p_time_saved_increment: timeSavedIncrement
-      });
-
-      if (error) throw error;
-
-      // Update local state
-      setWeeklyMetrics(prev => ({
-        automations_run: prev.automations_run + automationsIncrement,
-        cards_processed: prev.cards_processed + cardsIncrement,
-        claims_processed: prev.claims_processed + claimsIncrement,
-        time_saved_minutes: prev.time_saved_minutes + timeSavedIncrement,
-      }));
-    } catch (error) {
-      console.error('Error updating weekly metrics:', error);
-    }
-  };
-
   useEffect(() => {
-    fetchAutomationLogs();
-    fetchWeeklyMetrics();
-  }, []);
+    if (user?.sub) {
+      fetchLogs();
+      fetchWeeklyMetrics();
+    }
+  }, [user?.sub]);
 
   return {
     automationLogs,
     weeklyMetrics,
     isLoading,
     createAutomationLog,
-    refreshData: () => {
-      fetchAutomationLogs();
+    refetch: () => {
+      fetchLogs();
       fetchWeeklyMetrics();
-    }
+    },
   };
 };
