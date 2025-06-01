@@ -1,9 +1,29 @@
 
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Zap, TrendingUp, DollarSign, FileText, Users } from "lucide-react";
+import { AutomationModal } from "./AutomationModal";
+import { AutomationHistory } from "./AutomationHistory";
+import { useAutomationData } from "@/hooks/useAutomationData";
+import { useToast } from "@/hooks/use-toast";
+
+interface AutomationFormData {
+  patientName: string;
+  patientId: string;
+  facilityName: string;
+  serviceDate: Date;
+  providerName: string;
+  automationNotes: string;
+  automationType: string;
+}
 
 export const AutomationServices = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedAutomationType, setSelectedAutomationType] = useState("");
+  const { automationLogs, createAutomationLog } = useAutomationData();
+  const { toast } = useToast();
+
   const automationJobs = [
     {
       id: "patient-sourcing",
@@ -35,9 +55,24 @@ export const AutomationServices = () => {
     }
   ];
 
-  const handleRunJob = (jobId: string) => {
-    console.log(`Running automation job: ${jobId}`);
-    // TODO: Implement actual job triggering logic
+  const handleRunJob = (jobTitle: string) => {
+    setSelectedAutomationType(jobTitle);
+    setIsModalOpen(true);
+  };
+
+  const handleModalSubmit = async (data: AutomationFormData) => {
+    try {
+      await createAutomationLog(data);
+      
+      toast({
+        title: "Automation Started",
+        description: `${data.automationType} has been started successfully.`,
+      });
+
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Error starting automation:', error);
+    }
   };
 
   const getColorClasses = (color: string) => {
@@ -71,7 +106,7 @@ export const AutomationServices = () => {
             <CardContent>
               <p className="text-gray-600 mb-4">{job.description}</p>
               <Button 
-                onClick={() => handleRunJob(job.id)}
+                onClick={() => handleRunJob(job.title)}
                 className="w-full"
                 variant="outline"
               >
@@ -83,43 +118,14 @@ export const AutomationServices = () => {
         ))}
       </div>
 
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>Automation History</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center py-2 border-b">
-              <div>
-                <span className="font-medium">Revenue Cycle Automation</span>
-                <span className="text-sm text-green-600 ml-2">Completed</span>
-              </div>
-              <span className="text-sm text-gray-500">2 hours ago</span>
-            </div>
-            <div className="flex justify-between items-center py-2 border-b">
-              <div>
-                <span className="font-medium">Patient Sourcing Claims</span>
-                <span className="text-sm text-blue-600 ml-2">Running</span>
-              </div>
-              <span className="text-sm text-gray-500">30 minutes ago</span>
-            </div>
-            <div className="flex justify-between items-center py-2 border-b">
-              <div>
-                <span className="font-medium">Medical Coder Automation</span>
-                <span className="text-sm text-green-600 ml-2">Completed</span>
-              </div>
-              <span className="text-sm text-gray-500">4 hours ago</span>
-            </div>
-            <div className="flex justify-between items-center py-2">
-              <div>
-                <span className="font-medium">Debt & Write-offs Automation</span>
-                <span className="text-sm text-green-600 ml-2">Completed</span>
-              </div>
-              <span className="text-sm text-gray-500">1 day ago</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <AutomationHistory logs={automationLogs} />
+
+      <AutomationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        automationType={selectedAutomationType}
+        onSubmit={handleModalSubmit}
+      />
     </div>
   );
 };

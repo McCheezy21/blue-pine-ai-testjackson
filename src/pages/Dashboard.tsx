@@ -4,78 +4,88 @@ import { Sidebar } from "@/components/dashboard/Sidebar";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
 import { InsuranceCardService } from "@/components/dashboard/InsuranceCardService";
 import { AutomationServices } from "@/components/dashboard/AutomationServices";
-import { handleCognitoCallback, getUserInfo, isAuthenticated } from "@/utils/cognitoAuth";
+import { ReportsModal } from "@/components/dashboard/ReportsModal";
+import { getUserInfo, isAuthenticated, handleCognitoCallback } from "@/utils/cognitoAuth";
 
 export type DashboardView = 'home' | 'insurance' | 'automation' | 'services';
 
 const Dashboard = () => {
   const [activeView, setActiveView] = useState<DashboardView>('home');
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
-  const [user, setUser] = useState({
-    firstName: "Loading...",
-    lastName: "",
-    email: ""
-  });
+  const [showReports, setShowReports] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [authError, setAuthError] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const initAuth = async () => {
+    const processAuthentication = async () => {
       try {
-        setIsLoading(true);
-        setAuthError(null);
-
-        // Check if there's an authorization code in the URL (Cognito redirect)
+        // Check if we have an authorization code from OAuth callback
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
-        const error = urlParams.get('error');
-
-        if (error) {
-          // Handle Cognito errors (user cancelled, etc.)
-          console.error('Cognito authentication error:', error);
-          setAuthError('Authentication failed. Please try again.');
-          // Redirect to sign in after a delay
-          setTimeout(() => navigate('/signin'), 3000);
-          return;
-        }
-
+        
         if (code) {
-          // Handle the callback from Cognito
-          console.log('Processing Cognito callback...');
-          await handleCognitoCallback();
-          
-          // Clean up the URL by removing the code parameter
-          window.history.replaceState({}, document.title, '/dashboard');
+          console.log('🔄 Processing OAuth callback with code:', code.substring(0, 10) + '...');
+          try {
+            await handleCognitoCallback();
+            console.log('✅ OAuth callback processed successfully');
+            // Clean up URL by removing the code parameter
+            window.history.replaceState({}, document.title, window.location.pathname);
+          } catch (callbackError) {
+            console.error('❌ OAuth callback processing failed:', callbackError);
+            // If callback fails, redirect to signin
+            navigate('/signin');
+            return;
+          }
         }
-
+        
         // Check if user is authenticated
         if (!isAuthenticated()) {
-          console.log('User not authenticated, redirecting to sign in...');
+          console.log('❌ User not authenticated, redirecting to signin...');
           navigate('/signin');
           return;
         }
-
+        
         // Get user information
         const userInfo = getUserInfo();
-        if (!userInfo) {
-          throw new Error('Failed to get user information from token');
+        if (userInfo) {
+          setUser(userInfo);
+          console.log('✅ User authenticated:', userInfo);
+        } else {
+          console.log('❌ Failed to get user info, redirecting to signin...');
+          navigate('/signin');
+          return;
         }
-        setUser(userInfo);
-        console.log('Dashboard loaded successfully for user:', userInfo.firstName);
-
       } catch (error) {
-        console.error('Authentication error:', error);
-        setAuthError('Failed to authenticate. Please try signing in again.');
-        // Redirect to sign in page after error
-        setTimeout(() => navigate('/signin'), 3000);
+        console.error('❌ Authentication error:', error);
+        navigate('/signin');
       } finally {
         setIsLoading(false);
       }
     };
 
-    initAuth();
+    processAuthentication();
   }, [navigate]);
+
+  const handleNavigate = (view: string) => {
+    if (view === 'services') {
+      setShowReports(true);
+    } else {
+      setActiveView(view as DashboardView);
+    }
+  };
+
+  const renderContent = () => {
+    switch (activeView) {
+      case 'insurance':
+        return <InsuranceCardService />;
+      case 'automation':
+        return <AutomationServices />;
+      case 'home':
+      default:
+        return <DashboardContent user={user} onNavigate={handleNavigate} />;
+    }
+  };
 
   // Show loading screen while processing authentication
   if (isLoading) {
@@ -83,64 +93,55 @@ const Dashboard = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center font-sans">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Signing you in...</h2>
-          <p className="text-gray-600">Please wait while we set up your dashboard.</p>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Setting up your dashboard...</h2>
+          <p className="text-gray-600">Please wait while we verify your authentication.</p>
         </div>
       </div>
     );
   }
 
-  // Show error screen if authentication failed
-  if (authError) {
+  // Show error state if no user
+  if (!user) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center font-sans">
-        <div className="text-center max-w-md mx-auto p-6">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-red-800 mb-2">Authentication Error</h2>
-            <p className="text-red-600 mb-4">{authError}</p>
-            <button 
-              onClick={() => navigate('/signin')}
-              className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors"
-            >
-              Try Again
-            </button>
-          </div>
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Authentication Error</h2>
+          <p className="text-gray-600 mb-4">Unable to verify your authentication. Please try signing in again.</p>
+          <button 
+            onClick={() => navigate('/signin')}
+            className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90"
+          >
+            Back to Sign In
+          </button>
         </div>
       </div>
     );
   }
 
-  const renderContent = () => {
-    switch (activeView) {
-      case 'home':
-        return <DashboardContent user={user} />;
-      case 'insurance':
-        return <InsuranceCardService />;
-      case 'automation':
-        return <AutomationServices />;
-      case 'services':
-        return (
-          <div className="p-8 bg-gray-50 min-h-screen font-sans">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Reports & Analytics</h1>
-            <p className="text-gray-600">Coming Soon - Advanced reporting and analytics dashboard</p>
-          </div>
-        );
-      default:
-        return <DashboardContent user={user} />;
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50 flex font-sans">
+    <div className="min-h-screen flex w-full bg-gray-50">
       <Sidebar 
-        activeView={activeView}
+        activeView={activeView} 
         setActiveView={setActiveView}
         expanded={sidebarExpanded}
         setExpanded={setSidebarExpanded}
       />
-      <main className={`flex-1 transition-all duration-300 ${sidebarExpanded ? 'ml-64' : 'ml-20'}`}>
-        {renderContent()}
-      </main>
+      
+      {/* Main content area with smooth transition */}
+      <div 
+        className={`flex-1 transition-all duration-300 ease-in-out ${
+          sidebarExpanded ? 'ml-64' : 'ml-20'
+        }`}
+      >
+        <main className="h-full">
+          {renderContent()}
+        </main>
+      </div>
+
+      <ReportsModal 
+        isOpen={showReports}
+        onClose={() => setShowReports(false)}
+      />
     </div>
   );
 };

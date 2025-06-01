@@ -9,6 +9,57 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      automation_logs: {
+        Row: {
+          automation_notes: string
+          automation_type: string
+          completed_at: string | null
+          created_at: string | null
+          duration_seconds: number | null
+          facility_name: string
+          id: string
+          patient_id: string
+          patient_name: string
+          provider_name: string
+          service_date: string
+          status: string
+          time_saved_minutes: number
+          user_id: string | null
+        }
+        Insert: {
+          automation_notes: string
+          automation_type: string
+          completed_at?: string | null
+          created_at?: string | null
+          duration_seconds?: number | null
+          facility_name: string
+          id?: string
+          patient_id: string
+          patient_name: string
+          provider_name: string
+          service_date: string
+          status?: string
+          time_saved_minutes?: number
+          user_id?: string | null
+        }
+        Update: {
+          automation_notes?: string
+          automation_type?: string
+          completed_at?: string | null
+          created_at?: string | null
+          duration_seconds?: number | null
+          facility_name?: string
+          id?: string
+          patient_id?: string
+          patient_name?: string
+          provider_name?: string
+          service_date?: string
+          status?: string
+          time_saved_minutes?: number
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       Waitlist: {
         Row: {
           additional_info: string | null
@@ -39,6 +90,42 @@ export type Database = {
         }
         Relationships: []
       }
+      weekly_metrics: {
+        Row: {
+          automations_run: number | null
+          cards_processed: number | null
+          claims_processed: number | null
+          created_at: string | null
+          id: string
+          time_saved_minutes: number | null
+          updated_at: string | null
+          user_id: string | null
+          week_start: string
+        }
+        Insert: {
+          automations_run?: number | null
+          cards_processed?: number | null
+          claims_processed?: number | null
+          created_at?: string | null
+          id?: string
+          time_saved_minutes?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          week_start: string
+        }
+        Update: {
+          automations_run?: number | null
+          cards_processed?: number | null
+          claims_processed?: number | null
+          created_at?: string | null
+          id?: string
+          time_saved_minutes?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          week_start?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -53,6 +140,10 @@ export type Database = {
           waitlist_joined_at: string
         }[]
       }
+      get_week_start: {
+        Args: { input_date?: string }
+        Returns: string
+      }
       has_role: {
         Args: { role: Database["public"]["Enums"]["app_role"] }
         Returns: boolean
@@ -63,6 +154,16 @@ export type Database = {
           new_value: boolean
         }
         Returns: boolean
+      }
+      update_weekly_metrics: {
+        Args: {
+          p_user_id: string
+          p_automations_increment?: number
+          p_cards_increment?: number
+          p_claims_increment?: number
+          p_time_saved_increment?: number
+        }
+        Returns: undefined
       }
     }
     Enums: {
