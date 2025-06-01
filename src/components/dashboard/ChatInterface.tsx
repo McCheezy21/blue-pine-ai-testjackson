@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +13,7 @@ import {
   AlertDialogTitle 
 } from "@/components/ui/alert-dialog";
 import { X, Send, MessageCircle, Minimize2, Maximize2 } from "lucide-react";
+import { bedrockChatService } from '@/services/bedrockService';
 
 interface ChatMessage {
   id: string;
@@ -108,19 +108,40 @@ export const ChatInterface = ({ showInputBar = false }: ChatInterfaceProps) => {
     setInputValue("");
     setIsLoading(true);
 
-    // Mock AI response - replace with actual Amazon Bedrock integration later
-    setTimeout(() => {
+    try {
+      // Use real Bedrock AI instead of mock response
+      const conversationHistory = messages.map(msg => ({
+        id: msg.id,
+        role: msg.sender === 'user' ? 'user' as const : 'assistant' as const,
+        content: msg.text,
+        timestamp: msg.timestamp
+      }));
+      
+      const response = await bedrockChatService.sendMessage(inputValue, conversationHistory);
+      
       const aiMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        text: "Thank you for your message. I'm Blue Pine AI, and I'm here to help you with your healthcare automation needs. This is a mock response - the Amazon Bedrock integration will be implemented soon.",
+        text: response,
         sender: 'ai',
         timestamp: new Date()
       };
       const updatedMessages = [...newMessages, aiMessage];
       setMessages(updatedMessages);
       globalChatState.setState({ messages: updatedMessages });
+    } catch (error) {
+      console.error('Error with Bedrock:', error);
+      const errorMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        text: "I'm having trouble connecting right now. Please try again in a moment.",
+        sender: 'ai',
+        timestamp: new Date()
+      };
+      const updatedMessages = [...newMessages, errorMessage];
+      setMessages(updatedMessages);
+      globalChatState.setState({ messages: updatedMessages });
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const handleToggleChat = () => {
