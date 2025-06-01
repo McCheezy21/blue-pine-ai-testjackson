@@ -330,7 +330,8 @@ export const initiateCognitoLogin = () => {
     client_id: cognitoConfig.clientId,
     response_type: 'code',
     scope: 'openid email',  // Remove 'profile' to match app client config
-    redirect_uri: cognitoConfig.redirectUri
+    redirect_uri: cognitoConfig.redirectUri,
+    prompt: 'login'  // Force fresh login, don't use cached sessions
   });
   
   const cognitoUrl = `https://${cognitoConfig.domain}/oauth2/authorize?${params.toString()}`;
