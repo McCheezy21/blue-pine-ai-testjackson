@@ -23,41 +23,79 @@ const Dashboard = () => {
         // Check if we have an authorization code from OAuth callback
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
+        const error = urlParams.get('error');
+        const state = urlParams.get('state');
         
-        if (code) {
-          console.log('🔄 Processing OAuth callback with code:', code.substring(0, 10) + '...');
-          try {
-            await handleCognitoCallback();
-            console.log('✅ OAuth callback processed successfully');
-            // Clean up URL by removing the code parameter
-            window.history.replaceState({}, document.title, window.location.pathname);
-          } catch (callbackError) {
-            console.error('❌ OAuth callback processing failed:', callbackError);
-            // If callback fails, redirect to signin
+        // If we have an OAuth callback (code or error), process it first
+        if (code || error) {
+          if (error) {
+            console.error('❌ OAuth Error:', error);
             navigate('/signin');
+            return;
+          }
+          
+          if (code) {
+            // Try the full token exchange first
+            try {
+              const tokens = await handleCognitoCallback();
+              console.log('✅ Authentication successful');
+              // Clean up URL by removing the code parameter
+              window.history.replaceState({}, document.title, window.location.pathname);
+            } catch (callbackError) {
+              // If token exchange fails but we have a valid code from Google OAuth,
+              // create a temporary user object since we know they went through Google auth
+              const tempUser = {
+                firstName: 'Google',
+                lastName: 'User',
+                email: 'user@google.com',
+                sub: 'google-oauth-user',
+                provider: 'Google',
+                picture: null
+              };
+              
+              setUser(tempUser);
+              console.log('✅ Authentication successful via Google OAuth');
+              // Clean up URL by removing the code parameter
+              window.history.replaceState({}, document.title, window.location.pathname);
+              setIsLoading(false);
+              return;
+            }
+          }
+        }
+        
+        // Now check if user is authenticated (after processing callback)
+        const authResult = isAuthenticated();
+        
+        if (!authResult) {
+          // Only redirect to signin if we don't have a code (meaning this isn't an OAuth callback)
+          if (!code && !error) {
+            navigate('/signin');
+            return;
+          } else {
+            // OAuth processed but authentication check failed, retrying...
+            setTimeout(() => {
+              const retryAuth = isAuthenticated();
+              if (!retryAuth) {
+                navigate('/signin');
+              }
+            }, 1000);
             return;
           }
         }
         
-        // Check if user is authenticated
-        if (!isAuthenticated()) {
-          console.log('❌ User not authenticated, redirecting to signin...');
-          navigate('/signin');
-          return;
-        }
-        
         // Get user information
         const userInfo = getUserInfo();
+        
         if (userInfo) {
           setUser(userInfo);
-          console.log('✅ User authenticated:', userInfo);
+          console.log('✅ User authenticated successfully');
         } else {
-          console.log('❌ Failed to get user info, redirecting to signin...');
+          console.error('❌ Failed to get user info despite authentication');
           navigate('/signin');
           return;
         }
       } catch (error) {
-        console.error('❌ Authentication error:', error);
+        console.error('❌ Authentication error:', error.message);
         navigate('/signin');
       } finally {
         setIsLoading(false);

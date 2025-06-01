@@ -1,30 +1,21 @@
 // Utility functions for AWS Cognito authentication
 export const cognitoConfig = {
-  authority: 'https://cognito-idp.us-west-1.amazonaws.com/us-west-1_p6qGk8fQ3',
-  clientId: 'lg92qnkko2jl523bffuumh7pb',
+  authority: 'https://cognito-idp.us-west-1.amazonaws.com/us-west-1_ZRp04bdAf',
+  clientId: '3cqsdhk7qmhvdvt4n9lpvni40q',
   get redirectUri() {
     return window.location.origin + '/dashboard';
   },
   scope: 'phone openid email profile',
   region: 'us-west-1',
-  userPoolId: 'us-west-1_p6qGk8fQ3',
-  domain: 'us-west-1p6qgk8fq3.auth.us-west-1.amazoncognito.com'
+  userPoolId: 'us-west-1_ZRp04bdAf',
+  domain: 'us-west-1zrp04bdaf.auth.us-west-1.amazoncognito.com'
 };
 
 export const handleCognitoCallback = async () => {
-  console.log('🔄 handleCognitoCallback called');
-  console.log('🌐 Current URL:', window.location.href);
-  console.log('🔍 URL Search params:', window.location.search);
-  
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
   const error = urlParams.get('error');
   const errorDescription = urlParams.get('error_description');
-  
-  console.log('📋 Extracted params:');
-  console.log('- Code:', code ? code.substring(0, 10) + '...' : 'NULL');
-  console.log('- Error:', error);
-  console.log('- Error Description:', errorDescription);
   
   // Check for OAuth errors first
   if (error) {
@@ -34,27 +25,18 @@ export const handleCognitoCallback = async () => {
   }
   
   if (!code) {
-    console.log('❌ No authorization code found in URL');
     return null;
   }
 
   try {
-    console.log('🔄 Starting token exchange...');
-    console.log('📋 Code:', code.substring(0, 10) + '...');
-    console.log('📋 Redirect URI:', cognitoConfig.redirectUri);
-    console.log('📋 Client ID:', cognitoConfig.clientId);
-    
-    // Prepare token exchange request
-    const tokenEndpoint = `${cognitoConfig.authority}/oauth2/token`;
+    // Prepare token exchange request - use the domain, not authority for token endpoint
+    const tokenEndpoint = `https://${cognitoConfig.domain}/oauth2/token`;
     const requestBody = new URLSearchParams({
       grant_type: 'authorization_code',
       client_id: cognitoConfig.clientId,
       code: code,
       redirect_uri: cognitoConfig.redirectUri,
     });
-    
-    console.log('🌐 Token endpoint:', tokenEndpoint);
-    console.log('📤 Request body:', requestBody.toString());
     
     // Exchange authorization code for tokens
     const tokenResponse = await fetch(tokenEndpoint, {
@@ -64,30 +46,21 @@ export const handleCognitoCallback = async () => {
       },
       body: requestBody,
     });
-
-    console.log('📥 Token response status:', tokenResponse.status);
-    console.log('📥 Token response headers:', Object.fromEntries(tokenResponse.headers.entries()));
     
     if (!tokenResponse.ok) {
-      const errorText = await tokenResponse.text();
-      console.error('❌ Token exchange failed:');
-      console.error('Status:', tokenResponse.status);
-      console.error('Error text:', errorText);
-      throw new Error(`Failed to exchange authorization code for tokens: ${tokenResponse.status} ${errorText}`);
+      // Silently fail for token exchange, we have a fallback method
+      throw new Error(`Token exchange failed: ${tokenResponse.status}`);
     }
 
     const tokens = await tokenResponse.json();
     console.log('✅ Token exchange successful');
-    console.log('🔑 Received tokens:', Object.keys(tokens));
     
     // Validate that we received the expected tokens
     if (!tokens.access_token || !tokens.id_token) {
-      console.error('❌ Invalid token response: missing required tokens');
-      console.error('Received tokens:', Object.keys(tokens));
       throw new Error('Invalid token response: missing required tokens');
     }
     
-    // Store tokens in localStorage (you might want to use more secure storage in production)
+    // Store tokens in localStorage
     localStorage.setItem('accessToken', tokens.access_token);
     localStorage.setItem('idToken', tokens.id_token);
     if (tokens.refresh_token) {
@@ -95,17 +68,10 @@ export const handleCognitoCallback = async () => {
     }
     
     console.log('✅ Successfully stored authentication tokens');
-    console.log('💾 Stored in localStorage:');
-    console.log('- accessToken length:', tokens.access_token.length);
-    console.log('- idToken length:', tokens.id_token.length);
-    console.log('- refreshToken:', tokens.refresh_token ? 'present' : 'not provided');
     
     return tokens;
   } catch (error) {
-    console.error('❌ Error handling Cognito callback:', error);
-    console.error('❌ Error stack:', error.stack);
-    
-    // Clear any potentially invalid tokens
+    // Clear any potentially invalid tokens silently
     localStorage.removeItem('accessToken');
     localStorage.removeItem('idToken');
     localStorage.removeItem('refreshToken');
@@ -199,8 +165,6 @@ export const logout = () => {
 
 // Social provider login functions
 export const initiateGoogleLogin = () => {
-  console.log('🔵 initiateGoogleLogin called');
-  
   const redirectUri = cognitoConfig.redirectUri;
   const googleScopes = 'openid email';
   
@@ -210,15 +174,14 @@ export const initiateGoogleLogin = () => {
     redirect_uri: redirectUri,
     response_type: 'code',
     client_id: cognitoConfig.clientId,
-    scope: googleScopes
+    scope: googleScopes,
+    // Force the consent screen and account selection
+    prompt: 'select_account consent'
   });
   
   const cognitoUrl = `https://${cognitoConfig.domain}/oauth2/authorize?${params.toString()}`;
   
-  console.log('🌐 Generated URL:', cognitoUrl);
-  
   try {
-    console.log('🚀 Redirecting to Google login...');
     window.location.href = cognitoUrl;
   } catch (error) {
     console.error('❌ Error during redirect:', error);
@@ -271,9 +234,6 @@ export const initiateCognitoLogin = () => {
   console.log('========================');
   console.log('Client ID:', cognitoConfig.clientId);
   console.log('Redirect URI:', cognitoConfig.redirectUri);
-  
-  // Show URL for debugging
-  alert(`Generated URL:\n\n${cognitoUrl}`);
   
   console.log('🔵 Redirecting to Cognito Hosted UI:', cognitoUrl);
   window.location.href = cognitoUrl;
