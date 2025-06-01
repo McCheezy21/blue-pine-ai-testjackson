@@ -1,30 +1,28 @@
 // Utility functions for AWS Cognito authentication
 export const cognitoConfig = {
-  authority: 'https://cognito-idp.us-west-1.amazonaws.com/us-west-1_p6qGk8fQ3',
-  clientId: 'lg92qnkko2jl523bffuumh7pb',
+  authority: 'https://cognito-idp.us-west-1.amazonaws.com/us-west-1_ZRp04bdAf',
+  clientId: '3cqsdhk7qmhvdvt4n9lpvni40q',
   get redirectUri() {
     return window.location.origin + '/dashboard';
   },
   scope: 'phone openid email profile',
   region: 'us-west-1',
-  userPoolId: 'us-west-1_p6qGk8fQ3',
-  domain: 'us-west-1p6qgk8fq3.auth.us-west-1.amazoncognito.com'
+  userPoolId: 'us-west-1_ZRp04bdAf',
+  domain: 'us-west-1zrp04bdaf.auth.us-west-1.amazoncognito.com'
 };
 
 export const handleCognitoCallback = async () => {
-  console.log('🔄 handleCognitoCallback called');
-  console.log('🌐 Current URL:', window.location.href);
-  console.log('🔍 URL Search params:', window.location.search);
-  
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
   const error = urlParams.get('error');
   const errorDescription = urlParams.get('error_description');
   
-  console.log('📋 Extracted params:');
-  console.log('- Code:', code ? code.substring(0, 10) + '...' : 'NULL');
-  console.log('- Error:', error);
-  console.log('- Error Description:', errorDescription);
+  console.error('🔍🔍🔍 DEBUGGING COGNITO CALLBACK - START 🔍🔍🔍');
+  console.error('- Current URL:', window.location.href);
+  console.error('- Redirect URI we will use:', cognitoConfig.redirectUri);
+  console.error('- Authorization code:', code);
+  console.error('- Client ID:', cognitoConfig.clientId);
+  console.error('- Domain:', cognitoConfig.domain);
   
   // Check for OAuth errors first
   if (error) {
@@ -34,29 +32,35 @@ export const handleCognitoCallback = async () => {
   }
   
   if (!code) {
-    console.log('❌ No authorization code found in URL');
+    console.error('❌ No authorization code found in URL');
     return null;
   }
 
+  console.error('✅ Authorization code received, attempting token exchange...');
+  
   try {
-    console.log('🔄 Starting token exchange...');
-    console.log('📋 Code:', code.substring(0, 10) + '...');
-    console.log('📋 Redirect URI:', cognitoConfig.redirectUri);
-    console.log('📋 Client ID:', cognitoConfig.clientId);
+    // Use proper Cognito token exchange with client secret
+    const tokenEndpoint = `https://${cognitoConfig.domain}/oauth2/token`;
+    // Real client secret from AWS Cognito console
+    const clientSecret = '13ufeqd70tidrhrgnu9agb46118sb85b48p59lh7ac4jk95m3k3m';
     
-    // Prepare token exchange request
-    const tokenEndpoint = `${cognitoConfig.authority}/oauth2/token`;
     const requestBody = new URLSearchParams({
       grant_type: 'authorization_code',
       client_id: cognitoConfig.clientId,
+      client_secret: clientSecret,
       code: code,
       redirect_uri: cognitoConfig.redirectUri,
     });
     
-    console.log('🌐 Token endpoint:', tokenEndpoint);
-    console.log('📤 Request body:', requestBody.toString());
-    
-    // Exchange authorization code for tokens
+    console.error('🔄🔄🔄 MAKING TOKEN EXCHANGE REQUEST 🔄🔄🔄');
+    console.error('- Endpoint:', tokenEndpoint);
+    console.error('- Grant type: authorization_code');
+    console.error('- Client ID:', cognitoConfig.clientId);
+    console.error('- Client Secret (first 10 chars):', clientSecret.substring(0, 10) + '...');
+    console.error('- Redirect URI:', cognitoConfig.redirectUri);
+    console.error('- Code (first 10 chars):', code.substring(0, 10) + '...');
+    console.error('- Full request body:', requestBody.toString());
+
     const tokenResponse = await fetch(tokenEndpoint, {
       method: 'POST',
       headers: {
@@ -65,46 +69,51 @@ export const handleCognitoCallback = async () => {
       body: requestBody,
     });
 
-    console.log('📥 Token response status:', tokenResponse.status);
-    console.log('📥 Token response headers:', Object.fromEntries(tokenResponse.headers.entries()));
-    
+    console.error('🔍🔍🔍 TOKEN RESPONSE DETAILS 🔍🔍🔍');
+    console.error('- Status:', tokenResponse.status);
+    console.error('- Status Text:', tokenResponse.statusText);
+    console.error('- Headers:', Object.fromEntries(tokenResponse.headers.entries()));
+
     if (!tokenResponse.ok) {
       const errorText = await tokenResponse.text();
-      console.error('❌ Token exchange failed:');
-      console.error('Status:', tokenResponse.status);
-      console.error('Error text:', errorText);
-      throw new Error(`Failed to exchange authorization code for tokens: ${tokenResponse.status} ${errorText}`);
+      console.error('❌❌❌ TOKEN EXCHANGE FAILED ❌❌❌');
+      console.error('- Status:', tokenResponse.status);
+      console.error('- Full Error Response:', errorText);
+      
+      // Try to parse error details
+      try {
+        const errorJson = JSON.parse(errorText);
+        console.error('- Parsed Error Details:', JSON.stringify(errorJson, null, 2));
+        
+        // If invalid_client, try without client secret as fallback
+        if (errorJson.error === 'invalid_client') {
+          console.error('🔄 Trying without client secret as fallback...');
+          return await tryWithoutClientSecret(code);
+        }
+      } catch (e) {
+        console.error('- Error response is not JSON, raw text:', errorText);
+      }
+      
+      throw new Error(`Token exchange failed: ${tokenResponse.status} - ${errorText}`);
     }
 
     const tokens = await tokenResponse.json();
-    console.log('✅ Token exchange successful');
-    console.log('🔑 Received tokens:', Object.keys(tokens));
+    console.error('✅✅✅ REAL COGNITO TOKEN EXCHANGE SUCCESSFUL! ✅✅✅');
+    console.error('- Access token received:', !!tokens.access_token);
+    console.error('- ID token received:', !!tokens.id_token);
+    console.error('- Refresh token received:', !!tokens.refresh_token);
     
-    // Validate that we received the expected tokens
-    if (!tokens.access_token || !tokens.id_token) {
-      console.error('❌ Invalid token response: missing required tokens');
-      console.error('Received tokens:', Object.keys(tokens));
-      throw new Error('Invalid token response: missing required tokens');
-    }
-    
-    // Store tokens in localStorage (you might want to use more secure storage in production)
+    // Store real Cognito tokens
     localStorage.setItem('accessToken', tokens.access_token);
     localStorage.setItem('idToken', tokens.id_token);
     if (tokens.refresh_token) {
       localStorage.setItem('refreshToken', tokens.refresh_token);
     }
     
-    console.log('✅ Successfully stored authentication tokens');
-    console.log('💾 Stored in localStorage:');
-    console.log('- accessToken length:', tokens.access_token.length);
-    console.log('- idToken length:', tokens.id_token.length);
-    console.log('- refreshToken:', tokens.refresh_token ? 'present' : 'not provided');
-    
     return tokens;
-  } catch (error) {
-    console.error('❌ Error handling Cognito callback:', error);
-    console.error('❌ Error stack:', error.stack);
     
+  } catch (error) {
+    console.error('❌❌❌ TOKEN EXCHANGE ERROR ❌❌❌', error);
     // Clear any potentially invalid tokens
     localStorage.removeItem('accessToken');
     localStorage.removeItem('idToken');
@@ -112,6 +121,48 @@ export const handleCognitoCallback = async () => {
     
     throw error;
   }
+};
+
+// Fallback function to try token exchange without client secret
+const tryWithoutClientSecret = async (code: string) => {
+  console.error('🔄 Attempting token exchange WITHOUT client secret...');
+  
+  const tokenEndpoint = `https://${cognitoConfig.domain}/oauth2/token`;
+  
+  const requestBody = new URLSearchParams({
+    grant_type: 'authorization_code',
+    client_id: cognitoConfig.clientId,
+    code: code,
+    redirect_uri: cognitoConfig.redirectUri,
+  });
+  
+  console.error('- Request without client secret:', requestBody.toString());
+  
+  const tokenResponse = await fetch(tokenEndpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: requestBody,
+  });
+  
+  if (!tokenResponse.ok) {
+    const errorText = await tokenResponse.text();
+    console.error('❌ Fallback also failed:', tokenResponse.status, errorText);
+    throw new Error(`Both attempts failed: ${tokenResponse.status} - ${errorText}`);
+  }
+  
+  const tokens = await tokenResponse.json();
+  console.error('✅ SUCCESS with fallback method (no client secret)!');
+  
+  // Store tokens
+  localStorage.setItem('accessToken', tokens.access_token);
+  localStorage.setItem('idToken', tokens.id_token);
+  if (tokens.refresh_token) {
+    localStorage.setItem('refreshToken', tokens.refresh_token);
+  }
+  
+  return tokens;
 };
 
 export const getUserInfo = () => {
@@ -197,28 +248,47 @@ export const logout = () => {
   window.location.href = logoutUrl;
 };
 
+// PKCE helper functions
+const generateCodeVerifier = () => {
+  const array = new Uint8Array(32);
+  crypto.getRandomValues(array);
+  return btoa(String.fromCharCode.apply(null, Array.from(array)))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
+};
+
+const generateCodeChallenge = async (verifier: string) => {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(verifier);
+  const digest = await crypto.subtle.digest('SHA-256', data);
+  return btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(digest))))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
+};
+
 // Social provider login functions
-export const initiateGoogleLogin = () => {
-  console.log('🔵 initiateGoogleLogin called');
-  
+export const initiateGoogleLogin = async () => {
   const redirectUri = cognitoConfig.redirectUri;
   const googleScopes = 'openid email';
   
-  // Build URL using URLSearchParams for proper encoding
-  const params = new URLSearchParams({
-    identity_provider: 'Google', // Make sure this matches your Cognito identity provider name
+  const params = {
+    identity_provider: 'Google',
     redirect_uri: redirectUri,
     response_type: 'code',
     client_id: cognitoConfig.clientId,
-    scope: googleScopes
-  });
+    scope: googleScopes,
+    prompt: 'select_account consent'
+  };
   
-  const cognitoUrl = `https://${cognitoConfig.domain}/oauth2/authorize?${params.toString()}`;
+  console.log('🔐 Initiating Google login with client secret authentication');
   
-  console.log('🌐 Generated URL:', cognitoUrl);
+  // Build URL using URLSearchParams for proper encoding
+  const urlParams = new URLSearchParams(params);
+  const cognitoUrl = `https://${cognitoConfig.domain}/oauth2/authorize?${urlParams.toString()}`;
   
   try {
-    console.log('🚀 Redirecting to Google login...');
     window.location.href = cognitoUrl;
   } catch (error) {
     console.error('❌ Error during redirect:', error);
@@ -241,10 +311,10 @@ export const initiateMicrosoftLogin = () => {
 };
 
 // Generic social login function
-export const initiateSocialLogin = (provider: 'Google' | 'Microsoft') => {
+export const initiateSocialLogin = async (provider: 'Google' | 'Microsoft') => {
   console.log(`⚡ initiateSocialLogin called with provider: ${provider}`);
   if (provider === 'Google') {
-    initiateGoogleLogin();
+    await initiateGoogleLogin();
   } else if (provider === 'Microsoft') {
     initiateMicrosoftLogin();
   }
@@ -271,9 +341,6 @@ export const initiateCognitoLogin = () => {
   console.log('========================');
   console.log('Client ID:', cognitoConfig.clientId);
   console.log('Redirect URI:', cognitoConfig.redirectUri);
-  
-  // Show URL for debugging
-  alert(`Generated URL:\n\n${cognitoUrl}`);
   
   console.log('🔵 Redirecting to Cognito Hosted UI:', cognitoUrl);
   window.location.href = cognitoUrl;

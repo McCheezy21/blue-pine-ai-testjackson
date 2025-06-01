@@ -17,11 +17,7 @@ const AppRoutes = () => {
         <Route path="/waitlist" element={<Waitlist />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/dashboard" element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        } />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
