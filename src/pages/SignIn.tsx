@@ -9,14 +9,15 @@ const SignIn = () => {
   const [loadingProvider, setLoadingProvider] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleSocialLogin = (provider: 'Google' | 'Microsoft') => {
+  const handleSocialLogin = async (provider: 'Google' | 'Microsoft') => {
     // Clear any existing authentication data to force fresh login
     localStorage.clear();
     
     setIsLoading(true);
     setLoadingProvider(provider);
     try {
-      initiateSocialLogin(provider);
+      console.log(`📞 Calling initiateSocialLogin for ${provider}`);
+      await initiateSocialLogin(provider);
       setTimeout(() => {
         setIsLoading(false);
         setLoadingProvider(null);

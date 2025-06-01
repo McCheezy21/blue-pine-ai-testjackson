@@ -35,29 +35,15 @@ const Dashboard = () => {
           }
           
           if (code) {
-            // Try the full token exchange first
+            // Try the real token exchange
             try {
               const tokens = await handleCognitoCallback();
-              console.log('✅ Authentication successful');
+              console.log('✅ Real token authentication successful');
               // Clean up URL by removing the code parameter
               window.history.replaceState({}, document.title, window.location.pathname);
             } catch (callbackError) {
-              // If token exchange fails but we have a valid code from Google OAuth,
-              // create a temporary user object since we know they went through Google auth
-              const tempUser = {
-                firstName: 'Google',
-                lastName: 'User',
-                email: 'user@google.com',
-                sub: 'google-oauth-user',
-                provider: 'Google',
-                picture: null
-              };
-              
-              setUser(tempUser);
-              console.log('✅ Authentication successful via Google OAuth');
-              // Clean up URL by removing the code parameter
-              window.history.replaceState({}, document.title, window.location.pathname);
-              setIsLoading(false);
+              console.error('❌ Token exchange failed:', callbackError);
+              navigate('/signin');
               return;
             }
           }
