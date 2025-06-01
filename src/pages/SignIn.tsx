@@ -30,6 +30,9 @@ const SignIn = () => {
   };
 
   const handleCognitoLogin = () => {
+    // Clear any existing authentication data to force fresh login
+    localStorage.clear();
+    
     setIsLoading(true);
     setLoadingProvider('Cognito');
     try {
