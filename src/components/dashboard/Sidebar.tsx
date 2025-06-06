@@ -1,8 +1,9 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Home, Image, Settings, Zap, ChevronRight, Activity, LogOut } from "lucide-react";
 import { DashboardView } from "@/pages/Dashboard";
-import { logout, getUserInfo } from "@/utils/cognitoAuth";
+import { getUserInfo } from "@/utils/cognitoAuth";
 
 interface SidebarProps {
   activeView: DashboardView;
@@ -13,6 +14,7 @@ interface SidebarProps {
 
 export const Sidebar = ({ activeView, setActiveView, expanded, setExpanded }: SidebarProps) => {
   const user = getUserInfo();
+  const navigate = useNavigate();
   
   const menuItems = [
     { 
@@ -42,9 +44,7 @@ export const Sidebar = ({ activeView, setActiveView, expanded, setExpanded }: Si
   ];
 
   const handleLogout = () => {
-    if (confirm('Are you sure you want to log out?')) {
-      logout();
-    }
+    navigate('/signout');
   };
 
   const getInitials = (firstName: string, lastName: string) => {
