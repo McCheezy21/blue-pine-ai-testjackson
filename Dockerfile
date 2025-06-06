@@ -22,7 +22,7 @@ FROM nginx:alpine@sha256:2140dad235c130ac861018a4e13a6bc8aea3a35f3a40e20c1b060d5
 RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
 
 # Install curl for health checks (minimal installation)
-RUN apk add --no-cache curl=8.5.0-r0
+RUN apk add --no-cache curl
 
 # Copy the built application from builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
