@@ -21,14 +21,18 @@ FROM nginx:alpine@sha256:2140dad235c130ac861018a4e13a6bc8aea3a35f3a40e20c1b060d5
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
 
-# Install curl for health checks (minimal installation)
-RUN apk add --no-cache curl=8.5.0-r0
+# Install curl for health checks (use latest available version)
+RUN apk add --no-cache curl
 
 # Copy the built application from builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
+
+# Create necessary directories for nginx to run as non-root
+RUN mkdir -p /tmp/client_temp /tmp/proxy_temp_path /tmp/fastcgi_temp /tmp/uwsgi_temp /tmp/scgi_temp && \
+    chown -R nextjs:nodejs /tmp/client_temp /tmp/proxy_temp_path /tmp/fastcgi_temp /tmp/uwsgi_temp /tmp/scgi_temp
 
 # Change ownership to non-root user
 RUN chown -R nextjs:nodejs /usr/share/nginx/html && \
@@ -43,8 +47,8 @@ RUN mkdir -p /var/run/nginx && \
 # Switch to non-root user
 USER nextjs
 
-# Expose port 80
-EXPOSE 80
+# Expose port 8080
+EXPOSE 8080
 
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"] 

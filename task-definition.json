@@ -14,7 +14,7 @@
       "image": "947039910131.dkr.ecr.us-east-1.amazonaws.com/chase-blue-test:latest",
       "portMappings": [
         {
-          "containerPort": 80,
+          "containerPort": 8080,
           "protocol": "tcp"
         }
       ],
@@ -33,7 +33,7 @@
       "healthCheck": {
         "command": [
           "CMD-SHELL",
-          "curl -f http://localhost/health || exit 1"
+          "curl -f http://localhost:8080/health || exit 1"
         ],
         "interval": 30,
         "timeout": 5,

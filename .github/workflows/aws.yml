@@ -29,6 +29,7 @@ name: Deploy to Amazon ECS
 on:
   push:
     branches: [ "dev" ]
+  workflow_dispatch:  # Allows manual triggering from GitHub UI
 
 env:
   AWS_REGION: us-east-1                       # set this to your preferred AWS region, e.g. us-west-1
@@ -42,6 +43,7 @@ env:
 
 permissions:
   contents: read
+  id-token: write  # Required for OIDC authentication
 
 jobs:
   deploy:
