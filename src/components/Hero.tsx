@@ -3,7 +3,8 @@ import { ArrowRight } from "lucide-react";
 import { ShimmerButton } from "./ui/shimmer-button";
 
 const Hero = () => {
-  return <div className="relative min-h-[80vh] flex items-center">
+  return (
+    <div className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0 md:bg-gradient-to-br from-primary/10 to-secondary/10 -z-10" />
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9')] bg-cover bg-center opacity-35 -z-20" />
       <div className="absolute bottom-0 w-full h-32 bg-gradient-to-b from-transparent to-accent" />
@@ -18,12 +19,14 @@ const Hero = () => {
               Maximize Revenue <span className="text-gray-400 mx-2">|</span> Reduce Denials <span className="text-gray-400 mx-2">|</span> Automate Cashflow
             </p>
           </div>
-          <p className="text-gray-600 mb-8 max-w-5xl mx-auto animate-fade-up text-2xl py-[29px]">Say goodbye to revenue loss and inefficiencies. Our AI agents optimize patient sourcing, automate claims, recover underpayments, and streamline your revenue cycle—without extra staff</p>
+          <p className="text-gray-600 mb-8 max-w-5xl mx-auto animate-fade-up text-2xl py-[29px]">
+            Say goodbye to revenue loss and inefficiencies. Our AI agents optimize patient sourcing, automate claims, recover underpayments, and streamline your revenue cycle—without extra staff
+          </p>
           <div className="flex justify-center animate-fade-up">
             <ShimmerButton 
               to="/waitlist" 
               className="h-12 px-8 py-3" 
-              background="#004466" 
+              background="#1B4F72" 
               shimmerColor="#ffffff" 
               borderRadius="0.375rem"
             >
@@ -35,7 +38,8 @@ const Hero = () => {
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 
 export default Hero;
