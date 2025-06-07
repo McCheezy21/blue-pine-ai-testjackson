@@ -15,7 +15,6 @@ const PrivacyPolicy = () => {
         </div>
         
         <div className="space-y-8">
-          {/* Introduction */}
           <div className="modern-card p-8 animate-fade-up">
             <div className="prose prose-lg max-w-none">
               <p className="text-gray-700 text-lg leading-relaxed">
@@ -36,7 +35,6 @@ const PrivacyPolicy = () => {
             </div>
           </div>
 
-          {/* Summary */}
           <section className="modern-card p-8 animate-fade-up">
             <h2 className="text-3xl font-semibold text-primary mb-6">Summary</h2>
             <p className="text-gray-700 text-lg leading-relaxed">
@@ -44,7 +42,6 @@ const PrivacyPolicy = () => {
             </p>
           </section>
 
-          {/* Numbered Sections */}
           <div className="space-y-6">
             {[
               {

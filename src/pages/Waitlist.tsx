@@ -17,7 +17,7 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-const Demo = () => {
+const Waitlist = () => {
   const { toast } = useToast();
   const {
     register,
@@ -71,7 +71,6 @@ const Demo = () => {
             </p>
           </div>
           
-          {/* Contact Form Section */}
           <div className="max-w-2xl mx-auto">
             <div className="modern-card p-8 md:p-12 animate-fade-up">
               <div className="text-center mb-8">
@@ -177,4 +176,4 @@ const Demo = () => {
   );
 };
 
-export default Demo;
+export default Waitlist;

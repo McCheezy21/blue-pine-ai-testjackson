@@ -23,10 +23,6 @@ const Index = () => {
       <section id="ai-explanation" className="py-20">
         <AIExplanationSection />
       </section>
-      {/* Testimonials section temporarily hidden until we have testimonials */}
-      {/* <section id="testimonials" className="py-20 bg-gradient-to-l from-blue-50 to-white">
-        <Testimonials />
-      </section> */}
       <section className="py-20 bg-gradient-to-r from-white to-blue-50">
         <ToolsAndIntegrations />
       </section>
