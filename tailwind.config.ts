@@ -29,31 +29,46 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#004466",
+          DEFAULT: "#1B4F72",
           foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "#EAEFF2",
-          foreground: "#004466",
+          DEFAULT: "#EBF3FD",
+          foreground: "#1B4F72",
         },
         accent: {
           DEFAULT: "#f7fafc",
-          foreground: "#004466",
+          foreground: "#1B4F72",
         },
+        blue: {
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#1B4F72',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+        }
       },
       animation: {
-        "fade-up": "fadeUp 0.5s ease-out forwards",
-        "fade-down": "fadeDown 0.5s ease-out forwards",
+        "fade-up": "fadeUp 0.6s ease-out forwards",
+        "fade-down": "fadeDown 0.6s ease-out forwards",
         "shimmer-slide": "shimmer-slide var(--speed) ease-in-out infinite alternate",
         "spin-around": "spin-around calc(var(--speed) * 2) infinite linear",
+        "float": "float 6s ease-in-out infinite",
+        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "bounce-subtle": "bounceSubtle 2s infinite",
       },
       keyframes: {
         fadeUp: {
-          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "0%": { opacity: "0", transform: "translateY(30px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
         fadeDown: {
-          "0%": { opacity: "0", transform: "translateY(-20px)" },
+          "0%": { opacity: "0", transform: "translateY(-30px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
         "spin-around": {
@@ -75,6 +90,17 @@ export default {
             transform: "translate(calc(100cqw - 100%), 0)",
           },
         },
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
+        bounceSubtle: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+      },
+      backdropBlur: {
+        xs: '2px',
       },
     },
   },

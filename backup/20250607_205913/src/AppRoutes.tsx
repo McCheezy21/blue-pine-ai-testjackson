@@ -8,6 +8,7 @@ import SignIn from "./pages/SignIn";
 import SignOut from "./pages/SignOut";
 import Dashboard from "./pages/Dashboard";
 import { Invite } from "./pages/Invite";
+import { Admin } from "./pages/Admin";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const AppRoutes = () => {
@@ -21,6 +22,7 @@ const AppRoutes = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signout" element={<SignOut />} />
         <Route path="/invite/:token" element={<Invite />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -17,27 +17,17 @@ export const handleCognitoCallback = async () => {
   const error = urlParams.get('error');
   const errorDescription = urlParams.get('error_description');
   
-  console.error('🔍🔍🔍 DEBUGGING COGNITO CALLBACK - START 🔍🔍🔍');
-  console.error('- Current URL:', window.location.href);
-  console.error('- Redirect URI we will use:', cognitoConfig.redirectUri);
-  console.error('- Authorization code:', code);
-  console.error('- Client ID:', cognitoConfig.clientId);
-  console.error('- Domain:', cognitoConfig.domain);
-  
   // Check for OAuth errors first
   if (error) {
-    console.error('❌ OAuth Error:', error);
-    console.error('❌ Error Description:', decodeURIComponent(errorDescription || ''));
+    console.error('OAuth Error:', error, errorDescription);
     throw new Error(`OAuth Error: ${error} - ${decodeURIComponent(errorDescription || '')}`);
   }
   
   if (!code) {
-    console.error('❌ No authorization code found in URL');
+    console.error('No authorization code found in URL');
     return null;
   }
 
-  console.error('✅ Authorization code received, attempting token exchange...');
-  
   try {
     // Use proper Cognito token exchange with client secret
     const tokenEndpoint = `https://${cognitoConfig.domain}/oauth2/token`;
@@ -51,15 +41,6 @@ export const handleCognitoCallback = async () => {
       code: code,
       redirect_uri: cognitoConfig.redirectUri,
     });
-    
-    console.error('🔄🔄🔄 MAKING TOKEN EXCHANGE REQUEST 🔄🔄🔄');
-    console.error('- Endpoint:', tokenEndpoint);
-    console.error('- Grant type: authorization_code');
-    console.error('- Client ID:', cognitoConfig.clientId);
-    console.error('- Client Secret (first 10 chars):', clientSecret.substring(0, 10) + '...');
-    console.error('- Redirect URI:', cognitoConfig.redirectUri);
-    console.error('- Code (first 10 chars):', code.substring(0, 10) + '...');
-    console.error('- Full request body:', requestBody.toString());
 
     const tokenResponse = await fetch(tokenEndpoint, {
       method: 'POST',
@@ -69,39 +50,28 @@ export const handleCognitoCallback = async () => {
       body: requestBody,
     });
 
-    console.error('🔍🔍🔍 TOKEN RESPONSE DETAILS 🔍🔍🔍');
-    console.error('- Status:', tokenResponse.status);
-    console.error('- Status Text:', tokenResponse.statusText);
-    console.error('- Headers:', Object.fromEntries(tokenResponse.headers.entries()));
-
     if (!tokenResponse.ok) {
       const errorText = await tokenResponse.text();
-      console.error('❌❌❌ TOKEN EXCHANGE FAILED ❌❌❌');
-      console.error('- Status:', tokenResponse.status);
-      console.error('- Full Error Response:', errorText);
+      console.error('Token exchange failed:', tokenResponse.status, errorText);
       
       // Try to parse error details
       try {
         const errorJson = JSON.parse(errorText);
-        console.error('- Parsed Error Details:', JSON.stringify(errorJson, null, 2));
         
         // If invalid_client, try without client secret as fallback
         if (errorJson.error === 'invalid_client') {
-          console.error('🔄 Trying without client secret as fallback...');
+          console.log('Trying fallback method...');
           return await tryWithoutClientSecret(code);
         }
       } catch (e) {
-        console.error('- Error response is not JSON, raw text:', errorText);
+        // Error response is not JSON
       }
       
       throw new Error(`Token exchange failed: ${tokenResponse.status} - ${errorText}`);
     }
 
     const tokens = await tokenResponse.json();
-    console.error('✅✅✅ REAL COGNITO TOKEN EXCHANGE SUCCESSFUL! ✅✅✅');
-    console.error('- Access token received:', !!tokens.access_token);
-    console.error('- ID token received:', !!tokens.id_token);
-    console.error('- Refresh token received:', !!tokens.refresh_token);
+    console.log('✅ Token authentication successful');
     
     // Store real Cognito tokens
     localStorage.setItem('accessToken', tokens.access_token);
@@ -113,7 +83,7 @@ export const handleCognitoCallback = async () => {
     return tokens;
     
   } catch (error) {
-    console.error('❌❌❌ TOKEN EXCHANGE ERROR ❌❌❌', error);
+    console.error('Token exchange error:', error);
     // Clear any potentially invalid tokens
     localStorage.removeItem('accessToken');
     localStorage.removeItem('idToken');
@@ -125,8 +95,6 @@ export const handleCognitoCallback = async () => {
 
 // Fallback function to try token exchange without client secret
 const tryWithoutClientSecret = async (code: string) => {
-  console.error('🔄 Attempting token exchange WITHOUT client secret...');
-  
   const tokenEndpoint = `https://${cognitoConfig.domain}/oauth2/token`;
   
   const requestBody = new URLSearchParams({
@@ -135,8 +103,6 @@ const tryWithoutClientSecret = async (code: string) => {
     code: code,
     redirect_uri: cognitoConfig.redirectUri,
   });
-  
-  console.error('- Request without client secret:', requestBody.toString());
   
   const tokenResponse = await fetch(tokenEndpoint, {
     method: 'POST',
@@ -148,12 +114,12 @@ const tryWithoutClientSecret = async (code: string) => {
   
   if (!tokenResponse.ok) {
     const errorText = await tokenResponse.text();
-    console.error('❌ Fallback also failed:', tokenResponse.status, errorText);
+    console.error('Fallback also failed:', tokenResponse.status, errorText);
     throw new Error(`Both attempts failed: ${tokenResponse.status} - ${errorText}`);
   }
   
   const tokens = await tokenResponse.json();
-  console.error('✅ SUCCESS with fallback method (no client secret)!');
+  console.log('✅ Fallback method successful');
   
   // Store tokens
   localStorage.setItem('accessToken', tokens.access_token);
@@ -183,9 +149,54 @@ export const getUserInfo = () => {
       }
       
       // Handle different token formats from social providers
-      const firstName = payload.given_name || payload.name?.split(' ')[0] || payload['cognito:username'] || 'User';
-      const lastName = payload.family_name || payload.name?.split(' ').slice(1).join(' ') || '';
-      const email = payload.email || payload['cognito:username'] || 'user@example.com';
+      let firstName = 'User';
+      let lastName = '';
+      let email = 'user@example.com';
+      
+      // For Google OAuth tokens - check all possible name fields
+      if (payload.given_name) {
+        firstName = payload.given_name;
+        lastName = payload.family_name || '';
+      } 
+      else if (payload.name && !payload.name.includes('google_')) {
+        const nameParts = payload.name.split(' ');
+        firstName = nameParts[0] || 'User';
+        lastName = nameParts.slice(1).join(' ') || '';
+      }
+      // Check for other possible name fields from social providers
+      else if (payload.first_name) {
+        firstName = payload.first_name;
+        lastName = payload.last_name || '';
+      }
+      // For direct Cognito users
+      else if (payload['cognito:username'] && !payload['cognito:username'].includes('google_')) {
+        firstName = payload['cognito:username'];
+      }
+      // If we still don't have a real name, extract from email
+      else if (payload.email && payload.email !== 'user@example.com') {
+        const emailParts = payload.email.split('@')[0];
+        if (emailParts.includes('.')) {
+          const emailNameParts = emailParts.split('.');
+          firstName = emailNameParts[0].charAt(0).toUpperCase() + emailNameParts[0].slice(1);
+          lastName = emailNameParts[1] ? emailNameParts[1].charAt(0).toUpperCase() + emailNameParts[1].slice(1) : '';
+        } else {
+          firstName = emailParts.charAt(0).toUpperCase() + emailParts.slice(1);
+        }
+      }
+      
+      // Handle email
+      if (payload.email && payload.email !== 'user@example.com') {
+        email = payload.email;
+      } else if (payload['cognito:username'] && payload['cognito:username'].includes('@')) {
+        email = payload['cognito:username'];
+      }
+      
+      // Final fallback for display names
+      if (firstName === 'User' || firstName.includes('google_')) {
+        // Try to get a better name from the user - in a real app you'd want to prompt for this
+        firstName = 'Google User';
+        lastName = '';
+      }
       
       return {
         firstName,
@@ -236,16 +247,19 @@ export const isAuthenticated = () => {
 export const logout = () => {
   console.log('Logging out user...');
   
+  // Clear all tokens from local storage
   localStorage.removeItem('accessToken');
   localStorage.removeItem('idToken');
   localStorage.removeItem('refreshToken');
   
-  // Redirect to Cognito logout
-  const logoutUrl = `https://${cognitoConfig.domain}/logout?` +
-    `client_id=${cognitoConfig.clientId}&` +
-    `logout_uri=${encodeURIComponent(window.location.origin)}`;
+  // Clear any other auth-related storage
+  localStorage.removeItem('codeVerifier');
+  localStorage.removeItem('state');
   
-  window.location.href = logoutUrl;
+  // For now, just clear tokens and redirect to home
+  // This avoids the Cognito logout endpoint configuration issues
+  console.log('🏠 Redirecting to home page after clearing tokens');
+  window.location.href = window.location.origin;
 };
 
 // PKCE helper functions
