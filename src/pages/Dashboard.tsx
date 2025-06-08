@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sidebar } from "@/components/dashboard/Sidebar";
+import { Header } from "@/components/dashboard/Header";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
 import { InsuranceCardService } from "@/components/dashboard/InsuranceCardService";
 import { AutomationServices } from "@/components/dashboard/AutomationServices";
@@ -157,6 +158,9 @@ const Dashboard = () => {
           sidebarExpanded ? 'ml-64' : 'ml-20'
         }`}
       >
+        {/* Header with user profile dropdown */}
+        <Header user={user} />
+        
         <main className="h-full">
           {renderContent()}
         </main>
