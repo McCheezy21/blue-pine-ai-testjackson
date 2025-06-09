@@ -3,6 +3,11 @@ export const cognitoConfig = {
   authority: 'https://cognito-idp.us-west-1.amazonaws.com/us-west-1_ZRp04bdAf',
   clientId: '3cqsdhk7qmhvdvt4n9lpvni40q',
   get redirectUri() {
+    // Check if there's a post-login redirect saved (for tenant URLs)
+    const postLoginRedirect = localStorage.getItem('postLoginRedirect');
+    if (postLoginRedirect) {
+      return window.location.origin + '/dashboard'; // Still use dashboard for OAuth callback
+    }
     return window.location.origin + '/dashboard';
   },
   scope: 'phone openid email profile',
@@ -285,6 +290,8 @@ const generateCodeChallenge = async (verifier: string) => {
 // Social provider login functions
 export const initiateGoogleLogin = async () => {
   const redirectUri = cognitoConfig.redirectUri;
+  console.log('🔍 OAuth: Redirect URI being used:', redirectUri);
+  
   const googleScopes = 'openid email';
   
   const params = {
@@ -297,12 +304,16 @@ export const initiateGoogleLogin = async () => {
   };
   
   console.log('🔐 Initiating Google login with client secret authentication');
+  console.log('🔍 OAuth params:', params);
   
   // Build URL using URLSearchParams for proper encoding
   const urlParams = new URLSearchParams(params);
   const cognitoUrl = `https://${cognitoConfig.domain}/oauth2/authorize?${urlParams.toString()}`;
   
+  console.log('🌐 OAuth URL:', cognitoUrl);
+  
   try {
+    console.log('🔄 Redirecting to Google OAuth...');
     window.location.href = cognitoUrl;
   } catch (error) {
     console.error('❌ Error during redirect:', error);

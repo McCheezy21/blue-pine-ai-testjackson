@@ -9,7 +9,11 @@ const SignIn = () => {
   const [loadingProvider, setLoadingProvider] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  console.log('🔍 SignIn: Component loaded');
+
   const handleSocialLogin = async (provider: 'Google' | 'Microsoft') => {
+    console.log(`🔐 SignIn: Starting ${provider} OAuth flow`);
+    
     // Clear any existing authentication data to force fresh login
     localStorage.clear();
     
