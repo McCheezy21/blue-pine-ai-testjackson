@@ -21,14 +21,20 @@ const Dashboard = () => {
   useEffect(() => {
     const processAuthentication = async () => {
       try {
+        console.log('🔄 Dashboard: Starting authentication process...');
+        
         // Check if we have an authorization code from OAuth callback
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
         const error = urlParams.get('error');
         const state = urlParams.get('state');
         
+        console.log('🔍 Dashboard: OAuth params:', { code: code ? 'Present' : 'None', error, state });
+        
         // If we have an OAuth callback (code or error), process it first
         if (code || error) {
+          console.log('📥 Dashboard: Processing OAuth callback...');
+          
           if (error) {
             console.error('❌ OAuth Error:', error);
             navigate('/signin');
@@ -36,33 +42,42 @@ const Dashboard = () => {
           }
           
           if (code) {
+            console.log('🔐 Dashboard: Exchanging authorization code for tokens...');
             // Try the real token exchange
             try {
               const tokens = await handleCognitoCallback();
-              console.log('✅ Real token authentication successful');
+              console.log('✅ Dashboard: Token exchange successful');
               // Clean up URL by removing the code parameter
               window.history.replaceState({}, document.title, window.location.pathname);
             } catch (callbackError) {
-              console.error('❌ Token exchange failed:', callbackError);
+              console.error('❌ Dashboard: Token exchange failed:', callbackError);
               navigate('/signin');
               return;
             }
           }
         }
         
+        console.log('🔍 Dashboard: Checking if user is authenticated...');
+        
         // Now check if user is authenticated (after processing callback)
         const authResult = isAuthenticated();
+        console.log('🔍 Dashboard: Authentication result:', authResult);
         
         if (!authResult) {
+          console.log('❌ Dashboard: User not authenticated');
           // Only redirect to signin if we don't have a code (meaning this isn't an OAuth callback)
           if (!code && !error) {
+            console.log('🔄 Dashboard: Redirecting to signin (no OAuth callback)');
             navigate('/signin');
             return;
           } else {
             // OAuth processed but authentication check failed, retrying...
+            console.log('⏳ Dashboard: OAuth processed but auth check failed, retrying...');
             setTimeout(() => {
               const retryAuth = isAuthenticated();
+              console.log('🔄 Dashboard: Retry auth result:', retryAuth);
               if (!retryAuth) {
+                console.log('❌ Dashboard: Retry failed, redirecting to signin');
                 navigate('/signin');
               }
             }, 1000);
@@ -70,12 +85,34 @@ const Dashboard = () => {
           }
         }
         
+        console.log('✅ Dashboard: User is authenticated, getting user info...');
+        
         // Get user information
         const userInfo = getUserInfo();
         
         if (userInfo) {
           setUser(userInfo);
           console.log('✅ User authenticated successfully');
+          console.log('👤 User info:', { email: userInfo.email, firstName: userInfo.firstName });
+          console.log('📧 User email domain:', userInfo.email?.split('@')[1]);
+          
+          // Check for post-login redirect (for tenant access)
+          const postLoginRedirect = localStorage.getItem('postLoginRedirect');
+          console.log('🔍 Checking for post-login redirect:', postLoginRedirect);
+          
+          if (postLoginRedirect) {
+            localStorage.removeItem('postLoginRedirect');
+            console.log('🔄 Redirecting to post-login URL:', postLoginRedirect);
+            
+            // Add a small delay to ensure the user state is set
+            setTimeout(() => {
+              console.log('🎯 Executing redirect to:', postLoginRedirect);
+              window.location.href = postLoginRedirect;
+            }, 100);
+            return;
+          } else {
+            console.log('🏠 No post-login redirect found, staying on dashboard');
+          }
         } else {
           console.error('❌ Failed to get user info despite authentication');
           navigate('/signin');
@@ -85,6 +122,7 @@ const Dashboard = () => {
         console.error('❌ Authentication error:', error.message);
         navigate('/signin');
       } finally {
+        console.log('🏁 Dashboard: Authentication process complete, setting loading to false');
         setIsLoading(false);
       }
     };

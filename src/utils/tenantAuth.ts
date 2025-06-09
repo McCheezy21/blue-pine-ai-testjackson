@@ -6,6 +6,7 @@ export interface TenantInfo {
   name: string;
   plan: 'free' | 'pro' | 'enterprise';
   status: 'active' | 'suspended' | 'trial';
+  allowed_email_domains: string[];
   trialEndsAt?: Date;
   subscriptionId?: string;
   createdAt: Date;
@@ -24,8 +25,7 @@ export interface UserWithTenant {
   tenantPermissions: string[];
 }
 
-// EASIEST APPROACH: Path-based tenant identification
-// URLs: /tenant/acme-corp/dashboard, /tenant/acme-corp/settings, etc.
+// ENHANCED: Path-based tenant identification with validation
 export const getCurrentTenant = (): string | null => {
   const pathParts = window.location.pathname.split('/');
   
@@ -38,13 +38,14 @@ export const getCurrentTenant = (): string | null => {
   return localStorage.getItem('currentTenant');
 };
 
-// Get tenant information from your API
+// ENHANCED: Tenant information with proper error handling
 export const getTenantInfo = async (tenantId: string): Promise<TenantInfo | null> => {
   try {
-    const response = await fetch(`/api/tenants/${tenantId}`, {
+    const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    const response = await fetch(`${API_BASE}/api/tenants/${tenantId}`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+        'Authorization': `Bearer ${localStorage.getItem('idToken')}`, // Use idToken instead of accessToken
         'Content-Type': 'application/json'
       }
     });
@@ -66,79 +67,145 @@ export const getTenantInfo = async (tenantId: string): Promise<TenantInfo | null
   }
 };
 
-// Verify user has access to specific tenant (SECURITY CHECK)
-export const verifyTenantAccess = async (tenantId: string, userSub: string): Promise<{
+// ENHANCED: Domain validation for tenant access
+export const validateEmailDomainForTenant = async (email: string, tenantId: string): Promise<boolean> => {
+  try {
+    console.log(`🔍 DOMAIN VALIDATION: Checking email "${email}" against tenant "${tenantId}"`);
+    
+    const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    const response = await fetch(`${API_BASE}/api/tenants/${tenantId}/validate-email`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email })
+    });
+    
+    const result = await response.json();
+    console.log(`🔍 DOMAIN VALIDATION RESULT:`, result);
+    
+    if (!response.ok) {
+      console.error(`❌ DOMAIN VALIDATION FAILED: HTTP ${response.status}`, result);
+      return false;
+    }
+    
+    console.log(`✅ DOMAIN VALIDATION SUCCESS: ${result.valid ? 'ALLOWED' : 'DENIED'}`);
+    return result.valid;
+  } catch (error) {
+    console.error('❌ DOMAIN VALIDATION ERROR:', error);
+    return false;
+  }
+};
+
+// ENHANCED: Tenant access verification with domain checking
+export const verifyTenantAccess = async (tenantId: string, userSub: string, userEmail?: string): Promise<{
   hasAccess: boolean;
   role?: 'admin' | 'user' | 'viewer';
   permissions?: string[];
+  reason?: string;
 }> => {
   try {
-    const response = await fetch(`/api/tenants/${tenantId}/users/${userSub}/access`, {
+    const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    
+    // First check if user has direct tenant access
+    const response = await fetch(`${API_BASE}/api/tenants/${tenantId}/users/${userSub}/access`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+        'Authorization': `Bearer ${localStorage.getItem('idToken')}`,
         'Content-Type': 'application/json'
       }
     });
     
-    if (!response.ok) {
-      return { hasAccess: false };
+    if (response.ok) {
+      const accessInfo = await response.json();
+      return {
+        hasAccess: true,
+        role: accessInfo.role as 'admin' | 'user' | 'viewer',
+        permissions: accessInfo.permissions || []
+      };
     }
     
-    const accessInfo = await response.json();
-    return {
-      hasAccess: true,
-      role: accessInfo.role as 'admin' | 'user' | 'viewer',
-      permissions: accessInfo.permissions || []
-    };
+    // If no direct access, check domain validation for new users
+    if (userEmail) {
+      const isDomainValid = await validateEmailDomainForTenant(userEmail, tenantId);
+      if (!isDomainValid) {
+        return { 
+          hasAccess: false, 
+          reason: 'Email domain not allowed for this tenant'
+        };
+      }
+    }
+    
+    return { hasAccess: false, reason: 'No access found' };
   } catch (error) {
     console.error('Error verifying tenant access:', error);
-    return { hasAccess: false };
+    return { hasAccess: false, reason: 'Verification failed' };
   }
 };
 
-// Enhanced user info with tenant context and security checks
+// ENHANCED: Complete user authentication with tenant validation
 export const getUserWithTenant = async (): Promise<UserWithTenant | null> => {
+  console.log('🔄 getUserWithTenant: Starting tenant authentication process');
+  
   const basicUser = getBasicUserInfo();
   if (!basicUser) {
-    console.log('No authenticated user found');
+    console.log('❌ getUserWithTenant: No authenticated user found');
     return null;
   }
   
+  console.log(`✅ getUserWithTenant: Found authenticated user - ${basicUser.email}`);
+  
   const tenantId = getCurrentTenant();
   if (!tenantId) {
-    console.log('No tenant specified in URL');
+    console.log('❌ getUserWithTenant: No tenant specified in URL');
     // Redirect to tenant selection page
     window.location.href = '/select-tenant';
     return null;
   }
   
-  // SECURITY: Verify user has access to this tenant
-  const accessCheck = await verifyTenantAccess(tenantId, basicUser.sub);
+  console.log(`🔍 getUserWithTenant: Checking access to tenant "${tenantId}"`);
+  
+  // SECURITY: Verify user has access to this tenant with domain validation
+  const accessCheck = await verifyTenantAccess(tenantId, basicUser.sub, basicUser.email);
   if (!accessCheck.hasAccess) {
-    console.error('User does not have access to tenant:', tenantId);
-    window.location.href = '/unauthorized';
+    console.error(`❌ getUserWithTenant: User ${basicUser.email} does not have access to tenant: ${tenantId}`);
+    console.error(`❌ getUserWithTenant: Access denied reason: ${accessCheck.reason}`);
+    
+    // Provide specific error page based on reason
+    if (accessCheck.reason?.includes('domain')) {
+      window.location.href = '/unauthorized?reason=domain';
+    } else {
+      window.location.href = '/unauthorized';
+    }
     return null;
   }
+  
+  console.log(`✅ getUserWithTenant: Access granted with role: ${accessCheck.role}`);
   
   // Get tenant information
   const tenantInfo = await getTenantInfo(tenantId);
   if (!tenantInfo) {
-    console.error('Tenant not found:', tenantId);
+    console.error('❌ getUserWithTenant: Tenant not found:', tenantId);
     window.location.href = '/tenant-not-found';
     return null;
   }
   
+  console.log(`✅ getUserWithTenant: Tenant info retrieved for: ${tenantInfo.name}`);
+  
   // SECURITY: Check subscription status
   if (tenantInfo.status === 'suspended') {
+    console.error('❌ getUserWithTenant: Tenant is suspended');
     window.location.href = '/account-suspended';
     return null;
   }
   
   if (tenantInfo.status !== 'active' && tenantInfo.status !== 'trial') {
+    console.error('❌ getUserWithTenant: Tenant status not active/trial:', tenantInfo.status);
     window.location.href = '/subscription-required';
     return null;
   }
+  
+  console.log(`🎉 getUserWithTenant: Complete! User ${basicUser.email} authenticated for tenant ${tenantInfo.name}`);
   
   return {
     ...basicUser,
@@ -146,6 +213,30 @@ export const getUserWithTenant = async (): Promise<UserWithTenant | null> => {
     role: accessCheck.role || 'viewer',
     tenantPermissions: accessCheck.permissions || []
   };
+};
+
+// ENHANCED: Auto-join tenant for new users with valid domains
+export const autoJoinTenant = async (tenantId: string, userEmail: string, userSub: string): Promise<boolean> => {
+  try {
+    const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    
+    const response = await fetch(`${API_BASE}/api/tenants/${tenantId}/auto-join`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('idToken')}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user_sub: userSub,
+        email: userEmail
+      })
+    });
+    
+    return response.ok;
+  } catch (error) {
+    console.error('Error auto-joining tenant:', error);
+    return false;
+  }
 };
 
 // Helper function to check if user has specific permission
@@ -165,7 +256,7 @@ export const setDevelopmentTenant = (tenantId: string) => {
   window.location.href = `/tenant/${tenantId}/dashboard`;
 };
 
-// Create tenant-aware API request helper
+// ENHANCED: Create tenant-aware API request helper with proper authentication
 export const tenantApiRequest = async (
   endpoint: string, 
   options: RequestInit = {}
@@ -175,12 +266,13 @@ export const tenantApiRequest = async (
     throw new Error('No tenant context available');
   }
   
-  const url = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+  const url = endpoint.startsWith('/') ? `${API_BASE}${endpoint}` : `${API_BASE}/${endpoint}`;
   
   return fetch(url, {
     ...options,
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+      'Authorization': `Bearer ${localStorage.getItem('idToken')}`,
       'X-Tenant-ID': tenantId, // Custom header for backend to identify tenant
       'Content-Type': 'application/json',
       ...options.headers
