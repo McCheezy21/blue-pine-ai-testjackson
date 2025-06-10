@@ -128,6 +128,45 @@ app.get('/api/health', (req, res) => {
 
 // ===== ENHANCED TENANT VALIDATION ENDPOINTS =====
 
+// NEW: Get tenants accessible by email domain (for auto-redirect)
+app.get('/api/user/accessible-tenants', verifyToken, async (req, res) => {
+  try {
+    const userEmail = req.user.email;
+    
+    if (!userEmail) {
+      return res.status(400).json({ error: 'Email not found in token' });
+    }
+    
+    console.log(`🔍 Finding accessible tenants for email: ${userEmail}`);
+    
+    const emailDomain = userEmail.toLowerCase().split('@')[1];
+    
+    // Find all active tenants where the user's email domain is allowed
+    const accessibleTenants = await pool.query(`
+      SELECT id, name, plan, status, allowed_email_domains
+      FROM tenants 
+      WHERE status = 'active' 
+      AND (
+        allowed_email_domains = '{}' 
+        OR allowed_email_domains IS NULL 
+        OR $1 = ANY(allowed_email_domains)
+      )
+      ORDER BY created_at ASC
+    `, [emailDomain]);
+    
+    console.log(`✅ Found ${accessibleTenants.rows.length} accessible tenants for domain: ${emailDomain}`);
+    
+    res.json({
+      email: userEmail,
+      domain: emailDomain,
+      accessible_tenants: accessibleTenants.rows
+    });
+  } catch (error) {
+    console.error('Error finding accessible tenants:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // NEW: Validate email domain for tenant
 app.post('/api/tenants/:tenantId/validate-email', async (req, res) => {
   try {
@@ -454,6 +493,121 @@ app.get('/api/tenants/:tenantId', verifyToken, async (req, res) => {
   } catch (error) {
     console.error('Error fetching tenant:', error);
     res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// ===== ACCESS REQUEST SYSTEM =====
+
+// Submit access request (requires authentication)
+app.post('/api/access-requests', verifyToken, async (req, res) => {
+  try {
+    const { name, email, company, role, message } = req.body;
+    const userSub = req.user.sub;
+    const userEmail = req.user.email;
+    
+    // Validate required fields
+    if (!name || !email || !company || !role || !message) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+    
+    // Ensure email matches the authenticated user's email
+    if (email.toLowerCase() !== userEmail.toLowerCase()) {
+      return res.status(400).json({ 
+        error: 'Email must match your authenticated account' 
+      });
+    }
+    
+    console.log(`📝 Access request submitted by ${userEmail} from ${company}`);
+    
+    // Create access request record
+    await pool.query(`
+      INSERT INTO access_requests (
+        user_sub, 
+        name, 
+        email, 
+        company, 
+        role, 
+        message,
+        status,
+        created_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
+      ON CONFLICT (user_sub) 
+      DO UPDATE SET 
+        name = $2,
+        company = $4,
+        role = $5,
+        message = $6,
+        status = 'pending',
+        updated_at = NOW()
+    `, [userSub, name, email.toLowerCase(), company, role, message, 'pending']);
+    
+    console.log(`✅ Access request created/updated for user ${userSub}`);
+    
+    // TODO: Send notification email to admin team
+    // await sendAccessRequestNotification({ name, email, company, role, message });
+    
+    res.json({ 
+      success: true,
+      message: 'Access request submitted successfully'
+    });
+  } catch (error) {
+    console.error('Error creating access request:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Get all access requests (admin only)
+app.get('/api/admin/access-requests', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT 
+        user_sub,
+        name,
+        email,
+        company,
+        role,
+        message,
+        status,
+        created_at,
+        updated_at
+      FROM access_requests
+      ORDER BY 
+        CASE status
+          WHEN 'pending' THEN 1
+          WHEN 'approved' THEN 2
+          WHEN 'rejected' THEN 3
+        END,
+        created_at DESC
+    `);
+    
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching access requests:', error);
+    res.status(500).json({ error: 'Failed to fetch access requests' });
+  }
+});
+
+// Update access request status (admin only)
+app.put('/api/admin/access-requests/:userSub', async (req, res) => {
+  try {
+    const { userSub } = req.params;
+    const { status, admin_notes } = req.body;
+    
+    if (!['pending', 'approved', 'rejected'].includes(status)) {
+      return res.status(400).json({ error: 'Invalid status' });
+    }
+    
+    await pool.query(`
+      UPDATE access_requests 
+      SET status = $1, admin_notes = $2, updated_at = NOW()
+      WHERE user_sub = $3
+    `, [status, admin_notes, userSub]);
+    
+    console.log(`✅ Access request ${userSub} updated to status: ${status}`);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error updating access request:', error);
+    res.status(500).json({ error: 'Failed to update access request' });
   }
 });
 
