@@ -1,4 +1,3 @@
-
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { FileText, Database, CheckSquare, CreditCard, DollarSign, Archive, List, Bot } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -10,7 +9,8 @@ const benefits = [
   { icon: Archive, text: "Pre Authorizations", description: "Streamlined approval workflows" },
   { icon: List, text: "Claims Submissions", description: "Error-free claim processing" },
   { icon: CreditCard, text: "Billing and EDI", description: "Seamless data exchange" },
-  { icon: DollarSign, text: "Claims Status", description: "Real-time tracking & updates" }
+  { icon: DollarSign, text: "Claims Status", description: "Real-time tracking & updates" },
+  { icon: Bot, text: "Patient Eligibility", description: "Automated eligibility verification" }
 ];
 
 const WhyNeedUs = () => {
@@ -54,10 +54,29 @@ const WhyNeedUs = () => {
 
         {/* Desktop Grid Layout */}
         <div className="hidden lg:grid lg:grid-cols-4 gap-6 mb-12">
-          {benefits.map((benefit, index) => (
+          {benefits.slice(0, 4).map((benefit, index) => (
             <div 
               key={index} 
               className={`premium-card p-6 text-center group transition-all duration-700 delay-${index * 100} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+            >
+              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary/10 to-blue-50 flex items-center justify-center group-hover:from-primary/20 group-hover:to-blue-100 transition-all duration-300">
+                <benefit.icon className="w-8 h-8 text-primary group-hover:scale-110 transition-transform duration-300" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors duration-300">
+                {benefit.text}
+              </h3>
+              <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
+                {benefit.description}
+              </p>
+            </div>
+          ))}
+        </div>
+        
+        <div className="hidden lg:grid lg:grid-cols-4 gap-6 mb-12">
+          {benefits.slice(4, 8).map((benefit, index) => (
+            <div 
+              key={index + 4} 
+              className={`premium-card p-6 text-center group transition-all duration-700 delay-${(index + 4) * 100} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
             >
               <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary/10 to-blue-50 flex items-center justify-center group-hover:from-primary/20 group-hover:to-blue-100 transition-all duration-300">
                 <benefit.icon className="w-8 h-8 text-primary group-hover:scale-110 transition-transform duration-300" />

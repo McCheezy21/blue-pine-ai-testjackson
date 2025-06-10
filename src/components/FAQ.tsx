@@ -1,4 +1,3 @@
-
 import {
   Accordion,
   AccordionContent,
@@ -116,10 +115,10 @@ const FAQ = () => {
               Our team of healthcare revenue cycle experts is here to help you understand how AI can transform your facility.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="modern-button bg-gradient-to-r from-primary to-blue-500 text-white px-8 py-3 rounded-xl font-semibold hover:scale-105 transition-transform duration-300">
+              <button className="bg-gradient-to-r from-primary to-blue-500 text-white px-6 py-2.5 rounded-lg font-semibold hover:scale-105 transition-transform duration-300 text-sm shadow-lg">
                 Schedule Consultation
               </button>
-              <button className="px-8 py-3 rounded-xl font-semibold text-primary border-2 border-primary/20 hover:border-primary/40 hover:bg-primary/5 transition-all duration-300">
+              <button className="bg-white text-primary border-2 border-primary px-6 py-2.5 rounded-lg font-semibold hover:bg-primary hover:text-white transition-all duration-300 text-sm shadow-md">
                 Contact Support
               </button>
             </div>

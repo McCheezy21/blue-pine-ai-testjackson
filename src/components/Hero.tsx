@@ -1,4 +1,3 @@
-
 import { ArrowRight, Play, CheckCircle, Calendar, MessageSquare } from "lucide-react";
 import { ShimmerButton } from "./ui/shimmer-button";
 import { useEffect, useState } from "react";
@@ -76,15 +75,13 @@ const Hero = () => {
               </span>
             </ShimmerButton>
             
-            <button className="flex items-center gap-3 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-green-600 to-green-700 rounded-xl hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 group">
-              <Calendar className="w-5 h-5" />
-              Schedule Consultation
-            </button>
-
-            <button className="flex items-center gap-3 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 group">
-              <MessageSquare className="w-5 h-5" />
-              Request Demo
-            </button>
+            <a 
+              href="/waitlist" 
+              className="flex items-center gap-3 px-8 py-4 text-lg font-semibold text-blue-600 bg-white border-2 border-blue-600 rounded-xl hover:bg-blue-50 hover:shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 group"
+            >
+              <Play className="w-5 h-5" />
+              Watch Demo
+            </a>
           </div>
 
           {/* Stats */}

@@ -1,4 +1,3 @@
-
 import { Brain, CheckCircle, Clock, TrendingUp, Shield, Users, ArrowRight, Play } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -91,7 +90,7 @@ const AIExplanationSection = () => {
   ];
 
   return (
-    <div className="relative py-32 bg-gradient-to-b from-white via-gray-50/30 to-white overflow-hidden">
+    <div className="relative py-20 bg-gradient-to-b from-white via-gray-50/30 to-white overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary/5 to-blue-300/5 rounded-full blur-3xl floating-element"></div>
@@ -100,8 +99,8 @@ const AIExplanationSection = () => {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* What Is an AI Agent Section */}
-        <section className={`mb-32 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="text-center mb-20">
+        <section className={`mb-24 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-blue-100/50 border border-primary/20 text-primary font-medium text-sm mb-8">
               <Brain className="w-4 h-4 mr-2" />
               AI Agent Explanation
@@ -163,7 +162,7 @@ const AIExplanationSection = () => {
         </section>
 
         {/* How AI Agents Simplify Your Workload */}
-        <section className={`mb-32 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <section className={`mb-24 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-8">
               <span className="gradient-text">How AI Agents Simplify Your Workload</span>
@@ -205,7 +204,7 @@ const AIExplanationSection = () => {
         </section>
 
         {/* AI Agent ROI Section */}
-        <section className={`mb-32 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <section className={`mb-24 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-8">
               <span className="gradient-text">AI Agent ROI for Skilled Nursing Facilities</span>
@@ -233,7 +232,7 @@ const AIExplanationSection = () => {
         </section>
 
         {/* Why Adopt AI Now Section */}
-        <section className={`mb-20 transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <section className={`mb-16 transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-8">
               <span className="gradient-text">Why Adopt AI Now?</span>
@@ -260,7 +259,7 @@ const AIExplanationSection = () => {
         </section>
 
         {/* Ready to See AI in Action */}
-        <section className={`mb-20 transition-all duration-1000 delay-900 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <section className={`mb-16 transition-all duration-1000 delay-900 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="glass-card p-12 text-center">
             <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               Ready to See AI in Action?
@@ -268,31 +267,13 @@ const AIExplanationSection = () => {
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
               Join healthcare facilities already transforming their revenue cycles with our AI agents.
             </p>
-            <button className="bg-gradient-to-r from-purple-600 to-purple-700 text-white font-semibold px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-3 mx-auto">
+            <a 
+              href="/waitlist"
+              className="bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-3 mx-auto shadow-lg hover:shadow-blue-500/25"
+            >
               <Play className="w-5 h-5" />
               Watch Demo
-            </button>
-          </div>
-        </section>
-
-        {/* Still Have Questions */}
-        <section className={`transition-all duration-1000 delay-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="text-center">
-            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              Still Have Questions?
-            </h3>
-            <p className="text-xl text-gray-600 mb-8 max-w-4xl mx-auto">
-              Our team of healthcare revenue cycle experts is here to help you understand how AI can transform your facility.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-gradient-to-r from-primary to-blue-600 text-white font-semibold px-8 py-4 rounded-xl hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-3 justify-center">
-                <ArrowRight className="w-5 h-5" />
-                Schedule Consultation
-              </button>
-              <button className="bg-white text-primary border-2 border-primary font-semibold px-8 py-4 rounded-xl hover:bg-primary hover:text-white transition-all duration-300 hover:scale-105 active:scale-95">
-                Contact Support
-              </button>
-            </div>
+            </a>
           </div>
         </section>
       </div>

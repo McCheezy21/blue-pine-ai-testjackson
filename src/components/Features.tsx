@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { TrendingUp, Shield, Zap, Users, DollarSign, BarChart } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -29,8 +28,8 @@ const Features = () => {
       challenge: "Underpayments, missed billing opportunities, and claim errors reduce total revenue.",
       solution: "AI-driven accuracy identifies and recovers lost revenue while preventing errors.",
       outcome: "3-8% increase in revenue recovery per facility",
-      color: "from-green-500 to-emerald-600",
-      bgColor: "from-green-50 to-emerald-50"
+      color: "from-blue-600 to-blue-700",
+      bgColor: "from-blue-50 to-blue-100"
     },
     {
       icon: Shield,
@@ -38,8 +37,8 @@ const Features = () => {
       challenge: "High denial rates lead to increased write-offs and lost reimbursements.",
       solution: "AI automates denial recovery, ensures proper coding, and reduces claim errors.",
       outcome: "30-50% fewer denials and significant reduction in bad debt",
-      color: "from-blue-500 to-cyan-600",
-      bgColor: "from-blue-50 to-cyan-50"
+      color: "from-blue-600 to-blue-700",
+      bgColor: "from-blue-50 to-blue-100"
     },
     {
       icon: Zap,
@@ -47,8 +46,8 @@ const Features = () => {
       challenge: "Rising labor costs and inefficient workflows drain operational budgets.",
       solution: "AI replaces repetitive tasks, optimizes staff workflows, and prevents unauthorized treatments.",
       outcome: "Over 20% reduction in staffing costs and overhead",
-      color: "from-purple-500 to-violet-600",
-      bgColor: "from-purple-50 to-violet-50"
+      color: "from-blue-600 to-blue-700",
+      bgColor: "from-blue-50 to-blue-100"
     }
   ];
 
@@ -59,10 +58,10 @@ const Features = () => {
   ];
 
   return (
-    <section id="features-section" className="relative py-20">
+    <section id="features-section" className="relative py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className={`text-center mb-20 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
             <span className="gradient-text">Transform Your</span>
             <br />
@@ -74,7 +73,7 @@ const Features = () => {
         </div>
 
         {/* Main Features Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
           {features.map((feature, index) => (
             <Card 
               key={index} 
