@@ -9,27 +9,12 @@ import SignOut from "./pages/SignOut";
 import Dashboard from "./pages/Dashboard";
 import { Invite } from "./pages/Invite";
 import { Admin } from "./pages/Admin";
+import { TenantSelector } from "./pages/TenantSelector";
+import RequestAccess from "./pages/RequestAccess";
 import ProtectedRoute from "./components/ProtectedRoute";
 import TenantProtectedRoute from "./components/TenantProtectedRoute";
 import TenantDashboard from "./components/TenantDashboard";
 import { getUserInfo } from "./utils/cognitoAuth";
-
-const TenantSelector = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Select Your Organization</h1>
-        <p className="text-gray-600 mb-8">Please contact your administrator for access.</p>
-        <button
-          onClick={() => window.location.href = '/'}
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
-        >
-          Back to Home
-        </button>
-      </div>
-    </div>
-  );
-};
 
 const Unauthorized = () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -91,6 +76,7 @@ const AppRoutes = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signout" element={<SignOut />} />
         <Route path="/invite/:token" element={<Invite />} />
+        <Route path="/request-access" element={<RequestAccess />} />
         
         {/* Admin routes */}
         <Route path="/admin" element={<Admin />} />

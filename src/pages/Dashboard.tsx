@@ -16,6 +16,7 @@ const Dashboard = () => {
   const [showReports, setShowReports] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -102,17 +103,14 @@ const Dashboard = () => {
           
           if (postLoginRedirect) {
             localStorage.removeItem('postLoginRedirect');
-            console.log('🔄 Redirecting to post-login URL:', postLoginRedirect);
-            
-            // Add a small delay to ensure the user state is set
-            setTimeout(() => {
-              console.log('🎯 Executing redirect to:', postLoginRedirect);
-              window.location.href = postLoginRedirect;
-            }, 100);
+            console.log('🔀 Redirecting to post-login URL:', postLoginRedirect);
+            window.location.href = postLoginRedirect;
             return;
-          } else {
-            console.log('🏠 No post-login redirect found, staying on dashboard');
           }
+          
+          // 🎯 NEW: Auto-redirect to appropriate tenant dashboard
+          console.log('🎯 Checking for accessible tenants to auto-redirect...');
+          await checkAccessibleTenantsAndRedirect();
         } else {
           console.error('❌ Failed to get user info despite authentication');
           navigate('/signin');
@@ -121,8 +119,54 @@ const Dashboard = () => {
       } catch (error) {
         console.error('❌ Authentication error:', error.message);
         navigate('/signin');
-      } finally {
-        console.log('🏁 Dashboard: Authentication process complete, setting loading to false');
+      }
+    };
+
+    // 🎯 NEW: Check accessible tenants and auto-redirect
+    const checkAccessibleTenantsAndRedirect = async () => {
+      try {
+        console.log('🔍 Fetching accessible tenants...');
+        
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/user/accessible-tenants`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('idToken')}`
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log('📊 Accessible tenants response:', data);
+          
+          const tenants = data.accessible_tenants || [];
+          
+          if (tenants.length === 1) {
+            // User has access to exactly one tenant - redirect directly
+            const tenant = tenants[0];
+            const tenantDashboardUrl = `/tenant/${tenant.id}/dashboard`;
+            console.log(`🎯 Auto-redirecting to single accessible tenant: ${tenant.name} (${tenant.id})`);
+            console.log(`🔗 Redirecting to: ${tenantDashboardUrl}`);
+            window.location.href = tenantDashboardUrl;
+            return;
+          } else if (tenants.length > 1) {
+            // User has access to multiple tenants - redirect to tenant selector
+            console.log(`🎯 User has access to ${tenants.length} tenants, redirecting to tenant selector`);
+            window.location.href = '/select-tenant';
+            return;
+          } else {
+            // User has no tenant access - redirect to request access page
+            console.log('🚫 User has no tenant access, redirecting to request access page');
+            window.location.href = '/request-access';
+            return;
+          }
+        } else {
+          console.log('⚠️ Failed to fetch accessible tenants, staying on generic dashboard');
+          // Only show generic dashboard if API call fails
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error('❌ Error checking accessible tenants:', error);
+        console.log('⚠️ Error checking tenants, staying on generic dashboard');
+        // Only show generic dashboard if there's an error
         setIsLoading(false);
       }
     };
@@ -156,8 +200,8 @@ const Dashboard = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center font-sans">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Setting up your dashboard...</h2>
-          <p className="text-gray-600">Please wait while we verify your authentication.</p>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Setting up your account...</h2>
+          <p className="text-gray-600">Please wait while we get everything ready for you.</p>
         </div>
       </div>
     );

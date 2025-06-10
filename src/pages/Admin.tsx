@@ -16,10 +16,24 @@ interface User {
   email?: string;
 }
 
+interface AccessRequest {
+  user_sub: string;
+  name: string;
+  email: string;
+  company: string;
+  role: string;
+  message: string;
+  status: 'pending' | 'approved' | 'rejected';
+  admin_notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export const Admin: React.FC = () => {
   const [tenants, setTenants] = useState<Tenant[]>([]);
+  const [accessRequests, setAccessRequests] = useState<AccessRequest[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedTab, setSelectedTab] = useState<'tenants' | 'users' | 'invitations'>('tenants');
+  const [selectedTab, setSelectedTab] = useState<'tenants' | 'users' | 'invitations' | 'access-requests'>('tenants');
 
   // Create Tenant Form State
   const [newTenant, setNewTenant] = useState({
@@ -56,7 +70,10 @@ export const Admin: React.FC = () => {
 
   useEffect(() => {
     fetchTenants();
-  }, []);
+    if (selectedTab === 'access-requests') {
+      fetchAccessRequests();
+    }
+  }, [selectedTab]);
 
   const fetchTenants = async () => {
     try {
@@ -67,6 +84,16 @@ export const Admin: React.FC = () => {
       console.error('Error fetching tenants:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchAccessRequests = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/admin/access-requests');
+      const data = await response.json();
+      setAccessRequests(data);
+    } catch (error) {
+      console.error('Error fetching access requests:', error);
     }
   };
 
@@ -244,6 +271,27 @@ export const Admin: React.FC = () => {
     setEditTenantData({ name: '', allowed_email_domains: '' });
   };
 
+  const updateAccessRequestStatus = async (userSub: string, status: 'approved' | 'rejected', adminNotes?: string) => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/admin/access-requests/${userSub}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status, admin_notes: adminNotes })
+      });
+
+      if (response.ok) {
+        fetchAccessRequests(); // Refresh the list
+        alert(`Access request ${status} successfully!`);
+      } else {
+        const error = await response.json();
+        alert(`Error: ${error.error}`);
+      }
+    } catch (error) {
+      console.error('Error updating access request:', error);
+      alert('Failed to update access request');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -295,6 +343,21 @@ export const Admin: React.FC = () => {
               }`}
             >
               📧 Send Invitations
+            </button>
+            <button
+              onClick={() => setSelectedTab('access-requests')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                selectedTab === 'access-requests'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              👥 Access Requests
+              {accessRequests.filter(req => req.status === 'pending').length > 0 && (
+                <span className="ml-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                  {accessRequests.filter(req => req.status === 'pending').length}
+                </span>
+              )}
             </button>
           </nav>
         </div>
@@ -623,6 +686,99 @@ export const Admin: React.FC = () => {
                   to the recipient with instructions to join the organization.
                 </p>
               </div>
+            </div>
+          </div>
+        )}
+
+        {selectedTab === 'access-requests' && (
+          <div className="bg-white p-6 rounded-lg shadow">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold text-gray-900">Access Requests</h2>
+              <div className="text-sm text-gray-500">
+                {accessRequests.filter(req => req.status === 'pending').length} pending • {accessRequests.length} total
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              {accessRequests.map((request) => (
+                <div key={request.user_sub} className={`border rounded-lg p-6 ${
+                  request.status === 'pending' ? 'border-yellow-200 bg-yellow-50' : 
+                  request.status === 'approved' ? 'border-green-200 bg-green-50' :
+                  'border-red-200 bg-red-50'
+                }`}>
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 className="text-lg font-medium text-gray-900">{request.name}</h3>
+                      <p className="text-sm text-gray-600">{request.email}</p>
+                    </div>
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      request.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                      request.status === 'approved' ? 'bg-green-100 text-green-800' :
+                      'bg-red-100 text-red-800'
+                    }`}>
+                      {request.status}
+                    </span>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <p className="text-sm font-medium text-gray-700">Company</p>
+                      <p className="text-sm text-gray-900">{request.company}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-700">Role</p>
+                      <p className="text-sm text-gray-900">{request.role}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="mb-4">
+                    <p className="text-sm font-medium text-gray-700 mb-2">Message</p>
+                    <p className="text-sm text-gray-900 bg-white p-3 rounded border">{request.message}</p>
+                  </div>
+                  
+                  <div className="text-xs text-gray-500 mb-4">
+                    Submitted: {new Date(request.created_at).toLocaleDateString()} at {new Date(request.created_at).toLocaleTimeString()}
+                  </div>
+                  
+                  {request.status === 'pending' && (
+                    <div className="flex space-x-3 pt-4 border-t">
+                      <button
+                        onClick={() => updateAccessRequestStatus(request.user_sub, 'approved')}
+                        className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+                      >
+                        ✅ Approve Request
+                      </button>
+                      <button
+                        onClick={() => updateAccessRequestStatus(request.user_sub, 'rejected')}
+                        className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
+                      >
+                        ❌ Reject Request
+                      </button>
+                    </div>
+                  )}
+                  
+                  {request.status !== 'pending' && (
+                    <div className="pt-4 border-t">
+                      <p className={`text-sm font-medium ${
+                        request.status === 'approved' ? 'text-green-700' : 'text-red-700'
+                      }`}>
+                        {request.status === 'approved' ? '✅ Request Approved' : '❌ Request Rejected'}
+                      </p>
+                      {request.admin_notes && (
+                        <p className="text-sm text-gray-600 mt-1">Admin Notes: {request.admin_notes}</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+              
+              {accessRequests.length === 0 && (
+                <div className="text-center py-12">
+                  <div className="text-gray-500 text-6xl mb-4">📋</div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No Access Requests</h3>
+                  <p className="text-gray-500">No users have requested access yet.</p>
+                </div>
+              )}
             </div>
           </div>
         )}
