@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { useIsMobile } from "../hooks/use-mobile";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -7,14 +7,23 @@ import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const location = useLocation();
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const scrollToSection = (sectionId: string) => {
     if (location.pathname !== '/') {
       navigate('/');
-      // Wait for navigation to complete before scrolling
       setTimeout(() => {
         const element = document.getElementById(sectionId);
         if (element) {
@@ -31,77 +40,150 @@ const Navbar = () => {
         });
       }
     }
-    setIsOpen(false); // Close mobile menu after clicking
+    setIsOpen(false);
   };
 
-  return <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
+  return (
+    <nav className={`fixed w-full z-50 transition-all duration-500 ${
+      isScrolled 
+        ? 'bg-white/95 backdrop-blur-xl shadow-xl border-b border-gray-100' 
+        : 'bg-white/80 backdrop-blur-sm'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex items-center gap-2 cursor-pointer hover:opacity-90 transition-opacity" onClick={() => navigate('/')}>
-            <img src="/lovable-uploads/408a9d6d-f5ef-4982-8932-336aecfb2915.png" alt="Blue Pine AI Logo" className="h-14 w-14" />
-            <span className="text-2xl font-bold text-primary">Blue Pine AI</span>
+          {/* Logo */}
+          <div 
+            className="flex items-center gap-3 cursor-pointer hover:opacity-90 transition-all duration-300 group" 
+            onClick={() => navigate('/')}
+          >
+            <div className="relative">
+              <img 
+                src="/lovable-uploads/408a9d6d-f5ef-4982-8932-336aecfb2915.png" 
+                alt="Blue Pine AI Logo" 
+                className="h-10 w-10 group-hover:scale-110 transition-transform duration-300" 
+              />
+            </div>
+            <span className="text-xl font-bold text-primary group-hover:text-blue-600 transition-colors">
+              Blue Pine AI
+            </span>
           </div>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" onClick={() => navigate('/')}>
+          <div className="hidden md:flex items-center space-x-1">
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/')}
+              className="text-gray-700 hover:text-primary hover:bg-primary/5 transition-all duration-300 font-medium px-4 py-2 rounded-lg"
+            >
               Home
             </Button>
-            <Button variant="ghost" onClick={() => scrollToSection('features')}>
+            <Button 
+              variant="ghost" 
+              onClick={() => scrollToSection('features')}
+              className="text-gray-700 hover:text-primary hover:bg-primary/5 transition-all duration-300 font-medium px-4 py-2 rounded-lg"
+            >
               Features
             </Button>
-            <Button variant="ghost" onClick={() => scrollToSection('ai-explanation')}>AI Agent?</Button>
-            <Button variant="ghost" onClick={() => scrollToSection('faq')}>
+            <Button 
+              variant="ghost" 
+              onClick={() => scrollToSection('ai-explanation')}
+              className="text-gray-700 hover:text-primary hover:bg-primary/5 transition-all duration-300 font-medium px-4 py-2 rounded-lg"
+            >
+              AI Agents
+            </Button>
+            <Button 
+              variant="ghost" 
+              onClick={() => scrollToSection('faq')}
+              className="text-gray-700 hover:text-primary hover:bg-primary/5 transition-all duration-300 font-medium px-4 py-2 rounded-lg"
+            >
               FAQ
             </Button>
-            <Button variant="ghost" onClick={() => navigate('/signin')}>
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/signin')}
+              className="text-gray-700 hover:text-primary hover:bg-primary/5 transition-all duration-300 font-medium px-4 py-2 rounded-lg ml-2"
+            >
               Sign In
             </Button>
-            <Button variant="outline" onClick={() => navigate('/waitlist')} className="text-slate-50 mx-[9px] my-0 bg-primary hover:bg-primary/90 py-[14px] px-[35px]">Join Waitlist</Button>
+            <Button 
+              onClick={() => navigate('/waitlist')} 
+              className="ml-4 bg-gradient-to-r from-primary to-blue-600 text-white hover:shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 font-semibold px-6 py-2 rounded-lg"
+            >
+              Join Waitlist
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center">
-            <button onClick={() => setIsOpen(!isOpen)} className="text-primary p-2 rounded-md hover:bg-gray-100">
+            <button 
+              onClick={() => setIsOpen(!isOpen)} 
+              className="text-primary p-2 rounded-lg hover:bg-primary/5 transition-all duration-300"
+            >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
 
         {/* Mobile Navigation */}
-        {isOpen && <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
-              <Button variant="ghost" className="w-full text-left justify-start" onClick={() => {
-            navigate('/');
-            setIsOpen(false);
-          }}>
+        {isOpen && (
+          <div className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-xl">
+            <div className="px-4 py-6 space-y-3">
+              <Button 
+                variant="ghost" 
+                className="w-full text-left justify-start text-gray-700 hover:text-primary hover:bg-primary/5 transition-all duration-300 font-medium" 
+                onClick={() => {
+                  navigate('/');
+                  setIsOpen(false);
+                }}
+              >
                 Home
               </Button>
-              <Button variant="ghost" className="w-full text-left justify-start" onClick={() => scrollToSection('features')}>
+              <Button 
+                variant="ghost" 
+                className="w-full text-left justify-start text-gray-700 hover:text-primary hover:bg-primary/5 transition-all duration-300 font-medium" 
+                onClick={() => scrollToSection('features')}
+              >
                 Features
               </Button>
-              <Button variant="ghost" className="w-full text-left justify-start" onClick={() => scrollToSection('ai-explanation')}>
-                Why AI?
+              <Button 
+                variant="ghost" 
+                className="w-full text-left justify-start text-gray-700 hover:text-primary hover:bg-primary/5 transition-all duration-300 font-medium" 
+                onClick={() => scrollToSection('ai-explanation')}
+              >
+                AI Agents
               </Button>
-              <Button variant="ghost" className="w-full text-left justify-start" onClick={() => scrollToSection('faq')}>
+              <Button 
+                variant="ghost" 
+                className="w-full text-left justify-start text-gray-700 hover:text-primary hover:bg-primary/5 transition-all duration-300 font-medium" 
+                onClick={() => scrollToSection('faq')}
+              >
                 FAQ
               </Button>
-              <Button variant="ghost" className="w-full text-left justify-start" onClick={() => {
-                navigate('/signin');
-                setIsOpen(false);
-              }}>
+              <Button 
+                variant="ghost" 
+                className="w-full text-left justify-start text-gray-700 hover:text-primary hover:bg-primary/5 transition-all duration-300 font-medium" 
+                onClick={() => {
+                  navigate('/signin');
+                  setIsOpen(false);
+                }}
+              >
                 Sign In
               </Button>
-              <Button variant="outline" onClick={() => {
-            navigate('/waitlist');
-            setIsOpen(false);
-          }} className="w-full text-slate-50 bg-primary hover:bg-primary/90">
+              <Button 
+                onClick={() => {
+                  navigate('/waitlist');
+                  setIsOpen(false);
+                }} 
+                className="w-full bg-gradient-to-r from-primary to-blue-600 text-white hover:shadow-lg transition-all duration-300 font-semibold mt-4"
+              >
                 Join Waitlist
               </Button>
             </div>
-          </div>}
+          </div>
+        )}
       </div>
-    </nav>;
+    </nav>
+  );
 };
 
 export default Navbar;

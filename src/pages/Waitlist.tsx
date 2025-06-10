@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -78,15 +77,17 @@ const Waitlist = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <a href="/" className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-primary to-blue-600 rounded-xl flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">B</span>
-                </div>
-                <span className="text-xl font-bold text-gray-900">Blue Pine AI</span>
+              <a href="/" className="flex items-center space-x-3 group">
+                <img 
+                  src="/lovable-uploads/408a9d6d-f5ef-4982-8932-336aecfb2915.png" 
+                  alt="Blue Pine AI Logo" 
+                  className="h-10 w-10 group-hover:scale-110 transition-transform duration-300"
+                />
+                <span className="text-xl font-bold text-primary group-hover:text-blue-600 transition-colors">Blue Pine AI</span>
               </a>
             </div>
             <div className="flex items-center space-x-4">
-              <a href="/" className="text-gray-600 hover:text-primary transition-colors">
+              <a href="/" className="text-gray-600 hover:text-primary transition-colors font-medium">
                 Back to Home
               </a>
             </div>
@@ -99,8 +100,8 @@ const Waitlist = () => {
         <section className="relative py-20 overflow-hidden">
           {/* Background Elements */}
           <div className="absolute inset-0">
-            <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary/10 to-blue-300/10 rounded-full blur-3xl"></div>
-            <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-blue-200/10 to-primary/10 rounded-full blur-3xl"></div>
+            <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary/10 to-blue-300/10 rounded-full blur-3xl floating-element"></div>
+            <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-blue-200/10 to-primary/10 rounded-full blur-3xl floating-element" style={{ animationDelay: '2s' }}></div>
           </div>
 
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -231,7 +232,7 @@ const Waitlist = () => {
                     <button 
                       type="submit" 
                       disabled={isSubmitting}
-                      className="w-full bg-gradient-to-r from-primary to-blue-600 text-white font-semibold py-4 px-8 rounded-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                      className="w-full bg-gradient-to-r from-primary to-blue-600 text-white font-semibold py-4 px-8 rounded-xl hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                     >
                       {isSubmitting ? (
                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -251,13 +252,15 @@ const Waitlist = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-primary text-primary-foreground py-8">
+      <footer className="bg-primary text-primary-foreground py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="flex items-center justify-center mb-4">
-              <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center mr-3">
-                <span className="text-primary font-bold">B</span>
-              </div>
+            <div className="flex items-center justify-center mb-6">
+              <img 
+                src="/lovable-uploads/408a9d6d-f5ef-4982-8932-336aecfb2915.png" 
+                alt="Blue Pine AI Logo" 
+                className="w-8 h-8 mr-3"
+              />
               <span className="text-xl font-bold">Blue Pine AI</span>
             </div>
             <p className="text-primary-foreground/70">

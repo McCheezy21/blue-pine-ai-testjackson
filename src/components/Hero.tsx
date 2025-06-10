@@ -1,5 +1,5 @@
 
-import { ArrowRight, Play, CheckCircle } from "lucide-react";
+import { ArrowRight, Play, CheckCircle, Calendar, MessageSquare } from "lucide-react";
 import { ShimmerButton } from "./ui/shimmer-button";
 import { useEffect, useState } from "react";
 
@@ -66,7 +66,7 @@ const Hero = () => {
             <ShimmerButton 
               to="/waitlist" 
               className="h-14 px-8 py-4 text-lg font-semibold" 
-              background="linear-gradient(135deg, #3b82f6, #1d4ed8)" 
+              background="linear-gradient(135deg, #1B4F72, #2563eb)" 
               shimmerColor="#ffffff" 
               borderRadius="0.75rem"
             >
@@ -76,11 +76,14 @@ const Hero = () => {
               </span>
             </ShimmerButton>
             
-            <button className="flex items-center gap-3 px-8 py-4 text-lg font-semibold text-gray-700 hover:text-primary transition-colors group">
-              <div className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center group-hover:shadow-xl transition-shadow">
-                <Play className="w-5 h-5 text-primary ml-1" />
-              </div>
-              Watch Demo
+            <button className="flex items-center gap-3 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-green-600 to-green-700 rounded-xl hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 group">
+              <Calendar className="w-5 h-5" />
+              Schedule Consultation
+            </button>
+
+            <button className="flex items-center gap-3 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 group">
+              <MessageSquare className="w-5 h-5" />
+              Request Demo
             </button>
           </div>
 
