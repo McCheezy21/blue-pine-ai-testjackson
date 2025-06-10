@@ -11,24 +11,35 @@ import AIExplanationSection from "../components/AIExplanationSection";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+    <div className="min-h-screen bg-white overflow-hidden">
       <Navbar />
       <Hero />
-      <section id="features" className="py-20">
+      
+      {/* Premium spacing and sectioning */}
+      <section id="features" className="relative py-32 bg-gradient-to-b from-white to-gray-50/50">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent"></div>
         <Features />
       </section>
-      <section className="py-20 bg-gradient-to-r from-blue-50 to-white">
+      
+      <section className="relative py-32 bg-white">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/30 via-white to-blue-50/30"></div>
         <WhyNeedUs />
       </section>
-      <section id="ai-explanation" className="py-20">
+      
+      <section id="ai-explanation" className="relative py-32 bg-gradient-to-b from-gray-50/50 to-white">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/3 via-transparent to-transparent"></div>
         <AIExplanationSection />
       </section>
-      <section className="py-20 bg-gradient-to-r from-white to-blue-50">
+      
+      <section className="relative py-32 bg-white">
+        <div className="absolute inset-0 bg-gradient-to-r from-white via-blue-50/20 to-white"></div>
         <ToolsAndIntegrations />
       </section>
-      <section id="faq" className="py-20">
+      
+      <section id="faq" className="relative py-32 bg-gradient-to-b from-white to-gray-50/50">
         <FAQ />
       </section>
+      
       <Footer />
     </div>
   );
