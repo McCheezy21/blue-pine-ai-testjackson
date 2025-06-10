@@ -1,3 +1,4 @@
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -73,21 +74,23 @@ const Waitlist = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30">
       {/* Navigation */}
-      <nav className="bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-50">
+      <nav className="bg-white/90 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-20">
             <div className="flex items-center">
               <a href="/" className="flex items-center space-x-3 group">
                 <img 
                   src="/lovable-uploads/408a9d6d-f5ef-4982-8932-336aecfb2915.png" 
                   alt="Blue Pine AI Logo" 
-                  className="h-10 w-10 group-hover:scale-110 transition-transform duration-300"
+                  className="h-12 w-12 group-hover:scale-110 transition-transform duration-300"
                 />
-                <span className="text-xl font-bold text-primary group-hover:text-blue-600 transition-colors">Blue Pine AI</span>
+                <span className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
+                  Blue Pine AI
+                </span>
               </a>
             </div>
             <div className="flex items-center space-x-4">
-              <a href="/" className="text-gray-600 hover:text-primary transition-colors font-medium">
+              <a href="/" className="text-gray-600 hover:text-primary transition-colors font-medium text-lg">
                 Back to Home
               </a>
             </div>
@@ -252,18 +255,18 @@ const Waitlist = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-primary text-primary-foreground py-12">
+      <footer className="bg-gradient-to-r from-primary to-blue-600 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex items-center justify-center mb-6">
               <img 
                 src="/lovable-uploads/408a9d6d-f5ef-4982-8932-336aecfb2915.png" 
                 alt="Blue Pine AI Logo" 
-                className="w-8 h-8 mr-3"
+                className="w-10 h-10 mr-3"
               />
-              <span className="text-xl font-bold">Blue Pine AI</span>
+              <span className="text-2xl font-bold">Blue Pine AI</span>
             </div>
-            <p className="text-primary-foreground/70">
+            <p className="text-white/80 text-lg">
               © 2024 Blue Pine AI. All rights reserved.
             </p>
           </div>
