@@ -5,6 +5,7 @@ import { DashboardContent } from "@/components/dashboard/DashboardContent";
 import { InsuranceCardService } from "@/components/dashboard/InsuranceCardService";
 import { AutomationServices } from "@/components/dashboard/AutomationServices";
 import { ReportsModal } from "@/components/dashboard/ReportsModal";
+import { ChatInterface } from "@/components/dashboard/ChatInterface";
 import { UserWithTenant } from "@/utils/tenantAuth";
 
 export type DashboardView = 'home' | 'insurance' | 'automation' | 'services';
@@ -114,6 +115,9 @@ const TenantDashboard = ({ user }: TenantDashboardProps) => {
           {renderContent()}
         </main>
       </div>
+      
+      {/* ChatInterface available on ALL dashboard pages */}
+      <ChatInterface />
     </div>
   );
 };

@@ -1,10 +1,8 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Users, FileText, Clock, Zap, Upload, Activity, DollarSign } from "lucide-react";
 import { AutomationHistory } from "./AutomationHistory";
 import { ProcessedCardsView } from "./ProcessedCardsView";
-import { ChatInterface } from "./ChatInterface";
 import { useAnimatedCounter } from "@/hooks/useAnimatedCounter";
 import { useAutomationData } from "@/hooks/useAutomationData";
 
@@ -139,9 +137,6 @@ export const DashboardContent = ({ user, onNavigate }: DashboardContentProps) =>
           <Activity className="h-10 w-10 text-white" />
         </div>
       </div>
-
-      {/* Chat Interface with input bar */}
-      <ChatInterface showInputBar={true} />
 
       {/* Weekly Activity Overview */}
       <div className="mb-8">

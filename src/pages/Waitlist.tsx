@@ -1,10 +1,9 @@
-
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import { ArrowRight, CheckCircle, Users, Clock, Star } from "lucide-react";
+import { ArrowRight, CheckCircle, Users, Clock, Star, TreePine } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const formSchema = z.object({
@@ -79,12 +78,10 @@ const Waitlist = () => {
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center">
               <a href="/" className="flex items-center space-x-3 group">
-                <img 
-                  src="/lovable-uploads/408a9d6d-f5ef-4982-8932-336aecfb2915.png" 
-                  alt="Blue Pine AI Logo" 
-                  className="h-12 w-12 group-hover:scale-110 transition-transform duration-300"
-                />
-                <span className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                  <TreePine className="text-white w-7 h-7" />
+                </div>
+                <span className="text-2xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
                   Blue Pine AI
                 </span>
               </a>
