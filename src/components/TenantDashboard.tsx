@@ -150,7 +150,9 @@ const TenantDashboard = ({ user }: TenantDashboardProps) => {
           user={{
             firstName: user.firstName || 'User',
             lastName: user.lastName || '',
-            email: user.email
+            email: user.email,
+            tenant: user.tenant,
+            role: user.role
           }}
         />
         <main className="p-8 relative">
