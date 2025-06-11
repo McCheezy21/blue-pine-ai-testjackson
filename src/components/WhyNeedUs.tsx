@@ -1,6 +1,5 @@
-
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { FileText, Database, CheckSquare, CreditCard, DollarSign, Archive, List, Bot } from "lucide-react";
+import { FileText, Database, CheckSquare, CreditCard, DollarSign, Archive, List, Play, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const benefits = [
@@ -26,48 +25,48 @@ const WhyNeedUs = () => {
       { threshold: 0.1 }
     );
 
-    const element = document.getElementById('ai-agents-section');
+    const element = document.getElementById('why-need-us-section');
     if (element) observer.observe(element);
 
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section id="ai-agents-section" className="relative py-20">
+    <section id="why-need-us-section" className="relative py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="flex items-center justify-center mb-6">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-blue-100 flex items-center justify-center mr-4">
-              <Bot className="w-8 h-8 text-primary" />
-            </div>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold">
-              <span className="gradient-text">AI Agent</span>
-              <br />
-              <span className="gradient-text-secondary">Capabilities</span>
-            </h2>
-          </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Our intelligent agents work 24/7 to handle every aspect of your revenue cycle with precision and speed
+        {/* Section Header with Apple-inspired typography */}
+        <div className={`text-center mb-20 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight leading-none">
+            <span className="bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">Complete Revenue Cycle</span>
+            <br />
+            <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 bg-clip-text text-transparent">Automation</span>
+          </h2>
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-medium">
+            Our AI agents handle every aspect of your revenue cycle, from patient sourcing to final payment collection
           </p>
         </div>
 
-        {/* Desktop Grid Layout */}
-        <div className="hidden lg:grid lg:grid-cols-4 gap-6 mb-12">
-          {benefits.map((benefit, index) => (
-            <div 
-              key={index} 
-              className={`premium-card p-6 text-center group transition-all duration-700 delay-${index * 100} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
-            >
-              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary/10 to-blue-50 flex items-center justify-center group-hover:from-primary/20 group-hover:to-blue-100 transition-all duration-300">
-                <benefit.icon className="w-8 h-8 text-primary group-hover:scale-110 transition-transform duration-300" />
+        {/* Desktop Grid */}
+        <div className={`hidden lg:grid lg:grid-cols-4 gap-6 mb-20 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          {benefits.slice(0, 4).map((benefit, index) => (
+            <div key={index} className={`apple-card p-6 text-center transition-all duration-500 delay-${index * 100}`}>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100/50 backdrop-blur-sm flex items-center justify-center border border-blue-100/50">
+                <benefit.icon className="w-8 h-8 text-blue-600" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors duration-300">
-                {benefit.text}
-              </h3>
-              <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
-                {benefit.description}
-              </p>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">{benefit.text}</h3>
+              <p className="text-sm text-slate-600">{benefit.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className={`hidden lg:grid lg:grid-cols-3 gap-6 mb-20 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          {benefits.slice(4).map((benefit, index) => (
+            <div key={index + 4} className={`apple-card p-6 text-center transition-all duration-500 delay-${(index + 4) * 100}`}>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100/50 backdrop-blur-sm flex items-center justify-center border border-blue-100/50">
+                <benefit.icon className="w-8 h-8 text-blue-600" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">{benefit.text}</h3>
+              <p className="text-sm text-slate-600">{benefit.description}</p>
             </div>
           ))}
         </div>
@@ -85,12 +84,12 @@ const WhyNeedUs = () => {
               {benefits.map((benefit, index) => (
                 <CarouselItem key={index} className="md:basis-1/2">
                   <div className="p-2">
-                    <div className="premium-card p-6 text-center h-full">
-                      <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary/10 to-blue-50 flex items-center justify-center">
-                        <benefit.icon className="w-8 h-8 text-primary" />
+                    <div className="apple-card p-6 text-center h-full">
+                      <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100/50 backdrop-blur-sm flex items-center justify-center border border-blue-100/50">
+                        <benefit.icon className="w-8 h-8 text-blue-600" />
                       </div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">{benefit.text}</h3>
-                      <p className="text-sm text-gray-600">{benefit.description}</p>
+                      <h3 className="text-lg font-bold text-slate-900 mb-2">{benefit.text}</h3>
+                      <p className="text-sm text-slate-600">{benefit.description}</p>
                     </div>
                   </div>
                 </CarouselItem>
@@ -101,13 +100,15 @@ const WhyNeedUs = () => {
           </Carousel>
         </div>
 
-        {/* Call to Action */}
+        {/* Call to Action with Apple-inspired styling */}
         <div className={`text-center mt-16 transition-all duration-1000 delay-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="glass-card p-8 max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to See AI in Action?</h3>
-            <p className="text-gray-600 mb-6">Join healthcare facilities already transforming their revenue cycles with our AI agents.</p>
-            <button className="modern-button bg-gradient-to-r from-primary to-blue-500 text-white px-8 py-3 rounded-xl font-semibold hover:scale-105 transition-transform duration-300">
-              Request Demo
+          <div className="apple-glass-card p-8 max-w-2xl mx-auto">
+            <h3 className="text-2xl font-bold text-slate-900 mb-4">Ready to See AI in Action?</h3>
+            <p className="text-slate-600 mb-6 leading-relaxed">Join healthcare facilities already transforming their revenue cycles with our AI agents.</p>
+            <button className="apple-button group flex items-center gap-3 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-b from-blue-500 to-blue-600 rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg mx-auto">
+              <Play className="w-5 h-5 fill-current" />
+              Watch Demo
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
             </button>
           </div>
         </div>

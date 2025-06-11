@@ -1,11 +1,10 @@
-
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { HelpCircle, Shield, Zap, TrendingUp, Users, DollarSign } from "lucide-react";
+import { HelpCircle, Shield, Zap, TrendingUp, Users, DollarSign, Play, ArrowRight, MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const faqs = [
@@ -63,44 +62,44 @@ const FAQ = () => {
   return (
     <section id="faq-section" className="relative py-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+        {/* Section Header with Apple-inspired typography */}
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="flex items-center justify-center mb-6">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-blue-100 flex items-center justify-center mr-4">
-              <HelpCircle className="w-8 h-8 text-primary" />
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100/50 backdrop-blur-sm flex items-center justify-center mr-4 border border-blue-100/50">
+              <HelpCircle className="w-8 h-8 text-blue-600" />
             </div>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold">
-              <span className="gradient-text">Questions</span>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-none">
+              <span className="bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">Questions</span>
               <br />
-              <span className="gradient-text-secondary">& Answers</span>
+              <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 bg-clip-text text-transparent">& Answers</span>
             </h2>
           </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-medium">
             Everything you need to know about transforming your revenue cycle with AI
           </p>
         </div>
 
-        {/* FAQ Accordion */}
+        {/* FAQ Accordion with Apple-inspired styling */}
         <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <Accordion type="single" collapsible className="w-full space-y-4">
             {faqs.map((faq, index) => (
               <AccordionItem 
                 key={index} 
                 value={`item-${index}`} 
-                className={`premium-card overflow-hidden transition-all duration-500 delay-${index * 100}`}
+                className={`apple-card overflow-hidden transition-all duration-500 delay-${index * 100} hover:shadow-2xl hover:shadow-blue-500/10`}
               >
-                <AccordionTrigger className="px-8 py-6 text-left font-semibold text-gray-900 hover:no-underline hover:text-primary group">
+                <AccordionTrigger className="px-8 py-6 text-left font-semibold text-slate-900 hover:no-underline hover:text-blue-600 group">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/10 to-blue-50 flex items-center justify-center group-hover:from-primary/20 group-hover:to-blue-100 transition-all duration-300">
-                      <faq.icon className="w-6 h-6 text-primary" />
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/50 backdrop-blur-sm flex items-center justify-center group-hover:from-blue-100 group-hover:to-blue-200/50 transition-all duration-300 border border-blue-100/50">
+                      <faq.icon className="w-6 h-6 text-blue-600" />
                     </div>
                     <div className="flex-1">
-                      <div className="text-sm font-medium text-primary/70 uppercase tracking-wide mb-1">{faq.category}</div>
+                      <div className="text-sm font-medium text-blue-600/70 uppercase tracking-wide mb-1">{faq.category}</div>
                       <div className="text-lg font-bold">{faq.question}</div>
                     </div>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="px-8 pb-6 text-gray-600 leading-relaxed text-lg ml-16">
+                <AccordionContent className="px-8 pb-6 text-slate-600 leading-relaxed text-lg ml-16">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
@@ -108,18 +107,21 @@ const FAQ = () => {
           </Accordion>
         </div>
 
-        {/* CTA Section */}
+        {/* CTA Section with Apple-inspired styling */}
         <div className={`text-center mt-16 transition-all duration-1000 delay-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="glass-card p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Still Have Questions?</h3>
-            <p className="text-gray-600 mb-6 leading-relaxed">
+          <div className="apple-glass-card p-8">
+            <h3 className="text-2xl font-bold text-slate-900 mb-4">Still Have Questions?</h3>
+            <p className="text-slate-600 mb-6 leading-relaxed">
               Our team of healthcare revenue cycle experts is here to help you understand how AI can transform your facility.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="modern-button bg-gradient-to-r from-primary to-blue-500 text-white px-8 py-3 rounded-xl font-semibold hover:scale-105 transition-transform duration-300">
-                Schedule Consultation
+              <button className="apple-button group flex items-center justify-center gap-3 px-8 py-3 text-white bg-gradient-to-b from-blue-500 to-blue-600 rounded-xl hover:from-blue-600 hover:to-blue-700 font-semibold shadow-lg">
+                <Play className="w-5 h-5 fill-current" />
+                Watch Demo
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
               </button>
-              <button className="px-8 py-3 rounded-xl font-semibold text-primary border-2 border-primary/20 hover:border-primary/40 hover:bg-primary/5 transition-all duration-300">
+              <button className="flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-semibold text-blue-600 border-2 border-blue-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300">
+                <MessageCircle className="w-5 h-5" />
                 Contact Support
               </button>
             </div>
