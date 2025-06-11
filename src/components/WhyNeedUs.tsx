@@ -1,6 +1,7 @@
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { FileText, Database, CheckSquare, CreditCard, DollarSign, Archive, List, Play, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const benefits = [
   { icon: FileText, text: "Denial Management", description: "Automated appeal processing" },
@@ -14,6 +15,7 @@ const benefits = [
 
 const WhyNeedUs = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -105,7 +107,10 @@ const WhyNeedUs = () => {
           <div className="apple-glass-card p-8 max-w-2xl mx-auto">
             <h3 className="text-2xl font-bold text-slate-900 mb-4">Ready to See AI in Action?</h3>
             <p className="text-slate-600 mb-6 leading-relaxed">Join healthcare facilities already transforming their revenue cycles with our AI agents.</p>
-            <button className="apple-button group flex items-center gap-3 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-b from-blue-500 to-blue-600 rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg mx-auto">
+            <button 
+              onClick={() => navigate('/waitlist')}
+              className="apple-button group flex items-center gap-3 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-b from-blue-500 to-blue-600 rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg mx-auto"
+            >
               <Play className="w-5 h-5 fill-current" />
               Watch Demo
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />

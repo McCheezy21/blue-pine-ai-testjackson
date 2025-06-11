@@ -1,9 +1,11 @@
 import { ArrowRight, Play, CheckCircle } from "lucide-react";
 import { ShimmerButton } from "./ui/shimmer-button";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsVisible(true);
@@ -62,12 +64,18 @@ const Hero = () => {
 
           {/* Dual CTA Buttons - Apple style */}
           <div className={`flex flex-col sm:flex-row justify-center items-center gap-4 mb-16 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <button className="apple-button group flex items-center gap-3 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-b from-blue-500 to-blue-600 rounded-2xl hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] border border-blue-400/20">
+            <button 
+              onClick={() => navigate('/waitlist')}
+              className="apple-button group flex items-center gap-3 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-b from-blue-500 to-blue-600 rounded-2xl hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] border border-blue-400/20"
+            >
               Join Waitlist
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
             </button>
             
-            <button className="apple-button group flex items-center gap-3 px-8 py-4 text-lg font-semibold text-blue-600 bg-white border-2 border-blue-200 rounded-2xl hover:bg-blue-50 hover:border-blue-300 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
+            <button 
+              onClick={() => navigate('/waitlist')}
+              className="apple-button group flex items-center gap-3 px-8 py-4 text-lg font-semibold text-blue-600 bg-white border-2 border-blue-200 rounded-2xl hover:bg-blue-50 hover:border-blue-300 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+            >
               <Play className="w-5 h-5 fill-current" />
               Watch Demo
             </button>

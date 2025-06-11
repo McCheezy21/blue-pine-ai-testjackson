@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ChevronRight, ArrowRight, Play, MessageCircle, CheckCircle, Zap, Shield } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const AIExplanationSection = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -127,7 +129,10 @@ const AIExplanationSection = () => {
             <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto leading-relaxed">
               Join healthcare facilities already transforming their revenue cycles with our AI agents.
             </p>
-            <button className="apple-button group flex items-center gap-3 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-b from-blue-500 to-blue-600 rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg mx-auto">
+            <button 
+              onClick={() => navigate('/waitlist')}
+              className="apple-button group flex items-center gap-3 px-8 py-4 text-lg font-semibold text-white bg-gradient-to-b from-blue-500 to-blue-600 rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg mx-auto"
+            >
               <Play className="w-5 h-5 fill-current" />
               Watch Demo
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
@@ -145,12 +150,18 @@ const AIExplanationSection = () => {
               Our team of healthcare revenue cycle experts is here to help you understand how AI can transform your facility.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="apple-button group flex items-center justify-center gap-3 px-8 py-4 text-white bg-gradient-to-b from-blue-500 to-blue-600 rounded-xl hover:from-blue-600 hover:to-blue-700 font-semibold shadow-lg">
+              <button 
+                onClick={() => navigate('/waitlist')}
+                className="apple-button group flex items-center justify-center gap-3 px-8 py-4 text-white bg-gradient-to-b from-blue-500 to-blue-600 rounded-xl hover:from-blue-600 hover:to-blue-700 font-semibold shadow-lg"
+              >
                 <Play className="w-5 h-5 fill-current" />
                 Watch Demo
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
               </button>
-              <button className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-blue-600 border-2 border-blue-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300">
+              <button 
+                onClick={() => navigate('/waitlist')}
+                className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-blue-600 border-2 border-blue-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300"
+              >
                 <MessageCircle className="w-5 h-5" />
                 Contact Support
               </button>
