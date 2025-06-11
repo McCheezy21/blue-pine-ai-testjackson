@@ -6,7 +6,6 @@ import FAQ from "../components/FAQ";
 import Testimonials from "../components/Testimonials";
 import Footer from "../components/Footer";
 import AIExplanationSection from "../components/AIExplanationSection";
-import ChatbotWidget from "../components/ChatbotWidget";
 
 const Index = () => {
   return (
@@ -35,9 +34,6 @@ const Index = () => {
       </section>
       
       <Footer />
-      
-      {/* Persistent chatbot widget */}
-      <ChatbotWidget />
     </div>
   );
 };

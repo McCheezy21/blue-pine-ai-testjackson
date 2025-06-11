@@ -1,8 +1,7 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CheckCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, TreePine } from "lucide-react";
 import { initiateSocialLogin, initiateCognitoLogin } from "@/utils/cognitoAuth";
 
 const SignIn = () => {
@@ -88,12 +87,12 @@ const SignIn = () => {
 
             {/* Logo */}
             <div className="flex items-center justify-center gap-3 mb-6">
-              <img 
-                src="/lovable-uploads/408a9d6d-f5ef-4982-8932-336aecfb2915.png" 
-                alt="Blue Pine AI Logo" 
-                className="w-12 h-12"
-              />
-              <span className="text-2xl font-bold text-primary">Blue Pine AI</span>
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <TreePine className="text-white w-7 h-7" />
+              </div>
+              <span className="text-2xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">
+                Blue Pine AI
+              </span>
             </div>
 
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
