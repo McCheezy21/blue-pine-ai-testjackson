@@ -1,54 +1,45 @@
-# Build stage
-FROM node:18-alpine@sha256:435dcad253bb5b7f347ebc69c8cc52de7c912eb7241098b920f2fc2d7843183d as builder
+# Multi-stage build for production
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
 # Copy package files
+COPY api/package*.json ./api/
 COPY package*.json ./
 
-# Install all dependencies (including devDependencies needed for build)
-RUN npm ci
+# Install dependencies
+RUN cd api && npm ci --only=production
 
 # Copy source code
-COPY . .
-
-# Build the application
-RUN npm run build
+COPY api/ ./api/
 
 # Production stage
-FROM nginx:alpine@sha256:2140dad235c130ac861018a4e13a6bc8aea3a35f3a40e20c1b060d51a7efd250
+FROM node:18-alpine AS production
+
+WORKDIR /app
 
 # Create non-root user
-RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
 
-# Install curl for health checks (use latest available version)
-RUN apk add --no-cache curl
+# Copy built application
+COPY --from=builder --chown=nodejs:nodejs /app/api ./
 
-# Copy the built application from builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Create necessary directories for nginx to run as non-root
-RUN mkdir -p /tmp/client_temp /tmp/proxy_temp_path /tmp/fastcgi_temp /tmp/uwsgi_temp /tmp/scgi_temp && \
-    chown -R nextjs:nodejs /tmp/client_temp /tmp/proxy_temp_path /tmp/fastcgi_temp /tmp/uwsgi_temp /tmp/scgi_temp
-
-# Change ownership to non-root user
-RUN chown -R nextjs:nodejs /usr/share/nginx/html && \
-    chown -R nextjs:nodejs /var/cache/nginx && \
-    chown -R nextjs:nodejs /var/log/nginx && \
-    chown -R nextjs:nodejs /etc/nginx/conf.d
-
-# Create nginx PID directory with proper permissions
-RUN mkdir -p /var/run/nginx && \
-    chown -R nextjs:nodejs /var/run/nginx
+# Install dumb-init for proper signal handling
+RUN apk add --no-cache dumb-init
 
 # Switch to non-root user
-USER nextjs
+USER nodejs
 
-# Expose port 8080
-EXPOSE 8080
+# Expose port
+EXPOSE 3001
 
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"] 
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3001/api/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
+
+# Use dumb-init to handle signals properly
+ENTRYPOINT ["dumb-init", "--"]
+
+# Start the application (not nodemon in production)
+CMD ["node", "server.js"] 

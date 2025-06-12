@@ -117,12 +117,12 @@ export const verifyTenantAccess = async (tenantId: string, userSub: string, user
     });
     
     if (response.ok) {
-      const accessInfo = await response.json();
-      return {
-        hasAccess: true,
-        role: accessInfo.role as 'admin' | 'user' | 'viewer',
-        permissions: accessInfo.permissions || []
-      };
+    const accessInfo = await response.json();
+    return {
+      hasAccess: true,
+      role: accessInfo.role as 'admin' | 'user' | 'viewer',
+      permissions: accessInfo.permissions || []
+    };
     }
     
     // If no direct access, check domain validation for new users
@@ -175,7 +175,7 @@ export const getUserWithTenant = async (): Promise<UserWithTenant | null> => {
     if (accessCheck.reason?.includes('domain')) {
       window.location.href = '/unauthorized?reason=domain';
     } else {
-      window.location.href = '/unauthorized';
+    window.location.href = '/unauthorized';
     }
     return null;
   }

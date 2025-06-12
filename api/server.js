@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
 const axios = require('axios');
 const { sendInvitationEmail, testEmailConfiguration } = require('./email-service');
+const BedrockService = require('./bedrock-service');
 require('dotenv').config();
 
 const app = express();
@@ -784,6 +785,298 @@ app.delete('/api/admin/tenants/:tenantId/users', async (req, res) => {
   } catch (error) {
     console.error('Error removing users from tenant:', error);
     res.status(500).json({ error: 'Failed to remove users from tenant' });
+  }
+});
+
+// Initialize Bedrock service
+const bedrockService = new BedrockService();
+
+// ===== BEDROCK AI CHATBOT ENDPOINTS =====
+
+// Chat with AI assistant (requires authentication and tenant access)
+app.post('/api/tenants/:tenantId/chat', verifyToken, async (req, res) => {
+  try {
+    const { tenantId } = req.params;
+    const { message, conversation_history = [] } = req.body;
+    const userSub = req.user.sub;
+    const userEmail = req.user.email;
+
+    // Validate required fields
+    if (!message || typeof message !== 'string' || message.trim().length === 0) {
+      return res.status(400).json({ error: 'Message is required' });
+    }
+
+    // Check if user has access to this tenant
+    const userAccess = await pool.query(
+      'SELECT role FROM tenant_users WHERE tenant_id = $1 AND user_sub = $2',
+      [tenantId, userSub]
+    );
+
+    // If no direct access, check if email domain allows auto-join
+    if (userAccess.rows.length === 0) {
+      const emailAllowed = await isEmailAllowedForTenant(userEmail, tenantId);
+      if (emailAllowed) {
+        // Auto-join user to tenant
+        await pool.query(`
+          INSERT INTO tenant_users (tenant_id, user_sub, role, permissions)
+          VALUES ($1, $2, $3, ARRAY['read'])
+        `, [tenantId, userSub, 'user']);
+        
+        console.log(`✅ Auto-joined user ${userSub} to tenant ${tenantId} for chat`);
+      } else {
+        return res.status(403).json({ error: 'Access denied to this tenant' });
+      }
+    }
+
+    console.log(`🤖 Chat request from user ${userSub} in tenant ${tenantId}`);
+
+    // Get tenant info for context
+    const tenant = await pool.query(
+      'SELECT name FROM tenants WHERE id = $1',
+      [tenantId]
+    );
+
+    const tenantName = tenant.rows[0]?.name || 'your organization';
+
+    // Add tenant context to conversation
+    const contextualMessage = `${message}\n\n[Context: User is asking from ${tenantName}]`;
+
+    // Call Bedrock service - now returns just the response text
+    const response = await bedrockService.chatWithClaude(
+      contextualMessage, 
+      conversation_history, 
+      tenantId, 
+      userSub
+    );
+
+    // Log successful chat interaction
+    console.log(`✅ Chat response generated for user ${userSub} in tenant ${tenantId}`);
+    
+    // Store chat history in database for analytics
+    try {
+      await pool.query(`
+        INSERT INTO chat_logs (tenant_id, user_sub, message, response, created_at)
+        VALUES ($1, $2, $3, $4, NOW())
+      `, [tenantId, userSub, message, response]);
+    } catch (logError) {
+      // Don't fail the request if logging fails
+      console.warn('Failed to log chat interaction:', logError);
+    }
+
+    res.json({
+      success: true,
+      message: response,
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error('Error in chat endpoint:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Internal server error. Please try again later.' 
+    });
+  }
+});
+
+// Submit conversation rating
+app.post('/api/tenants/:tenantId/conversations/:conversationId/rating', verifyToken, async (req, res) => {
+  try {
+    const { tenantId, conversationId } = req.params;
+    const { 
+      overall_rating,
+      feedback_text,
+      conversation_length,
+      conversation_duration_seconds 
+    } = req.body;
+    const userSub = req.user.sub;
+
+    // Validate required fields
+    if (!overall_rating || overall_rating < 1 || overall_rating > 5) {
+      return res.status(400).json({ error: 'Valid overall_rating (1-5) is required' });
+    }
+
+    // Check if user has access to this tenant
+    const userAccess = await pool.query(
+      'SELECT role FROM tenant_users WHERE tenant_id = $1 AND user_sub = $2',
+      [tenantId, userSub]
+    );
+
+    if (userAccess.rows.length === 0) {
+      return res.status(403).json({ error: 'Access denied to this tenant' });
+    }
+
+    // Insert conversation rating
+    const result = await pool.query(
+      `INSERT INTO conversation_ratings 
+       (tenant_id, user_sub, conversation_id, overall_rating, feedback_text, 
+        conversation_length, conversation_duration_seconds, created_at) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, NOW()) 
+       RETURNING id`,
+      [tenantId, userSub, conversationId, overall_rating, feedback_text || null, 
+       conversation_length || 0, conversation_duration_seconds || 0]
+    );
+
+    console.log(`✅ Conversation rating submitted: ${overall_rating}/5 stars for conversation ${conversationId}`);
+
+    res.json({ 
+      success: true, 
+      message: 'Rating submitted successfully',
+      rating_id: result.rows[0].id 
+    });
+
+  } catch (error) {
+    console.error('Error submitting conversation rating:', error);
+    res.status(500).json({ error: 'Failed to submit rating' });
+  }
+});
+
+// Get conversation analytics (admin only)
+app.get('/api/admin/analytics/conversations', async (req, res) => {
+  try {
+    const { tenant_id, start_date, end_date, limit = 100 } = req.query;
+
+    let whereClause = 'WHERE 1=1';
+    const params = [];
+    let paramCount = 0;
+
+    if (tenant_id) {
+      paramCount++;
+      whereClause += ` AND cr.tenant_id = $${paramCount}`;
+      params.push(tenant_id);
+    }
+
+    if (start_date) {
+      paramCount++;
+      whereClause += ` AND cr.created_at >= $${paramCount}`;
+      params.push(start_date);
+    }
+
+    if (end_date) {
+      paramCount++;
+      whereClause += ` AND cr.created_at <= $${paramCount}`;
+      params.push(end_date);
+    }
+
+    paramCount++;
+    params.push(parseInt(limit));
+
+    const analytics = await pool.query(`
+      SELECT 
+        cr.*,
+        t.name as tenant_name,
+        COUNT(cl.id) as total_messages
+      FROM conversation_ratings cr
+      LEFT JOIN tenants t ON cr.tenant_id = t.id
+      LEFT JOIN chat_logs cl ON cr.conversation_id = cl.conversation_id
+      ${whereClause}
+      GROUP BY cr.id, t.name
+      ORDER BY cr.created_at DESC
+      LIMIT $${paramCount}
+    `, params);
+
+    // Get summary statistics
+    const summaryQuery = `
+      SELECT 
+        COUNT(*) as total_ratings,
+        AVG(overall_rating) as avg_overall_rating,
+        AVG(helpfulness_rating) as avg_helpfulness_rating,
+        AVG(accuracy_rating) as avg_accuracy_rating,
+        COUNT(CASE WHEN overall_rating >= 4 THEN 1 END) as positive_ratings,
+        COUNT(CASE WHEN overall_rating <= 2 THEN 1 END) as negative_ratings,
+        COUNT(CASE WHEN primary_issue_resolved = true THEN 1 END) as resolved_issues,
+        COUNT(CASE WHEN would_recommend = true THEN 1 END) as would_recommend_count
+      FROM conversation_ratings cr
+      ${whereClause.replace('$' + paramCount, '')}
+    `;
+
+    const summary = await pool.query(summaryQuery, params.slice(0, -1));
+
+    res.json({
+      success: true,
+      ratings: analytics.rows,
+      summary: summary.rows[0],
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error('Error fetching conversation analytics:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Failed to fetch conversation analytics' 
+    });
+  }
+});
+
+// Test Bedrock connection (admin only)
+app.get('/api/admin/bedrock/test', async (req, res) => {
+  try {
+    console.log('🧪 Testing Bedrock connection...');
+    
+    const testResult = await bedrockService.testConnection();
+    
+    if (testResult) {
+      console.log('✅ Bedrock connection test successful');
+      res.json({
+        success: true,
+        message: 'Bedrock connection is working properly',
+        timestamp: new Date().toISOString()
+      });
+    } else {
+      console.log('❌ Bedrock connection test failed');
+      res.status(500).json({
+        success: false,
+        error: 'Bedrock connection test failed',
+        timestamp: new Date().toISOString()
+      });
+    }
+  } catch (error) {
+    console.error('Error testing Bedrock connection:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to test Bedrock connection',
+      details: error.message
+    });
+  }
+});
+
+// Get chat history for a tenant (optional - for future use)
+app.get('/api/tenants/:tenantId/chat/history', verifyToken, async (req, res) => {
+  try {
+    const { tenantId } = req.params;
+    const userSub = req.user.sub;
+    const { limit = 50, offset = 0 } = req.query;
+
+    // Check if user has access to this tenant
+    const userAccess = await pool.query(
+      'SELECT role FROM tenant_users WHERE tenant_id = $1 AND user_sub = $2',
+      [tenantId, userSub]
+    );
+
+    if (userAccess.rows.length === 0) {
+      return res.status(403).json({ error: 'Access denied to this tenant' });
+    }
+
+    // Get chat history for this user in this tenant
+    const chatHistory = await pool.query(`
+      SELECT message, response, created_at
+      FROM chat_logs
+      WHERE tenant_id = $1 AND user_sub = $2
+      ORDER BY created_at DESC
+      LIMIT $3 OFFSET $4
+    `, [tenantId, userSub, parseInt(limit), parseInt(offset)]);
+
+    res.json({
+      success: true,
+      history: chatHistory.rows,
+      total: chatHistory.rows.length
+    });
+
+  } catch (error) {
+    console.error('Error fetching chat history:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Failed to fetch chat history' 
+    });
   }
 });
 

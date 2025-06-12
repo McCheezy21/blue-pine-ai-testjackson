@@ -62,7 +62,7 @@ export const Admin: React.FC = () => {
   const [accessRequests, setAccessRequests] = useState<AccessRequest[]>([]);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedTab, setSelectedTab] = useState<'tenants' | 'users' | 'invitations' | 'access-requests' | 'invoices'>('tenants');
+  const [selectedTab, setSelectedTab] = useState<'tenants' | 'users' | 'invitations' | 'access-requests' | 'invoices' | 'analytics'>('tenants');
   const [isVisible, setIsVisible] = useState(false);
   const [showInvoiceForm, setShowInvoiceForm] = useState(false);
 
@@ -116,6 +116,18 @@ export const Admin: React.FC = () => {
     items: [{ id: '1', description: '', quantity: 1, rate: 0, amount: 0 }] as InvoiceItem[]
   });
 
+  const [analyticsData, setAnalyticsData] = useState({
+    conversationStats: {
+      totalConversations: 0,
+      avgSatisfactionScore: 0,
+      topCategories: [],
+      responseTimeAvg: 0
+    },
+    feedbackTrends: [],
+    commonQuestions: [],
+    improvementAreas: []
+  });
+
   useEffect(() => {
     fetchTenants();
     if (selectedTab === 'access-requests') {
@@ -123,6 +135,9 @@ export const Admin: React.FC = () => {
     }
     if (selectedTab === 'invoices') {
       fetchInvoices();
+    }
+    if (selectedTab === 'analytics') {
+      fetchAnalytics();
     }
   }, [selectedTab]);
 
@@ -176,6 +191,16 @@ export const Admin: React.FC = () => {
       setInvoices(mockInvoices);
     } catch (error) {
       console.error('Error fetching invoices:', error);
+    }
+  };
+
+  const fetchAnalytics = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/admin/analytics');
+      const data = await response.json();
+      setAnalyticsData(data);
+    } catch (error) {
+      console.error('Error fetching analytics:', error);
     }
   };
 
@@ -500,7 +525,7 @@ export const Admin: React.FC = () => {
               </h1>
               <p className="text-lg text-slate-600 mt-2">Comprehensive platform management and billing</p>
             </div>
-          </div>
+        </div>
 
           {/* Apple-style Navigation Tabs */}
           <div className="relative">
@@ -511,9 +536,10 @@ export const Admin: React.FC = () => {
                 { id: 'users', icon: Users, label: 'Users' },
                 { id: 'invitations', icon: Mail, label: 'Invitations' },
                 { id: 'access-requests', icon: Settings, label: 'Requests' },
-                { id: 'invoices', icon: FileText, label: 'Invoices' }
+                { id: 'invoices', icon: FileText, label: 'Invoices' },
+                { id: 'analytics', icon: Calculator, label: 'AI Analytics' }
               ].map((tab) => (
-                <button
+            <button
                   key={tab.id}
                   onClick={() => setSelectedTab(tab.id as any)}
                   className={`flex-1 flex items-center justify-center space-x-3 py-4 px-6 rounded-xl font-medium transition-all duration-300 ${
@@ -524,7 +550,7 @@ export const Admin: React.FC = () => {
                 >
                   <tab.icon className="w-5 h-5" />
                   <span>{tab.label}</span>
-                </button>
+            </button>
               ))}
             </div>
           </div>
@@ -532,8 +558,8 @@ export const Admin: React.FC = () => {
 
         {/* Content Sections with Apple-inspired design */}
         <div className="space-y-8">
-          {selectedTab === 'tenants' && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {selectedTab === 'tenants' && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Create New Tenant Card */}
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl"></div>
@@ -548,62 +574,62 @@ export const Admin: React.FC = () => {
                   </div>
 
                   <form onSubmit={createTenant} className="space-y-6">
-                    <div>
+                <div>
                       <label className="block text-sm font-medium text-slate-700 mb-3">Tenant ID</label>
-                      <input
-                        type="text"
+                  <input
+                    type="text"
                         placeholder="mayo-clinic, cleveland-clinic"
-                        value={newTenant.id}
-                        onChange={(e) => setNewTenant({...newTenant, id: e.target.value})}
+                    value={newTenant.id}
+                    onChange={(e) => setNewTenant({...newTenant, id: e.target.value})}
                         className="w-full px-4 py-4 bg-white/70 backdrop-blur-sm border border-white/30 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-400 transition-all duration-300 text-slate-900 placeholder-slate-500"
-                        required
-                      />
-                    </div>
-                    
-                    <div>
+                    required
+                  />
+                </div>
+
+                <div>
                       <label className="block text-sm font-medium text-slate-700 mb-3">Company Name</label>
-                      <input
-                        type="text"
+                  <input
+                    type="text"
                         placeholder="Mayo Clinic, Cleveland Clinic"
-                        value={newTenant.name}
-                        onChange={(e) => setNewTenant({...newTenant, name: e.target.value})}
+                    value={newTenant.name}
+                    onChange={(e) => setNewTenant({...newTenant, name: e.target.value})}
                         className="w-full px-4 py-4 bg-white/70 backdrop-blur-sm border border-white/30 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-400 transition-all duration-300 text-slate-900 placeholder-slate-500"
-                        required
-                      />
-                    </div>
+                    required
+                  />
+                </div>
 
-                    <div>
+                <div>
                       <label className="block text-sm font-medium text-slate-700 mb-3">Plan</label>
-                      <select
-                        value={newTenant.plan}
-                        onChange={(e) => setNewTenant({...newTenant, plan: e.target.value})}
+                  <select
+                    value={newTenant.plan}
+                    onChange={(e) => setNewTenant({...newTenant, plan: e.target.value})}
                         className="w-full px-4 py-4 bg-white/70 backdrop-blur-sm border border-white/30 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-400 transition-all duration-300 text-slate-900"
-                      >
-                        <option value="pro">Pro</option>
-                        <option value="enterprise">Enterprise</option>
+                  >
+                    <option value="pro">Pro</option>
+                    <option value="enterprise">Enterprise</option>
                         <option value="basic">Basic</option>
-                      </select>
-                    </div>
+                  </select>
+                </div>
 
-                    <div>
+                <div>
                       <label className="block text-sm font-medium text-slate-700 mb-3">Allowed Email Domains</label>
-                      <input
-                        type="text"
+                  <input
+                    type="text"
                         placeholder="mayoclinic.org, mayo.edu (comma separated)"
-                        value={newTenant.allowed_email_domains}
-                        onChange={(e) => setNewTenant({...newTenant, allowed_email_domains: e.target.value})}
+                    value={newTenant.allowed_email_domains}
+                    onChange={(e) => setNewTenant({...newTenant, allowed_email_domains: e.target.value})}
                         className="w-full px-4 py-4 bg-white/70 backdrop-blur-sm border border-white/30 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-400 transition-all duration-300 text-slate-900 placeholder-slate-500"
-                      />
+                  />
                       <p className="text-xs text-slate-500 mt-2">Leave empty to allow any email domain</p>
-                    </div>
+                </div>
 
-                    <button
-                      type="submit"
+                <button
+                  type="submit"
                       className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white font-medium py-4 rounded-xl hover:from-blue-700 hover:to-blue-600 focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 shadow-lg hover:shadow-xl"
-                    >
-                      Create Tenant
-                    </button>
-                  </form>
+                >
+                  Create Tenant
+                </button>
+              </form>
                 </div>
               </div>
 
@@ -618,10 +644,10 @@ export const Admin: React.FC = () => {
                     <h2 className="text-2xl font-semibold bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
                       Existing Tenants
                     </h2>
-                  </div>
+            </div>
 
                   <div className="space-y-4 max-h-96 overflow-y-auto">
-                    {tenants.map((tenant) => (
+                {tenants.map((tenant) => (
                       <div key={tenant.id} className="relative group/tenant">
                         <div className="absolute inset-0 bg-gradient-to-r from-white/60 to-white/40 backdrop-blur-sm rounded-2xl opacity-0 group-hover/tenant:opacity-100 transition-all duration-300"></div>
                         <div className="relative p-6 backdrop-blur-sm bg-white/30 rounded-2xl border border-white/20 hover:shadow-lg transition-all duration-300">
@@ -634,25 +660,25 @@ export const Admin: React.FC = () => {
                                 Domains: {tenant.allowed_email_domains?.join(', ') || 'Any domain'}
                               </p>
                             </div>
-                            <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-2">
                               <button
                                 onClick={() => startEditingTenant(tenant)}
                                 className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                               >
                                 <Edit className="w-4 h-4" />
                               </button>
-                              <button
-                                onClick={() => toggleTenantStatus(tenant.id, tenant.status)}
+                        <button
+                          onClick={() => toggleTenantStatus(tenant.id, tenant.status)}
                                 className={`px-3 py-1 rounded-full text-xs font-medium ${
-                                  tenant.status === 'active'
+                            tenant.status === 'active' 
                                     ? 'bg-red-100 text-red-700 hover:bg-red-200'
                                     : 'bg-green-100 text-green-700 hover:bg-green-200'
-                                }`}
-                              >
-                                {tenant.status === 'active' ? 'Disable' : 'Enable'}
-                              </button>
-                            </div>
-                          </div>
+                          }`}
+                        >
+                          {tenant.status === 'active' ? 'Disable' : 'Enable'}
+                        </button>
+                      </div>
+                    </div>
                           
                           <div className="flex items-center justify-between">
                             <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
@@ -822,9 +848,9 @@ export const Admin: React.FC = () => {
                                         <Trash2 className="w-4 h-4" />
                                       </button>
                                     )}
-                                  </div>
-                                </div>
-                              ))}
+                    </div>
+                  </div>
+                ))}
                             </div>
 
                             {/* Invoice Totals */}
@@ -933,11 +959,142 @@ export const Admin: React.FC = () => {
                     ))}
                   </div>
                 </div>
+            </div>
+          </div>
+        )}
+
+        {selectedTab === 'analytics' && (
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-gray-900">AI Analytics & Training Insights</h2>
+              <button
+                onClick={fetchAnalytics}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Refresh Data
+              </button>
+            </div>
+
+            {/* Key Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="bg-white p-6 rounded-lg shadow">
+                <h3 className="text-sm font-medium text-gray-500">Total Conversations</h3>
+                <p className="text-2xl font-bold text-gray-900">{analyticsData.conversationStats.totalConversations}</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow">
+                <h3 className="text-sm font-medium text-gray-500">Avg Satisfaction</h3>
+                <p className="text-2xl font-bold text-green-600">
+                  {(analyticsData.conversationStats.avgSatisfactionScore * 100).toFixed(1)}%
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow">
+                <h3 className="text-sm font-medium text-gray-500">Avg Response Time</h3>
+                <p className="text-2xl font-bold text-blue-600">
+                  {analyticsData.conversationStats.responseTimeAvg}ms
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow">
+                <h3 className="text-sm font-medium text-gray-500">Top Category</h3>
+                <p className="text-2xl font-bold text-purple-600">
+                  {analyticsData.conversationStats.topCategories[0] || 'N/A'}
+                </p>
               </div>
             </div>
-          )}
 
-          {selectedTab === 'users' && (
+            {/* Common Questions */}
+            <div className="bg-white rounded-lg shadow">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h3 className="text-lg font-medium text-gray-900">Most Common Questions</h3>
+                <p className="text-sm text-gray-500">Questions that could benefit from knowledge base entries</p>
+              </div>
+              <div className="p-6">
+                {analyticsData.commonQuestions.length > 0 ? (
+                  <div className="space-y-4">
+                    {analyticsData.commonQuestions.map((question, index) => (
+                      <div key={index} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                        <div>
+                          <p className="font-medium text-gray-900">{question.text}</p>
+                          <p className="text-sm text-gray-500">
+                            Asked {question.count} times • Category: {question.category}
+                          </p>
+                        </div>
+                        <button className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+                          Add to KB
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500">No common questions data available yet.</p>
+                )}
+              </div>
+            </div>
+
+            {/* Improvement Areas */}
+            <div className="bg-white rounded-lg shadow">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h3 className="text-lg font-medium text-gray-900">Areas for Improvement</h3>
+                <p className="text-sm text-gray-500">Based on negative feedback and low confidence scores</p>
+              </div>
+              <div className="p-6">
+                {analyticsData.improvementAreas.length > 0 ? (
+                  <div className="space-y-4">
+                    {analyticsData.improvementAreas.map((area, index) => (
+                      <div key={index} className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="font-medium text-red-900">{area.category}</p>
+                            <p className="text-sm text-red-700">{area.description}</p>
+                            <p className="text-xs text-red-600 mt-1">
+                              {area.occurrences} occurrences • Avg confidence: {(area.avgConfidence * 100).toFixed(1)}%
+                            </p>
+                          </div>
+                          <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-xs font-medium">
+                            Priority: {area.priority}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500">No improvement areas identified yet.</p>
+                )}
+              </div>
+            </div>
+
+            {/* Training Recommendations */}
+            <div className="bg-white rounded-lg shadow">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h3 className="text-lg font-medium text-gray-900">Training Recommendations</h3>
+                <p className="text-sm text-gray-500">Suggested actions to improve AI performance</p>
+              </div>
+              <div className="p-6">
+                <div className="space-y-4">
+                  <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <h4 className="font-medium text-blue-900">📚 Expand Knowledge Base</h4>
+                    <p className="text-sm text-blue-700 mt-1">
+                      Add frequently asked questions to the knowledge base for more consistent responses.
+                    </p>
+                  </div>
+                  <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <h4 className="font-medium text-green-900">🎯 Improve Category Detection</h4>
+                    <p className="text-sm text-green-700 mt-1">
+                      Review misclassified conversations to enhance intent recognition.
+                    </p>
+                  </div>
+                  <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <h4 className="font-medium text-yellow-900">⚡ Optimize Response Time</h4>
+                    <p className="text-sm text-yellow-700 mt-1">
+                      Consider caching common responses or using faster model configurations.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {selectedTab === 'users' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Add User Card */}
               <div className="relative group">
@@ -953,46 +1110,46 @@ export const Admin: React.FC = () => {
                   </div>
 
                   <form onSubmit={addUserToTenant} className="space-y-6">
-                    <div>
+              <div>
                       <label className="block text-sm font-medium text-slate-700 mb-3">Select Tenant</label>
-                      <select
-                        value={newUser.tenant_id}
-                        onChange={(e) => setNewUser({...newUser, tenant_id: e.target.value})}
+                <select
+                  value={newUser.tenant_id}
+                  onChange={(e) => setNewUser({...newUser, tenant_id: e.target.value})}
                         className="w-full px-4 py-4 bg-white/70 backdrop-blur-sm border border-white/30 rounded-xl focus:ring-2 focus:ring-green-500/50 focus:border-green-400 transition-all duration-300"
-                        required
-                      >
-                        <option value="">Choose a tenant...</option>
-                        {tenants.map((tenant) => (
+                  required
+                >
+                  <option value="">Choose a tenant...</option>
+                  {tenants.map((tenant) => (
                           <option key={tenant.id} value={tenant.id}>{tenant.name}</option>
-                        ))}
-                      </select>
-                    </div>
+                  ))}
+                </select>
+              </div>
 
-                    <div>
+              <div>
                       <label className="block text-sm font-medium text-slate-700 mb-3">User Email</label>
-                      <input
-                        type="email"
-                        value={newUser.email}
-                        onChange={(e) => setNewUser({...newUser, email: e.target.value})}
+                <input
+                  type="email"
+                  value={newUser.email}
+                  onChange={(e) => setNewUser({...newUser, email: e.target.value})}
                         className="w-full px-4 py-4 bg-white/70 backdrop-blur-sm border border-white/30 rounded-xl focus:ring-2 focus:ring-green-500/50 focus:border-green-400 transition-all duration-300"
-                        required
-                      />
-                    </div>
+                  required
+                />
+              </div>
 
-                    <div>
+              <div>
                       <label className="block text-sm font-medium text-slate-700 mb-3">Role</label>
-                      <select
-                        value={newUser.role}
-                        onChange={(e) => setNewUser({...newUser, role: e.target.value})}
+                <select
+                  value={newUser.role}
+                  onChange={(e) => setNewUser({...newUser, role: e.target.value})}
                         className="w-full px-4 py-4 bg-white/70 backdrop-blur-sm border border-white/30 rounded-xl focus:ring-2 focus:ring-green-500/50 focus:border-green-400 transition-all duration-300"
-                      >
-                        <option value="user">User</option>
-                        <option value="admin">Admin</option>
-                      </select>
-                    </div>
+                >
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
 
-                    <button
-                      type="submit"
+              <button
+                type="submit"
                       className="w-full bg-gradient-to-r from-green-600 to-green-500 text-white font-medium py-4 rounded-xl hover:from-green-700 hover:to-green-600 focus:ring-2 focus:ring-green-500/50 transition-all duration-300 shadow-lg hover:shadow-xl"
                     >
                       Add User
@@ -1098,8 +1255,8 @@ export const Admin: React.FC = () => {
                       className="w-full bg-gradient-to-r from-purple-600 to-purple-500 text-white font-medium py-4 rounded-xl hover:from-purple-700 hover:to-purple-600 focus:ring-2 focus:ring-purple-500/50 transition-all duration-300 shadow-lg hover:shadow-xl"
                     >
                       Send Invitation
-                    </button>
-                  </form>
+                </button>
+              </form>
                 </div>
               </div>
 
@@ -1235,8 +1392,8 @@ export const Admin: React.FC = () => {
                   )}
                 </div>
               </div>
-            </div>
-          )}
+          </div>
+        )}
         </div>
       </div>
 

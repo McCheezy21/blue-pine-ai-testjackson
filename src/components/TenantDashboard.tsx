@@ -41,6 +41,11 @@ const TenantDashboard = ({ user }: TenantDashboardProps) => {
     }
   };
 
+  // Get user token from localStorage (this is where Cognito stores it)
+  const getUserToken = () => {
+    return localStorage.getItem('idToken') || localStorage.getItem('accessToken') || '';
+  };
+
   const renderContent = () => {
     switch (activeView) {
       case 'insurance':
@@ -115,8 +120,11 @@ const TenantDashboard = ({ user }: TenantDashboardProps) => {
         </main>
       </div>
       
-      {/* ChatInterface available on ALL dashboard pages */}
-      <ChatInterface />
+      {/* ChatInterface available on ALL dashboard pages with authentication */}
+      <ChatInterface 
+        tenantId={user.tenant.id}
+        userToken={getUserToken()}
+      />
     </div>
   );
 };
