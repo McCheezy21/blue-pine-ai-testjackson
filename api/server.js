@@ -164,7 +164,23 @@ app.get('/api/user/accessible-tenants', verifyToken, async (req, res) => {
     });
   } catch (error) {
     console.error('Error finding accessible tenants:', error);
-    res.status(500).json({ error: 'Server error' });
+    
+    // Check if it's a database connection error
+    if (error.code === '28000' || error.code === 'ECONNREFUSED' || error.message.includes('does not exist')) {
+      console.error('🚨 SECURITY: Database connection failed, denying access');
+      return res.status(503).json({ 
+        error: 'Service temporarily unavailable', 
+        code: 'DATABASE_UNAVAILABLE',
+        message: 'Unable to verify tenant access. Please try again later.' 
+      });
+    }
+    
+    // Generic server error for other issues
+    return res.status(500).json({ 
+      error: 'Server error',
+      code: 'INTERNAL_ERROR',
+      message: 'An unexpected error occurred while checking tenant access.' 
+    });
   }
 });
 

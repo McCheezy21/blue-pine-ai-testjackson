@@ -159,15 +159,79 @@ const Dashboard = () => {
             return;
           }
         } else {
-          console.log('⚠️ Failed to fetch accessible tenants, staying on generic dashboard');
-          // Only show generic dashboard if API call fails
-          setIsLoading(false);
+          // SECURITY FIX: Fail secure when API is unavailable, with tenant fallback for paying customers
+          console.error('🚨 SECURITY: API failed to fetch accessible tenants (status:', response.status, '), checking for tenant fallback');
+          
+          // Try to get more specific error information
+          try {
+            const errorData = await response.json();
+            console.error('🚨 API Error Details:', errorData);
+            
+            if (errorData.code === 'DATABASE_UNAVAILABLE') {
+              console.error('🚨 SECURITY: Database unavailable - checking tenant fallback mapping');
+              
+              // FALLBACK TENANT MAPPING when database is unavailable
+              const userInfo = getUserInfo();
+              const userEmail = userInfo?.email;
+              const emailDomain = userEmail?.split('@')[1];
+              
+              console.log(`🔍 FALLBACK: Checking domain "${emailDomain}" for tenant mapping`);
+              
+              // Critical tenant mappings for when database is down
+              const fallbackTenantMapping: Record<string, string> = {
+                'bluepineai.com': 'bluepineai-test-tenant',
+                'pacs.com': 'PACs-test-tentant',
+                // Add more critical customer domains here as needed
+              };
+              
+              const fallbackTenantId = fallbackTenantMapping[emailDomain || ''];
+              
+              if (fallbackTenantId) {
+                console.log(`🔓 FALLBACK SUCCESS: Redirecting ${emailDomain} to tenant ${fallbackTenantId}`);
+                window.location.href = `/tenant/${fallbackTenantId}/dashboard`;
+                return;
+              } else {
+                console.error(`🚨 SECURITY: Unknown domain "${emailDomain}" with database unavailable - failing secure`);
+              }
+            }
+          } catch (parseError) {
+            console.error('🚨 Could not parse error response:', parseError);
+          }
+          
+          // For unknown domains or other errors, redirect to request access
+          console.log('🔒 SECURITY: Redirecting to request access page');
+          window.location.href = '/request-access';
+          return;
         }
       } catch (error) {
-        console.error('❌ Error checking accessible tenants:', error);
-        console.log('⚠️ Error checking tenants, staying on generic dashboard');
-        // Only show generic dashboard if there's an error
-        setIsLoading(false);
+        // SECURITY FIX: Fail secure when database/API is not accessible, with tenant fallback for paying customers
+        console.error('🚨 SECURITY: Error checking accessible tenants (likely database unavailable):', error);
+        
+        // Use same fallback tenant mapping for network errors
+        const userInfo = getUserInfo();
+        const userEmail = userInfo?.email;
+        const emailDomain = userEmail?.split('@')[1];
+        
+        console.log(`🔍 FALLBACK (Network Error): Checking domain "${emailDomain}" for tenant mapping`);
+        
+        // Critical tenant mappings for when database is down (same as above)
+        const fallbackTenantMapping: Record<string, string> = {
+          'bluepineai.com': 'bluepineai-test-tenant',
+          'pacs.com': 'PACs-test-tentant',
+          // Add more critical customer domains here as needed
+        };
+        
+        const fallbackTenantId = fallbackTenantMapping[emailDomain || ''];
+        
+        if (fallbackTenantId) {
+          console.log(`🔓 FALLBACK SUCCESS (Network Error): Redirecting ${emailDomain} to tenant ${fallbackTenantId}`);
+          window.location.href = `/tenant/${fallbackTenantId}/dashboard`;
+          return;
+        }
+        
+        console.log('🔒 SECURITY: Failing secure - redirecting to request access page');
+        window.location.href = '/request-access';
+        return;
       }
     };
 
