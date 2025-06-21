@@ -66,27 +66,23 @@ export const DashboardContent = ({ user, onNavigate }: DashboardContentProps) =>
       label: "Cards Processed", 
       value: animatedCardsProcessed, 
       icon: Upload, 
-      change: "+12%",
       onClick: () => setShowProcessedCards(true)
     },
     { 
       label: "Automations Run", 
       value: animatedAutomationsRun, 
       icon: Activity, 
-      change: "+8%",
       onClick: () => onNavigate('automation')
     },
     { 
       label: "Claims Processed", 
       value: animatedClaimsProcessed, 
-      icon: FileText, 
-      change: "+15%"
+      icon: FileText
     },
     { 
       label: "Time Saved", 
       value: formatTimeSaved(animatedTimeSaved), 
-      icon: Clock, 
-      change: "+22%"
+      icon: Clock
     },
   ];
 
@@ -116,7 +112,7 @@ export const DashboardContent = ({ user, onNavigate }: DashboardContentProps) =>
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 font-['Inter',system-ui,sans-serif]">
       {/* Weekly Performance Metrics */}
       <div className={`transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
         <div className="mb-6">
@@ -138,10 +134,6 @@ export const DashboardContent = ({ user, onNavigate }: DashboardContentProps) =>
               <div className="flex items-center justify-between mb-4">
                 <div className="w-10 h-10 bg-[#004466] rounded-lg flex items-center justify-center">
                   <metric.icon className="h-5 w-5 text-white" />
-                </div>
-                <div className="flex items-center space-x-1 px-2 py-1 bg-[#3CB371]/10 rounded text-[#3CB371] text-sm font-medium">
-                  <TrendingUp className="h-3 w-3" />
-                  <span>{metric.change}</span>
                 </div>
               </div>
               
@@ -203,14 +195,12 @@ export const DashboardContent = ({ user, onNavigate }: DashboardContentProps) =>
           <h2 className="text-xl font-semibold text-[#333333] mb-2">
             Recent Activity
           </h2>
-          <p className="text-[#333333]/70">Latest automation and processing updates</p>
+          <p className="text-[#333333]/70">Latest automation runs and updates</p>
         </div>
         
-                 <div className="bg-white border border-[#CCCCCC] rounded-lg">
-           <AutomationHistory 
-             logs={automationLogs}
-           />
-         </div>
+        <div className="bg-white border border-[#CCCCCC] rounded-lg">
+          <AutomationHistory logs={automationLogs.slice(0, 5)} />
+        </div>
       </div>
     </div>
   );

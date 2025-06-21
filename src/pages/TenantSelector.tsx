@@ -187,7 +187,7 @@ export const TenantSelector: React.FC = () => {
                   <div className="mb-8">
                     <h4 className="text-sm font-semibold text-slate-700 mb-3">Allowed domains:</h4>
                     <div className="flex flex-wrap gap-2">
-                      {tenant.allowed_email_domains.length > 0 ? (
+                      {tenant.allowed_email_domains && tenant.allowed_email_domains.length > 0 ? (
                         tenant.allowed_email_domains.map((domain, index) => (
                           <span 
                             key={index} 
