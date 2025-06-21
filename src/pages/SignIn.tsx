@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle, TreePine, Building2 } from "lucide-react";
 import { initiateSocialLogin, initiateCognitoLogin } from "@/utils/cognitoAuth";
 import { initiatePointClickCareLogin } from "@/utils/pointClickCareAuth";
+import BluePineLogo from "@/components/ui/BluePineLogo";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -92,13 +93,16 @@ const SignIn = () => {
             </div>
 
             {/* Logo */}
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                <TreePine className="text-white w-7 h-7" />
+            <div className="mb-8 text-center">
+              <div className="flex items-center justify-center mb-4">
+                <BluePineLogo size="xl" />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent mb-2">
                 Blue Pine AI
-              </span>
+              </h1>
+              <p className="text-slate-600 text-lg">
+                Revenue Cycle Automation for SNFs
+              </p>
             </div>
 
             <h1 className="text-4xl md:text-5xl font-bold mb-4">

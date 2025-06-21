@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { ArrowRight, CheckCircle, Users, Clock, Star, TreePine } from "lucide-react";
 import { useEffect, useState } from "react";
+import BluePineLogo from "@/components/ui/BluePineLogo";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -78,9 +79,7 @@ const Waitlist = () => {
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center">
               <a href="/" className="flex items-center space-x-3 group">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                  <TreePine className="text-white w-7 h-7" />
-                </div>
+                <BluePineLogo className="group-hover:scale-110 transition-transform duration-300" size="lg" />
                 <span className="text-2xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
                   Blue Pine AI
                 </span>
@@ -256,11 +255,7 @@ const Waitlist = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex items-center justify-center mb-6">
-              <img 
-                src="/lovable-uploads/408a9d6d-f5ef-4982-8932-336aecfb2915.png" 
-                alt="Blue Pine AI Logo" 
-                className="w-10 h-10 mr-3"
-              />
+              <BluePineLogo size="lg" className="mr-3" />
               <span className="text-2xl font-bold">Blue Pine AI</span>
             </div>
             <p className="text-white/80 text-lg">

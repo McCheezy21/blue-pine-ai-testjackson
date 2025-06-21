@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Building, Users, Mail, Settings, FileText, Plus, Edit, Trash2, Check, X, TreePine, Calculator, Clock, DollarSign, Eye, Send } from 'lucide-react';
+import { Building, Users, Mail, Settings, FileText, Plus, Edit, Trash2, Check, X, Calculator, Clock, DollarSign, Eye, Send } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import BluePineLogo from "@/components/ui/BluePineLogo";
 
 interface Tenant {
   id: string;
@@ -483,13 +493,9 @@ export const Admin: React.FC = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
         <div className="relative">
-          {/* Apple-style floating elements */}
-          <div className="absolute -top-20 -left-20 w-40 h-40 bg-gradient-to-br from-blue-500/20 to-blue-300/20 rounded-full blur-3xl animate-pulse-slow"></div>
-          <div className="absolute -bottom-20 -right-20 w-32 h-32 bg-gradient-to-br from-slate-400/20 to-slate-200/20 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
-          
           <div className="relative backdrop-blur-xl bg-white/70 p-12 rounded-3xl border border-white/20 shadow-2xl">
             <div className="flex items-center justify-center space-x-4">
-              <TreePine className="w-8 h-8 text-blue-600 animate-spin" />
+              <BluePineLogo className="w-8 h-8 animate-spin" />
               <div className="text-2xl font-semibold bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
                 Loading Admin Panel...
               </div>
@@ -513,19 +519,13 @@ export const Admin: React.FC = () => {
         {/* Header Section with Apple aesthetics */}
         <div className="mb-12">
           <div className="flex items-center space-x-6 mb-8">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-blue-500 rounded-2xl blur-xl opacity-30"></div>
-              <div className="relative bg-gradient-to-br from-blue-600 to-blue-500 p-4 rounded-2xl">
-                <TreePine className="w-8 h-8 text-white" />
-              </div>
-            </div>
-            <div>
-              <h1 className="text-4xl font-semibold bg-gradient-to-r from-slate-900 via-slate-800 to-slate-600 bg-clip-text text-transparent">
+            <div className="flex items-center space-x-4 mb-8">
+              <BluePineLogo className="w-8 h-8" />
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">
                 Blue Pine AI Admin
               </h1>
-              <p className="text-lg text-slate-600 mt-2">Comprehensive platform management and billing</p>
             </div>
-        </div>
+          </div>
 
           {/* Apple-style Navigation Tabs */}
           <div className="relative">
