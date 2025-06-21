@@ -5,7 +5,7 @@ import { Header } from "@/components/dashboard/Header";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
 import { InsuranceCardService } from "@/components/dashboard/InsuranceCardService";
 import { AutomationServices } from "@/components/dashboard/AutomationServices";
-import { ReportsModal } from "@/components/dashboard/ReportsModal";
+import { ReportsAnalytics } from "@/components/dashboard/ReportsAnalytics";
 import { getUserInfo, isAuthenticated, handleCognitoCallback } from "@/utils/cognitoAuth";
 
 export type DashboardView = 'home' | 'insurance' | 'automation' | 'services';
@@ -239,11 +239,7 @@ const Dashboard = () => {
   }, [navigate]);
 
   const handleNavigate = (view: string) => {
-    if (view === 'services') {
-      setShowReports(true);
-    } else {
-      setActiveView(view as DashboardView);
-    }
+    setActiveView(view as DashboardView);
   };
 
   const renderContent = () => {
@@ -252,6 +248,8 @@ const Dashboard = () => {
         return <InsuranceCardService />;
       case 'automation':
         return <AutomationServices />;
+      case 'services':
+        return <ReportsAnalytics />;
       case 'home':
       default:
         return <DashboardContent user={user} onNavigate={handleNavigate} />;
@@ -305,17 +303,14 @@ const Dashboard = () => {
         }`}
       >
         {/* Header with user profile dropdown */}
-        <Header user={user} />
+        <Header onSettingsClick={() => {}} />
         
         <main className="h-full">
           {renderContent()}
         </main>
       </div>
 
-      <ReportsModal 
-        isOpen={showReports}
-        onClose={() => setShowReports(false)}
-      />
+
     </div>
   );
 };

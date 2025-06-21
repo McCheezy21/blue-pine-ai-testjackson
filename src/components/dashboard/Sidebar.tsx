@@ -53,7 +53,7 @@ export const Sidebar = ({ activeView, setActiveView, expanded, setExpanded }: Si
 
   return (
     <div 
-      className={`fixed left-0 top-0 h-full bg-white border-r border-[#CCCCCC] font-sans z-50 transition-all duration-200 ease-out ${
+      className={`fixed left-0 top-0 h-full bg-white border-r border-[#CCCCCC] font-['Inter',system-ui,sans-serif] z-50 transition-all duration-200 ease-out ${
         expanded ? 'w-64' : 'w-16'
       }`}
       onMouseEnter={() => setExpanded(true)}

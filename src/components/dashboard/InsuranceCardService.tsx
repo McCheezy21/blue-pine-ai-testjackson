@@ -112,7 +112,7 @@ export const InsuranceCardService = () => {
   );
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 font-['Inter',system-ui,sans-serif]">
       {/* Healthcare Header */}
       <div className={`transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
         <div className="flex items-center justify-between">

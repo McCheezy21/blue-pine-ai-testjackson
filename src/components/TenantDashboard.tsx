@@ -8,8 +8,9 @@ import { ReportsModal } from "@/components/dashboard/ReportsModal";
 import { ChatInterface } from "@/components/dashboard/ChatInterface";
 import { UserWithTenant } from "@/utils/tenantAuth";
 import { Shield, CheckCircle2, Activity } from "lucide-react";
-
-export type DashboardView = 'home' | 'insurance' | 'automation' | 'services';
+import { DashboardView } from "@/pages/Dashboard";
+import { ReportsAnalytics } from "@/components/dashboard/ReportsAnalytics";
+import { getUserInfo } from "@/utils/cognitoAuth";
 
 interface TenantDashboardProps {
   user: UserWithTenant;
@@ -52,6 +53,8 @@ const TenantDashboard = ({ user }: TenantDashboardProps) => {
         return <InsuranceCardService />;
       case 'automation':
         return <AutomationServices />;
+      case 'services':
+        return <ReportsAnalytics />;
       case 'home':
       default:
         return (
@@ -91,7 +94,7 @@ const TenantDashboard = ({ user }: TenantDashboardProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-[#EAEFF2] font-sans">
+    <div className="min-h-screen bg-[#EAEFF2] font-['Inter',system-ui,sans-serif]">
       <Sidebar 
         activeView={activeView}
         setActiveView={setActiveView}
@@ -99,15 +102,7 @@ const TenantDashboard = ({ user }: TenantDashboardProps) => {
         setExpanded={setSidebarExpanded}
       />
       <div className={`transition-all duration-300 ${sidebarExpanded ? 'ml-64' : 'ml-16'}`}>
-        <Header 
-          user={{
-            firstName: user.firstName || 'User',
-            lastName: user.lastName || '',
-            email: user.email,
-            tenant: user.tenant,
-            role: user.role
-          }}
-        />
+        <Header onSettingsClick={() => {}} />
         <main className="p-6">
           {renderContent()}
         </main>
