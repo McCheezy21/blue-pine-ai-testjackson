@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, TreePine } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import BluePineLogo from "@/components/ui/BluePineLogo";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,12 +37,10 @@ const Navbar = () => {
           <div className="flex items-center space-x-8">
             {/* Logo */}
             <div 
-              className="flex items-center cursor-pointer group"
+              className="flex items-center cursor-pointer group space-x-3"
               onClick={() => navigate('/')}
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                <TreePine className="text-white w-6 h-6" />
-              </div>
+                              <BluePineLogo className="group-hover:scale-110 transition-transform duration-300" size="lg" />
               <span className="text-2xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">
                 Blue Pine AI
               </span>

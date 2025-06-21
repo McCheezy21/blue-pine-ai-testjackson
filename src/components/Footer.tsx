@@ -1,18 +1,13 @@
 import { Footer as FooterUI } from "@/components/ui/footer"
 import { useNavigate } from "react-router-dom"
+import BluePineLogo from "@/components/ui/BluePineLogo";
 
 const Footer = () => {
   const navigate = useNavigate();
   
   return (
     <FooterUI
-      logo={
-        <img 
-          src="/lovable-uploads/408a9d6d-f5ef-4982-8932-336aecfb2915.png" 
-          alt="Blue Pine AI Logo" 
-          className="h-14 w-14 brightness-0 invert"
-        />
-      }
+      logo={<BluePineLogo size="lg" />}
       brandName="Blue Pine AI"
       socialLinks={[]}
       mainLinks={[]}

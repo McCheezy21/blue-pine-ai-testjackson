@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { getUserInfo } from '../utils/cognitoAuth';
 import { TreePine, Building2, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
+import BluePineLogo from "@/components/ui/BluePineLogo";
 
 interface Tenant {
   id: string;
@@ -114,17 +120,17 @@ export const TenantSelector: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Apple-inspired Header */}
           <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="flex items-center justify-center mb-6">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-xl">
-                <TreePine className="w-8 h-8 text-white" />
+            <div className="text-center mb-12">
+              <div className="flex items-center justify-center space-x-4 mb-6">
+                <BluePineLogo className="w-10 h-10" />
+                <div>
+                  <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">
+                    Blue Pine AI
+                  </h1>
+                  <p className="text-slate-600">Multi-Tenant Access</p>
+                </div>
               </div>
             </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-800 bg-clip-text text-transparent mb-4">
-              Select Your Organization
-            </h1>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Welcome <span className="font-semibold text-blue-600">{userEmail}</span>! You have access to multiple organizations. Choose one to continue.
-            </p>
           </div>
 
           {/* Apple-inspired Organization Cards */}

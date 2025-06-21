@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, Image, Settings, Zap, ChevronRight, Activity, LogOut, TreePine } from "lucide-react";
+import { Home, Image, Settings, Zap, ChevronRight, Activity, LogOut } from "lucide-react";
 import { DashboardView } from "@/pages/Dashboard";
 import { getUserInfo } from "@/utils/cognitoAuth";
+import BluePineLogo from "@/components/ui/BluePineLogo";
 
 interface SidebarProps {
   activeView: DashboardView;
@@ -64,17 +65,13 @@ export const Sidebar = ({ activeView, setActiveView, expanded, setExpanded }: Si
     >
       {/* Apple-inspired Header */}
       <div className="p-4 border-b border-slate-100/50">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-            <TreePine className="h-6 w-6 text-white" />
-          </div>
-          <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
-            expanded ? 'opacity-100 w-full transform translate-x-0' : 'opacity-0 w-0 transform -translate-x-4'
-          }`}>
-            <div className="text-lg font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-800 bg-clip-text text-transparent whitespace-nowrap">
+        <div className="flex items-center space-x-3">
+                        <BluePineLogo size="lg" />
+          <div>
+            <h2 className="text-xl font-bold text-slate-800">
               Blue Pine AI
-            </div>
-            <div className="text-sm text-slate-500 whitespace-nowrap">Automation Portal</div>
+            </h2>
+            <p className="text-sm text-slate-500">Revenue Automation</p>
           </div>
         </div>
       </div>
