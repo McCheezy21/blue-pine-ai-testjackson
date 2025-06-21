@@ -37,120 +37,97 @@ interface HeaderProps {
 
 export const Header = ({ user }: HeaderProps) => {
   const navigate = useNavigate();
-  const [notificationCount] = useState(3); // Mock notification count
-  const [showHelpModal, setShowHelpModal] = useState(false);
   const [showProfileDetails, setShowProfileDetails] = useState(false);
-
-  const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
-  };
+  const [showHelpSupport, setShowHelpSupport] = useState(false);
 
   const handleSignOut = () => {
-    navigate('/signout');
+    navigate("/signout");
   };
 
-  const handleProfileClick = () => {
-    setShowProfileDetails(!showProfileDetails);
-  };
-
-  const handleHelpClick = () => {
-    setShowHelpModal(true);
+  const getInitials = (firstName: string, lastName: string) => {
+    return `${firstName?.charAt(0) || ''}${lastName?.charAt(0) || ''}`.toUpperCase();
   };
 
   return (
     <>
-      <header className="bg-white/70 backdrop-blur-xl border-b border-slate-200/50 px-8 py-4 sticky top-0 z-40">
+      <header className="bg-white border-b border-[#CCCCCC] px-6 py-4">
         <div className="flex items-center justify-between">
-          {/* Left side - Breadcrumbs or Page Title */}
-          <div className="flex-1">
-            <div className="flex items-center space-x-2">
-              <h1 className="text-lg font-semibold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-800 bg-clip-text text-transparent">
-                Dashboard
-              </h1>
-              <div className="w-1 h-1 bg-slate-300 rounded-full"></div>
-              <span className="text-sm text-slate-500">Blue Pine AI Portal</span>
-            </div>
+          {/* Page Title */}
+          <div>
+            <h1 className="text-2xl font-semibold text-[#333333]">
+              Dashboard
+            </h1>
+            <p className="text-sm text-[#333333]/60">
+              Healthcare Revenue Cycle Management
+            </p>
           </div>
 
-          {/* Right side - Actions and User menu */}
-          <div className="flex items-center gap-3">
-            {/* Apple-inspired Notifications */}
-            <div className="relative">
-              <button className="p-2.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100/50 rounded-xl transition-all duration-300 hover:scale-105 group">
-                <Bell className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
-                {notificationCount > 0 && (
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center text-white text-xs font-semibold shadow-lg animate-pulse">
-                    {notificationCount}
-                  </div>
-                )}
-              </button>
-            </div>
+          {/* User Menu */}
+          <div className="flex items-center space-x-4">
+            {/* Notifications */}
+            <button className="relative p-2 text-[#333333]/60 hover:text-[#004466] hover:bg-[#EAEFF2] rounded-lg transition-colors duration-200">
+              <Bell className="h-5 w-5" />
+            </button>
 
-            {/* Apple-inspired User Profile Dropdown */}
+            {/* User Profile Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-3 px-3 py-2 text-left hover:bg-slate-50/50 rounded-xl transition-all duration-300 hover:scale-[1.02] group">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                <button className="flex items-center space-x-3 px-3 py-2 text-[#333333] hover:bg-[#EAEFF2] rounded-lg transition-colors duration-200">
+                  <div className="w-8 h-8 bg-[#004466] rounded-full flex items-center justify-center text-white font-medium text-sm">
                     {getInitials(user.firstName, user.lastName)}
                   </div>
-                  <div className="hidden md:block">
-                    <div className="font-semibold text-slate-900 text-sm">
+                  <div className="text-left">
+                    <div className="font-medium text-sm">
                       {user.firstName} {user.lastName}
                     </div>
-                    <div className="text-xs text-slate-500">
-                      {user.email}
+                    <div className="text-xs text-[#333333]/60">
+                      {user.tenant?.name || 'BluePine AI'}
                     </div>
                   </div>
-                  <ChevronDown className="h-4 w-4 text-slate-500 transition-transform duration-300 group-hover:rotate-180" />
+                  <ChevronDown className="h-4 w-4 text-[#333333]/60" />
                 </button>
               </DropdownMenuTrigger>
               
-              <DropdownMenuContent align="end" className="w-80 bg-white/90 backdrop-blur-xl border border-slate-200/50 shadow-2xl rounded-2xl p-2 mt-2">
-                {/* Apple-inspired user info header */}
-                <DropdownMenuLabel className="px-3 py-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-semibold shadow-lg">
+              <DropdownMenuContent className="w-80 bg-white border border-[#CCCCCC] shadow-lg" align="end">
+                <DropdownMenuLabel className="pb-2">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-12 h-12 bg-[#004466] rounded-full flex items-center justify-center text-white font-medium">
                       {getInitials(user.firstName, user.lastName)}
                     </div>
                     <div>
-                      <div className="font-semibold text-slate-900">{user.firstName} {user.lastName}</div>
-                      <div className="text-sm text-slate-500">{user.email}</div>
+                      <div className="font-medium text-[#333333]">
+                        {user.firstName} {user.lastName}
+                      </div>
+                      <div className="text-sm text-[#333333]/60">{user.email}</div>
                     </div>
                   </div>
                 </DropdownMenuLabel>
-                
-                <DropdownMenuSeparator className="bg-slate-200/50 my-2" />
-                
-                {/* My Profile with expandable details */}
+
+                <DropdownMenuSeparator className="bg-[#CCCCCC]" />
+
+                {/* View Profile Toggle */}
                 <DropdownMenuItem 
-                  className="cursor-pointer hover:bg-slate-50/50 focus:bg-slate-50/50 px-3 py-2.5 rounded-xl mx-1 transition-all duration-200 group"
-                  onClick={handleProfileClick}
+                  onSelect={() => setShowProfileDetails(!showProfileDetails)}
+                  className="text-[#333333] hover:bg-[#EAEFF2] focus:bg-[#EAEFF2]"
                 >
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-200">
-                    <UserCircle className="h-4 w-4 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="font-medium text-slate-900">My Profile</div>
-                    <div className="text-xs text-slate-500">View and edit profile</div>
-                  </div>
-                  <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform duration-200 ${showProfileDetails ? 'rotate-180' : ''}`} />
+                  <UserCircle className="mr-2 h-4 w-4" />
+                  <span>View Profile Details</span>
                 </DropdownMenuItem>
 
-                {/* Expanded Profile Details */}
                 {showProfileDetails && (
-                  <div className="mx-1 my-2 p-3 bg-slate-50/50 rounded-xl border border-slate-200/50">
-                    {/* Tenant Isolation Status */}
-                    <div className="flex items-center gap-3 mb-3 p-2 bg-green-50/70 rounded-lg border border-green-200/50">
-                      <div className="w-6 h-6 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
+                  <div className="mx-1 my-2 p-3 bg-[#EAEFF2] rounded-lg border border-[#CCCCCC]">
+                    {/* Tenant Status */}
+                    <div className="flex items-center gap-3 mb-3 p-2 bg-[#3CB371]/10 rounded-lg border border-[#3CB371]/20">
+                      <div className="w-6 h-6 bg-[#3CB371] rounded-lg flex items-center justify-center">
                         <Shield className="h-3 w-3 text-white" />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-1">
-                          <span className="text-xs font-medium text-green-900">Tenant Isolation Active</span>
-                          <CheckCircle2 className="h-3 w-3 text-green-600" />
+                          <span className="text-xs font-medium text-[#333333]">Tenant Isolation Active</span>
+                          <CheckCircle2 className="h-3 w-3 text-[#3CB371]" />
                         </div>
-                        <div className="text-xs text-green-700/80">
-                          You are securely isolated within the {user.tenant?.name || 'BluePine AI'} organization space.
+                        <div className="text-xs text-[#333333]/70">
+                          Securely isolated within {user.tenant?.name || 'BluePine AI'} organization.
                         </div>
                       </div>
                     </div>
@@ -158,17 +135,17 @@ export const Header = ({ user }: HeaderProps) => {
                     {/* Plan and Role Info */}
                     <div className="space-y-2 text-xs">
                       <div className="flex justify-between items-center">
-                        <span className="text-slate-500">Plan:</span>
-                        <span className="font-medium text-blue-600 capitalize">{user.tenant?.plan || 'pro'}</span>
+                        <span className="text-[#333333]/70">Plan:</span>
+                        <span className="font-medium text-[#004466] capitalize">{user.tenant?.plan || 'pro'}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-slate-500">Role:</span>
-                        <span className="font-medium text-blue-600 capitalize">{user.role || 'user'}</span>
+                        <span className="text-[#333333]/70">Role:</span>
+                        <span className="font-medium text-[#004466] capitalize">{user.role || 'user'}</span>
                       </div>
                       {user.tenant?.allowed_email_domains && (
-                        <div className="pt-2 border-t border-slate-200/50">
-                          <div className="text-slate-500 mb-1">Authorized domains:</div>
-                          <div className="font-medium text-slate-700 text-xs">
+                        <div className="pt-2 border-t border-[#CCCCCC]">
+                          <div className="text-[#333333]/70 mb-1">Authorized domains:</div>
+                          <div className="font-medium text-[#333333] text-xs">
                             {user.tenant.allowed_email_domains.join(', ')}
                           </div>
                         </div>
@@ -179,32 +156,22 @@ export const Header = ({ user }: HeaderProps) => {
                 
                 {/* Help & Support */}
                 <DropdownMenuItem 
-                  className="cursor-pointer hover:bg-slate-50/50 focus:bg-slate-50/50 px-3 py-2.5 rounded-xl mx-1 transition-all duration-200 group"
-                  onClick={handleHelpClick}
+                  onSelect={() => setShowHelpSupport(true)}
+                  className="text-[#333333] hover:bg-[#EAEFF2] focus:bg-[#EAEFF2]"
                 >
-                  <div className="w-8 h-8 bg-gradient-to-br from-slate-500 to-slate-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-200">
-                    <HelpCircle className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-medium text-slate-900">Help & Support</div>
-                    <div className="text-xs text-slate-500">Get help when you need it</div>
-                  </div>
+                  <HelpCircle className="mr-2 h-4 w-4" />
+                  <span>Help & Support</span>
                 </DropdownMenuItem>
-                
-                <DropdownMenuSeparator className="bg-slate-200/50 my-2" />
-                
-                {/* Apple-style sign out */}
+
+                <DropdownMenuSeparator className="bg-[#CCCCCC]" />
+
+                {/* Sign Out */}
                 <DropdownMenuItem 
-                  className="cursor-pointer text-red-600 hover:bg-red-50/50 focus:bg-red-50/50 hover:text-red-700 focus:text-red-700 px-3 py-2.5 rounded-xl mx-1 transition-all duration-200 group"
-                  onClick={handleSignOut}
+                  onSelect={handleSignOut}
+                  className="text-[#D9534F] hover:bg-[#D9534F]/10 focus:bg-[#D9534F]/10"
                 >
-                  <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-200">
-                    <LogOut className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-medium">Sign Out</div>
-                    <div className="text-xs text-red-500/70">End your session</div>
-                  </div>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Sign Out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -213,9 +180,9 @@ export const Header = ({ user }: HeaderProps) => {
       </header>
 
       {/* Help Support Modal */}
-      <HelpSupportModal 
-        isOpen={showHelpModal} 
-        onClose={() => setShowHelpModal(false)} 
+      <HelpSupportModal
+        isOpen={showHelpSupport}
+        onClose={() => setShowHelpSupport(false)}
       />
     </>
   );

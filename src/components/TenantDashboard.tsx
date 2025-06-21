@@ -7,7 +7,7 @@ import { AutomationServices } from "@/components/dashboard/AutomationServices";
 import { ReportsModal } from "@/components/dashboard/ReportsModal";
 import { ChatInterface } from "@/components/dashboard/ChatInterface";
 import { UserWithTenant } from "@/utils/tenantAuth";
-import { Shield, CheckCircle2, Sparkles } from "lucide-react";
+import { Shield, CheckCircle2, Activity } from "lucide-react";
 
 export type DashboardView = 'home' | 'insurance' | 'automation' | 'services';
 
@@ -56,31 +56,27 @@ const TenantDashboard = ({ user }: TenantDashboardProps) => {
       default:
         return (
           <div className="space-y-6">
-            {/* Clean Apple-inspired Welcome Banner */}
-            <div className={`relative overflow-hidden bg-gradient-to-br from-white via-blue-50/30 to-slate-50/50 backdrop-blur-sm border border-blue-100/50 rounded-2xl transition-all duration-700 ${
+            {/* Healthcare Professional Welcome Section */}
+            <div className={`bg-white border border-[#CCCCCC] rounded-lg shadow-sm transition-all duration-500 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}>
-              {/* Floating background elements */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-blue-500/10 to-blue-300/10 rounded-full blur-2xl"></div>
-              <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-gradient-to-br from-slate-400/10 to-slate-200/10 rounded-full blur-2xl"></div>
-              
-              <div className="relative p-12 text-center">
+              <div className="p-8 text-center">
                 <div className="flex items-center justify-center mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                    <Sparkles className="w-8 h-8 text-white" />
+                  <div className="w-16 h-16 bg-[#004466] rounded-lg flex items-center justify-center">
+                    <Activity className="w-8 h-8 text-white" />
                   </div>
                 </div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-800 bg-clip-text text-transparent mb-4">
-                  Welcome back, {user.tenant.name}
+                <h1 className="text-3xl font-semibold text-[#333333] mb-3">
+                  Welcome, {user.tenant.name}
                 </h1>
-                <p className="text-lg text-slate-600 max-w-md mx-auto">
-                  Your comprehensive healthcare revenue cycle management platform
+                <p className="text-[#333333]/70 text-lg max-w-2xl mx-auto">
+                  Healthcare Revenue Cycle Management Platform
                 </p>
               </div>
             </div>
 
-            {/* Dashboard Content with staggered animation */}
-            <div className={`transition-all duration-700 delay-300 ${
+            {/* Dashboard Content */}
+            <div className={`transition-all duration-500 delay-200 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}>
               <DashboardContent user={user} onNavigate={handleNavigate} />
@@ -95,10 +91,7 @@ const TenantDashboard = ({ user }: TenantDashboardProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-slate-50/30 to-blue-50/20 font-sans">
-      {/* Background texture */}
-      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-100/20 via-transparent to-slate-100/20 pointer-events-none"></div>
-      
+    <div className="min-h-screen bg-[#EAEFF2] font-sans">
       <Sidebar 
         activeView={activeView}
         setActiveView={setActiveView}
@@ -115,7 +108,7 @@ const TenantDashboard = ({ user }: TenantDashboardProps) => {
             role: user.role
           }}
         />
-        <main className="p-8 relative">
+        <main className="p-6">
           {renderContent()}
         </main>
       </div>
