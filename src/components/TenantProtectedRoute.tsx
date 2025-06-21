@@ -2,10 +2,23 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getUserWithTenant, UserWithTenant } from '@/utils/tenantAuth';
 import { isAuthenticated } from '@/utils/cognitoAuth';
+import { isPointClickCareAuthenticated } from '@/utils/pointClickCareAuth';
 
 interface TenantProtectedRouteProps {
   children: (user: UserWithTenant) => React.ReactNode;
 }
+
+// Unified authentication check that works for both Cognito and PointClickCare
+const isUserAuthenticated = (): boolean => {
+  const cognitoAuth = isAuthenticated();
+  const pccAuth = isPointClickCareAuthenticated();
+  
+  console.log('🔍 TenantProtectedRoute: Authentication check');
+  console.log('🔐 Cognito authenticated:', cognitoAuth);
+  console.log('🏥 PointClickCare authenticated:', pccAuth);
+  
+  return cognitoAuth || pccAuth;
+};
 
 const TenantProtectedRoute = ({ children }: TenantProtectedRouteProps) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -20,8 +33,8 @@ const TenantProtectedRoute = ({ children }: TenantProtectedRouteProps) => {
         setIsLoading(true);
         setError(null);
         
-        // First check basic authentication
-        const isAuth = isAuthenticated();
+        // First check unified authentication (Cognito OR PointClickCare)
+        const isAuth = isUserAuthenticated();
         if (!isAuth) {
           console.log('❌ User not authenticated, redirecting to signin with tenant context');
           // Preserve the current tenant URL for post-login redirect
@@ -36,7 +49,7 @@ const TenantProtectedRoute = ({ children }: TenantProtectedRouteProps) => {
         
         // This function handles all security checks:
         // - Tenant existence
-        // - Domain validation
+        // - Domain validation (for Cognito) or facility mapping (for PointClickCare)
         // - Auto-join if domain is allowed
         const authenticatedUser = await getUserWithTenant();
         
@@ -49,7 +62,7 @@ const TenantProtectedRoute = ({ children }: TenantProtectedRouteProps) => {
         }
         
         setUser(authenticatedUser);
-        console.log(`✅ Tenant access granted for ${authenticatedUser.email} to ${tenantId}`);
+        console.log(`✅ Tenant access granted for ${authenticatedUser.email} to ${tenantId} via ${authenticatedUser.provider}`);
       } catch (error) {
         console.error('❌ Tenant access check failed:', error);
         setError('Failed to verify tenant access');
