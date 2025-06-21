@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CheckCircle, TreePine } from "lucide-react";
+import { ArrowLeft, CheckCircle, TreePine, Building2 } from "lucide-react";
 import { initiateSocialLogin, initiateCognitoLogin } from "@/utils/cognitoAuth";
+import { initiatePointClickCareLogin } from "@/utils/pointClickCareAuth";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +18,7 @@ const SignIn = () => {
     setTimeout(() => setIsVisible(true), 100);
   });
 
-  const handleSocialLogin = async (provider: 'Google' | 'Microsoft') => {
+  const handleSocialLogin = async (provider: 'Google' | 'Microsoft' | 'PointClickCare') => {
     console.log(`🔐 SignIn: Starting ${provider} OAuth flow`);
     
     localStorage.clear();
@@ -25,8 +26,13 @@ const SignIn = () => {
     setIsLoading(true);
     setLoadingProvider(provider);
     try {
-      console.log(`📞 Calling initiateSocialLogin for ${provider}`);
-      await initiateSocialLogin(provider);
+      if (provider === 'PointClickCare') {
+        console.log(`📞 Calling initiatePointClickCareLogin`);
+        await initiatePointClickCareLogin();
+      } else {
+        console.log(`📞 Calling initiateSocialLogin for ${provider}`);
+        await initiateSocialLogin(provider);
+      }
       setTimeout(() => {
         setIsLoading(false);
         setLoadingProvider(null);
@@ -106,6 +112,32 @@ const SignIn = () => {
           {/* Sign In Card */}
           <div className={`glass-card p-8 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="space-y-4">
+              {/* PointClickCare Sign In - Primary Option */}
+              <button 
+                onClick={() => handleSocialLogin('PointClickCare')}
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 py-4 px-6 rounded-xl font-semibold group shadow-lg"
+                disabled={isLoading}
+              >
+                {loadingProvider === 'PointClickCare' ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                ) : (
+                  <Building2 className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                )}
+                <span className="font-semibold">
+                  {loadingProvider === 'PointClickCare' ? 'Connecting...' : 'Continue with PointClickCare'}
+                </span>
+              </button>
+
+              {/* Divider */}
+              <div className="relative py-2">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-gray-200" />
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="bg-white px-4 text-gray-500 font-medium">Or continue with</span>
+                </div>
+              </div>
+
               {/* Google Sign In */}
               <button 
                 onClick={() => handleSocialLogin('Google')}
@@ -124,27 +156,6 @@ const SignIn = () => {
                 )}
                 <span className="font-medium">
                   {loadingProvider === 'Google' ? 'Connecting...' : 'Continue with Google'}
-                </span>
-              </button>
-
-              {/* Microsoft Sign In */}
-              <button 
-                onClick={() => handleSocialLogin('Microsoft')}
-                className="w-full bg-white text-gray-700 border border-gray-200 hover:border-primary/30 hover:bg-gray-50 flex items-center justify-center gap-3 py-4 px-6 rounded-xl transition-all duration-300 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed group"
-                disabled={isLoading}
-              >
-                {loadingProvider === 'Microsoft' ? (
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-700"></div>
-                ) : (
-                  <svg className="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
-                    <path fill="#f25022" d="M1 1h10v10H1z"/>
-                    <path fill="#00a4ef" d="M12 1h10v10H12z"/>
-                    <path fill="#7fba00" d="M1 12h10v10H1z"/>
-                    <path fill="#ffb900" d="M12 12h10v10H12z"/>
-                  </svg>
-                )}
-                <span className="font-medium">
-                  {loadingProvider === 'Microsoft' ? 'Connecting...' : 'Continue with Microsoft'}
                 </span>
               </button>
 

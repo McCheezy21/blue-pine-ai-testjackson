@@ -1,5 +1,6 @@
 // Multi-tenant authentication utilities (Path-Based + Shared DB)
-import { getUserInfo as getBasicUserInfo } from './cognitoAuth';
+import { getUserInfo as getBasicUserInfo, isAuthenticated as isCognitoAuthenticated } from './cognitoAuth';
+import { getPointClickCareUserInfo, isPointClickCareAuthenticated } from './pointClickCareAuth';
 
 export interface TenantInfo {
   id: string;
@@ -105,6 +106,15 @@ const getFallbackTenantInfo = (tenantId: string): TenantInfo | null => {
       allowed_email_domains: ['bluepineai.com'],
       createdAt: new Date('2024-01-01'),
       updatedAt: new Date('2024-01-01')
+    },
+    'pcc-demo-skilled-nursing-facility': {
+      id: 'pcc-demo-skilled-nursing-facility',
+      name: 'Demo Skilled Nursing Facility',
+      plan: 'pro',
+      status: 'active',
+      allowed_email_domains: [], // PointClickCare users don't use email domain validation
+      createdAt: new Date('2024-01-01'),
+      updatedAt: new Date('2024-01-01')
     }
   };
   
@@ -174,6 +184,10 @@ const validateEmailDomainFallback = (email: string, tenantId: string): boolean =
     'blue-pine-test': {
       allowedDomains: ['bluepineai.com'],
       defaultRole: 'admin'
+    },
+    'pcc-demo-skilled-nursing-facility': {
+      allowedDomains: [], // PointClickCare users don't use email domain validation
+      defaultRole: 'user'
     }
   };
   
@@ -269,6 +283,10 @@ const checkFallbackTenantAccess = (tenantId: string, userEmail?: string): {
     'blue-pine-test': {
       allowedDomains: ['bluepineai.com'],
       defaultRole: 'admin'
+    },
+    'pcc-demo-skilled-nursing-facility': {
+      allowedDomains: [], // PointClickCare users don't use email domain validation
+      defaultRole: 'user'
     }
   };
   
@@ -291,17 +309,60 @@ const checkFallbackTenantAccess = (tenantId: string, userEmail?: string): {
   };
 };
 
-// ENHANCED: Complete user authentication with tenant validation
+// ENHANCED: Complete user authentication with tenant validation (supports Cognito and PointClickCare)
 export const getUserWithTenant = async (): Promise<UserWithTenant | null> => {
   console.log('🔄 getUserWithTenant: Starting tenant authentication process');
   
-  const basicUser = getBasicUserInfo();
+  // Check for PointClickCare authentication first
+  let basicUser = null;
+  let authProvider = 'unknown';
+  
+  if (isPointClickCareAuthenticated()) {
+    console.log('🏥 getUserWithTenant: PointClickCare authentication detected');
+    basicUser = getPointClickCareUserInfo();
+    authProvider = 'pointclickcare';
+    
+    // For PointClickCare users, check if we have tenant mapping
+    const tenantMappingString = localStorage.getItem('pcc_tenant_mapping');
+    if (tenantMappingString) {
+      try {
+        const tenantMapping = JSON.parse(tenantMappingString);
+        console.log(`🏥 getUserWithTenant: Using PCC tenant mapping for ${tenantMapping.facilityName}`);
+        
+        // Override getCurrentTenant() for PointClickCare users
+        const tenantId = tenantMapping.tenantId;
+        
+        // Build complete user object with tenant info
+        const tenantInfo = await getTenantInfo(tenantId);
+        if (!tenantInfo) {
+          console.error('❌ getUserWithTenant: PCC mapped tenant not found:', tenantId);
+          window.location.href = '/tenant-not-found';
+          return null;
+        }
+        
+        return {
+          ...basicUser,
+          tenant: tenantInfo,
+          role: tenantMapping.accessLevel === 'full' ? 'admin' : 'user',
+          tenantPermissions: tenantMapping.accessLevel === 'full' ? ['all'] : ['read'],
+          provider: 'pointclickcare'
+        };
+      } catch (error) {
+        console.warn('Error parsing PCC tenant mapping:', error);
+      }
+    }
+  } else if (isCognitoAuthenticated()) {
+    console.log('🔐 getUserWithTenant: Cognito authentication detected');
+    basicUser = getBasicUserInfo();
+    authProvider = 'cognito';
+  }
+  
   if (!basicUser) {
     console.log('❌ getUserWithTenant: No authenticated user found');
     return null;
   }
   
-  console.log(`✅ getUserWithTenant: Found authenticated user - ${basicUser.email}`);
+  console.log(`✅ getUserWithTenant: Found authenticated user - ${basicUser.email} (${authProvider})`);
   
   const tenantId = getCurrentTenant();
   if (!tenantId) {
@@ -313,8 +374,21 @@ export const getUserWithTenant = async (): Promise<UserWithTenant | null> => {
   
   console.log(`🔍 getUserWithTenant: Checking access to tenant "${tenantId}"`);
   
-  // SECURITY: Verify user has access to this tenant with domain validation
-  const accessCheck = await verifyTenantAccess(tenantId, basicUser.sub, basicUser.email);
+  // SECURITY: Verify user has access to this tenant
+  let accessCheck;
+  
+  if (authProvider === 'pointclickcare') {
+    // For PointClickCare users, use facility-based access
+    accessCheck = {
+      hasAccess: true,
+      role: 'user' as const,
+      permissions: ['read', 'write']
+    };
+  } else {
+    // For Cognito users, use domain-based access
+    accessCheck = await verifyTenantAccess(tenantId, basicUser.sub, basicUser.email);
+  }
+  
   if (!accessCheck.hasAccess) {
     console.error(`❌ getUserWithTenant: User ${basicUser.email} does not have access to tenant: ${tenantId}`);
     console.error(`❌ getUserWithTenant: Access denied reason: ${accessCheck.reason}`);
@@ -323,7 +397,7 @@ export const getUserWithTenant = async (): Promise<UserWithTenant | null> => {
     if (accessCheck.reason?.includes('domain')) {
       window.location.href = '/unauthorized?reason=domain';
     } else {
-    window.location.href = '/unauthorized';
+      window.location.href = '/unauthorized';
     }
     return null;
   }
@@ -353,13 +427,14 @@ export const getUserWithTenant = async (): Promise<UserWithTenant | null> => {
     return null;
   }
   
-  console.log(`🎉 getUserWithTenant: Complete! User ${basicUser.email} authenticated for tenant ${tenantInfo.name}`);
+  console.log(`🎉 getUserWithTenant: Complete! User ${basicUser.email} authenticated for tenant ${tenantInfo.name} via ${authProvider}`);
   
   return {
     ...basicUser,
     tenant: tenantInfo,
     role: accessCheck.role || 'viewer',
-    tenantPermissions: accessCheck.permissions || []
+    tenantPermissions: accessCheck.permissions || [],
+    provider: authProvider
   };
 };
 

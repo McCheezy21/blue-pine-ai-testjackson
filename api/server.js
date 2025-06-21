@@ -63,39 +63,72 @@ const verifyToken = async (req, res, next) => {
   }
   
   try {
-    // Decode header to get kid (key ID)
+    // Decode header to check the issuer
     const decoded = jwt.decode(token, { complete: true });
-    if (!decoded || !decoded.header.kid) {
+    if (!decoded) {
       return res.status(401).json({ error: 'Invalid token format' });
     }
-
-    // Get Cognito public keys
-    const keys = await getCognitoKeys();
-    const key = keys.find(k => k.kid === decoded.header.kid);
     
-    if (!key) {
-      return res.status(401).json({ error: 'Invalid token - key not found' });
-    }
+    // 🔐 SECURITY: Handle different token types
+    if (decoded.payload.iss === 'blue-pine-api') {
+      // This is our own PointClickCare JWT token
+      console.log('🏥 Verifying PointClickCare JWT token...');
+      
+      const jwtSecret = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+      
+      const payload = jwt.verify(token, jwtSecret, {
+        algorithms: ['HS256'],
+        audience: 'blue-pine-frontend',
+        issuer: 'blue-pine-api'
+      });
+      
+      // Check token expiration
+      const currentTime = Math.floor(Date.now() / 1000);
+      if (payload.exp && payload.exp < currentTime) {
+        return res.status(401).json({ error: 'Token expired' });
+      }
+      
+      console.log('✅ PointClickCare JWT token verified successfully for user:', payload.sub);
+      req.user = payload;
+      return next();
+      
+    } else {
+      // This is a Cognito JWT token - use existing verification
+      console.log('🔐 Verifying Cognito JWT token...');
+      
+      if (!decoded.header.kid) {
+        return res.status(401).json({ error: 'Invalid Cognito token format' });
+      }
 
-    // Convert JWK to PEM format
-    const pem = jwkToPem(key);
+      // Get Cognito public keys
+      const keys = await getCognitoKeys();
+      const key = keys.find(k => k.kid === decoded.header.kid);
+      
+      if (!key) {
+        return res.status(401).json({ error: 'Invalid Cognito token - key not found' });
+      }
+
+      // Convert JWK to PEM format
+      const pem = jwkToPem(key);
+      
+      // Verify the token
+      const payload = jwt.verify(token, pem, {
+        algorithms: ['RS256'],
+        audience: COGNITO_CONFIG.clientId,
+        issuer: `https://cognito-idp.${COGNITO_CONFIG.region}.amazonaws.com/${COGNITO_CONFIG.userPoolId}`
+      });
+
+      // Check token expiration
+      const currentTime = Math.floor(Date.now() / 1000);
+      if (payload.exp && payload.exp < currentTime) {
+        return res.status(401).json({ error: 'Token expired' });
+      }
+
+      console.log('✅ Cognito JWT token verified successfully for user:', payload.sub);
+      req.user = payload;
+      return next();
+    }
     
-    // Verify the token
-    const payload = jwt.verify(token, pem, {
-      algorithms: ['RS256'],
-      audience: COGNITO_CONFIG.clientId,
-      issuer: `https://cognito-idp.${COGNITO_CONFIG.region}.amazonaws.com/${COGNITO_CONFIG.userPoolId}`
-    });
-
-    // Check token expiration
-    const currentTime = Math.floor(Date.now() / 1000);
-    if (payload.exp && payload.exp < currentTime) {
-      return res.status(401).json({ error: 'Token expired' });
-    }
-
-    console.log('✅ JWT token verified successfully for user:', payload.sub);
-    req.user = payload;
-    next();
   } catch (error) {
     console.error('❌ JWT verification failed:', error.message);
     res.status(401).json({ error: 'Invalid token' });
@@ -125,6 +158,186 @@ const isEmailAllowedForTenant = async (email, tenantId) => {
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// ===== POINTCLICKCARE OAUTH ENDPOINTS =====
+
+// PointClickCare OAuth token exchange endpoint
+app.post('/api/auth/pointclickcare/token', async (req, res) => {
+  try {
+    const { code, redirectUri } = req.body;
+    
+    if (!code) {
+      return res.status(400).json({ error: 'Authorization code is required' });
+    }
+    
+    const clientId = process.env.POINTCLICKCARE_CLIENT_ID;
+    const clientSecret = process.env.POINTCLICKCARE_CLIENT_SECRET;
+    
+    if (!clientId || !clientSecret) {
+      console.error('PointClickCare credentials not configured');
+      return res.status(500).json({ error: 'PointClickCare authentication not configured' });
+    }
+    
+    // Exchange authorization code for access token
+    const tokenResponse = await axios.post('https://auth.pointclickcare.com/oauth2/token', {
+      grant_type: 'authorization_code',
+      client_id: clientId,
+      client_secret: clientSecret,
+      code: code,
+      redirect_uri: redirectUri,
+    }, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+    
+    const tokens = tokenResponse.data;
+    console.log('✅ PointClickCare token exchange successful');
+    
+    // Get user info from PointClickCare API
+    let userInfo = null;
+    let tenantMapping = null;
+    
+    if (tokens.access_token) {
+      try {
+        const userResponse = await axios.get('https://api.pointclickcare.com/v1/user/me', {
+          headers: {
+            'Authorization': `Bearer ${tokens.access_token}`,
+          },
+        });
+        userInfo = userResponse.data;
+        console.log('✅ PointClickCare user info retrieved');
+        
+        // Get facilities for user
+        try {
+          const facilitiesResponse = await axios.get('https://api.pointclickcare.com/v1/facilities', {
+            headers: {
+              'Authorization': `Bearer ${tokens.access_token}`,
+            },
+          });
+          userInfo.facilities = facilitiesResponse.data;
+          console.log(`✅ Retrieved ${userInfo.facilities.length} facilities for user`);
+        } catch (facilityError) {
+          console.warn('Failed to retrieve facilities:', facilityError.message);
+          userInfo.facilities = [];
+        }
+        
+        // Map user to tenant based on facility
+        const { mapPCCUserToTenant } = require('./pointclickcare-tenant-mapping');
+        tenantMapping = await mapPCCUserToTenant(userInfo);
+        console.log('✅ Tenant mapping successful:', tenantMapping);
+        
+      } catch (userError) {
+        console.warn('Failed to retrieve PointClickCare user info:', userError.message);
+        // Continue without user info - not critical for authentication
+      }
+    }
+    
+    // 🔐 SECURITY: Generate our own JWT tokens for PointClickCare users
+    let ourJwtToken = null;
+    if (userInfo) {
+      const jwtSecret = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+      const currentTime = Math.floor(Date.now() / 1000);
+      
+      // Create JWT payload compatible with our existing API
+      const jwtPayload = {
+        sub: `pcc-${userInfo.id || userInfo.userId || userInfo.username}`, // Unique user identifier
+        email: userInfo.email || `${userInfo.username}@pointclickcare.com`,
+        given_name: userInfo.firstName || userInfo.first_name || '',
+        family_name: userInfo.lastName || userInfo.last_name || '',
+        name: `${userInfo.firstName || ''} ${userInfo.lastName || ''}`.trim(),
+        'cognito:username': `pcc-${userInfo.username || userInfo.id}`,
+        provider: 'pointclickcare',
+        iss: 'blue-pine-api', // Our own issuer
+        aud: 'blue-pine-frontend',
+        iat: currentTime,
+        exp: currentTime + (24 * 60 * 60), // 24 hours expiration
+        auth_time: currentTime,
+        token_use: 'id'
+      };
+      
+      // Sign the JWT token
+      ourJwtToken = jwt.sign(jwtPayload, jwtSecret, { algorithm: 'HS256' });
+      console.log('✅ Generated JWT token for PointClickCare user:', jwtPayload.sub);
+    }
+    
+    res.json({
+      access_token: tokens.access_token,
+      id_token: tokens.id_token,
+      refresh_token: tokens.refresh_token,
+      // 🔐 SECURITY: Return our own JWT for API authentication
+      blue_pine_jwt: ourJwtToken,
+      userInfo: userInfo,
+      tenantMapping: tenantMapping,
+    });
+    
+  } catch (error) {
+    console.error('PointClickCare token exchange error:', error.response?.data || error.message);
+    
+    if (error.response?.status === 400) {
+      return res.status(400).json({ 
+        error: 'Invalid authorization code or redirect URI',
+        details: error.response.data 
+      });
+    }
+    
+    res.status(500).json({ 
+      error: 'PointClickCare authentication failed',
+      message: error.message 
+    });
+  }
+});
+
+// PointClickCare user profile endpoint (with authentication)
+app.get('/api/auth/pointclickcare/profile', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Bearer token required' });
+    }
+    
+    const accessToken = authHeader.replace('Bearer ', '');
+    
+    // Get user profile from PointClickCare API
+    const userResponse = await axios.get('https://api.pointclickcare.com/v1/user/me', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+    
+    const userInfo = userResponse.data;
+    
+    // Get facilities if available
+    let facilities = [];
+    try {
+      const facilitiesResponse = await axios.get('https://api.pointclickcare.com/v1/facilities', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+      facilities = facilitiesResponse.data;
+    } catch (facilityError) {
+      console.warn('Failed to retrieve facilities:', facilityError.message);
+    }
+    
+    res.json({
+      user: userInfo,
+      facilities: facilities,
+    });
+    
+  } catch (error) {
+    console.error('PointClickCare profile error:', error.response?.data || error.message);
+    
+    if (error.response?.status === 401) {
+      return res.status(401).json({ error: 'Invalid or expired PointClickCare token' });
+    }
+    
+    res.status(500).json({ 
+      error: 'Failed to retrieve PointClickCare profile',
+      message: error.message 
+    });
+  }
 });
 
 // ===== ENHANCED TENANT VALIDATION ENDPOINTS =====

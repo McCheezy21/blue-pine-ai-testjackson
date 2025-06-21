@@ -14,6 +14,7 @@ import RequestAccess from "./pages/RequestAccess";
 import ProtectedRoute from "./components/ProtectedRoute";
 import TenantProtectedRoute from "./components/TenantProtectedRoute";
 import TenantDashboard from "./components/TenantDashboard";
+import PointClickCareCallback from "./components/PointClickCareCallback";
 import { getUserInfo } from "./utils/cognitoAuth";
 
 const Unauthorized = () => {
@@ -77,6 +78,9 @@ const AppRoutes = () => {
         <Route path="/signout" element={<SignOut />} />
         <Route path="/invite/:token" element={<Invite />} />
         <Route path="/request-access" element={<RequestAccess />} />
+        
+        {/* PointClickCare OAuth Callback */}
+        <Route path="/auth/pointclickcare/callback" element={<PointClickCareCallback />} />
         
         {/* Admin routes */}
         <Route path="/admin" element={<Admin />} />
