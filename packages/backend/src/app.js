@@ -5,8 +5,8 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
 const axios = require('axios');
-const { sendInvitationEmail, testEmailConfiguration } = require('./email-service');
-const BedrockService = require('./bedrock-service');
+// const { sendInvitationEmail, testEmailConfiguration } = require('./services/email-service');
+const BedrockService = require('./services/bedrock-service');
 require('dotenv').config();
 
 const app = express();
@@ -224,7 +224,7 @@ app.post('/api/auth/pointclickcare/token', async (req, res) => {
         }
         
         // Map user to tenant based on facility
-        const { mapPCCUserToTenant } = require('./pointclickcare-tenant-mapping');
+        const { mapPCCUserToTenant } = require('./services/pointclickcare-tenant-mapping');
         tenantMapping = await mapPCCUserToTenant(userInfo);
         console.log('✅ Tenant mapping successful:', tenantMapping);
         
@@ -887,35 +887,19 @@ app.post('/api/admin/invitations', async (req, res) => {
     
     console.log(`✅ Invitation created for ${email} to tenant ${tenant_id}`);
     
-    // ENHANCED: Send actual invitation email
-    const emailResult = await sendInvitationEmail(email, companyName, inviteUrl, 'Blue Pine AI Team');
+    // ENHANCED: Send actual invitation email (temporarily disabled)
+    // const emailResult = await sendInvitationEmail(email, companyName, inviteUrl, 'Blue Pine AI Team');
     
-    if (emailResult.success) {
-      console.log(`📧 Invitation email sent successfully to ${email}`);
-      res.json({ 
-        success: true, 
-        invitation_token: token,
-        invite_url: inviteUrl,
-        expires_in: '7 days',
-        email_sent: true,
-        message: 'Invitation created and email sent successfully!'
-      });
-    } else {
-      console.log(`📧 Email sending failed: ${emailResult.error}`);
-      
-      // Still return success for invitation creation, but note email issue
-      res.json({ 
-        success: true, 
-        invitation_token: token,
-        invite_url: inviteUrl,
-        expires_in: '7 days',
-        email_sent: false,
-        email_error: emailResult.error,
-        manual_send_required: emailResult.manualSend || false,
-        message: 'Invitation created successfully. Email sending failed - please send invitation manually.',
-        manual_details: emailResult.details
-      });
-    }
+    // Email sending temporarily disabled
+    console.log(`📧 Invitation email would be sent to ${email} (email disabled)`);
+    res.json({ 
+      success: true, 
+      invitation_token: token,
+      invite_url: inviteUrl,
+      expires_in: '7 days',
+      email_sent: false,
+      message: 'Invitation created successfully. Email sending temporarily disabled.'
+    });
     
   } catch (error) {
     console.error('Error creating invitation:', error);
@@ -923,11 +907,11 @@ app.post('/api/admin/invitations', async (req, res) => {
   }
 });
 
-// NEW: Test email configuration endpoint
+// NEW: Test email configuration endpoint (temporarily disabled)
 app.get('/api/admin/test-email', async (req, res) => {
   try {
-    const result = await testEmailConfiguration();
-    res.json(result);
+    // const result = await testEmailConfiguration();
+    res.json({ status: 'disabled', message: 'Email testing temporarily disabled' });
   } catch (error) {
     console.error('Error testing email configuration:', error);
     res.status(500).json({ error: 'Failed to test email configuration' });

@@ -3,8 +3,8 @@ version: '3.8'
 services:
   blue-pine-api:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
     ports:
       - "3001:3001"
     environment:
@@ -27,6 +27,10 @@ services:
       - COGNITO_USER_POOL_ID=${COGNITO_USER_POOL_ID}
       - COGNITO_CLIENT_ID=${COGNITO_CLIENT_ID}
       - COGNITO_REGION=${COGNITO_REGION:-us-east-1}
+      
+      # PointClickCare Configuration
+      - POINTCLICKCARE_CLIENT_ID=${POINTCLICKCARE_CLIENT_ID}
+      - POINTCLICKCARE_CLIENT_SECRET=${POINTCLICKCARE_CLIENT_SECRET}
       
       # Application Configuration
       - NODE_ENV=production
