@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import Index from "./pages/Index";
-import Waitlist from "./pages/Waitlist";
+import Demo from "./pages/Demo";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import SignIn from "./pages/SignIn";
@@ -72,7 +72,7 @@ const AppRoutes = () => {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<Index />} />
-        <Route path="/waitlist" element={<Waitlist />} />
+        <Route path="/demo" element={<Demo />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signout" element={<SignOut />} />

@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
 import { cn } from "@/lib/utils"
@@ -46,7 +45,7 @@ export function Footer({
               aria-label={brandName}
             >
               {logo}
-              <span className="font-bold text-xl">{brandName}</span>
+              <span className="text-2xl text-primary-foreground font-serif">{brandName}</span>
             </Link>
           )}
           <ul className="flex list-none mt-1.5 md:mt-0 space-x-3">

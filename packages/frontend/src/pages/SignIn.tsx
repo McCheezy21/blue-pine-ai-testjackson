@@ -193,8 +193,8 @@ const SignIn = () => {
             <div className="mt-8 text-center space-y-4">
               <p className="text-gray-600">
                 Don't have an account?{" "}
-                <Link to="/waitlist" className="text-primary hover:underline font-medium transition-colors">
-                  Join our waitlist
+                <Link to="/demo" className="text-primary hover:underline font-medium transition-colors">
+                  Join our demo
                 </Link>
               </p>
               

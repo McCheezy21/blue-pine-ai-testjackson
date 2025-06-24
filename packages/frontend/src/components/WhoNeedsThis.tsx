@@ -1,4 +1,3 @@
-
 import { Card, CardContent } from "./ui/card";
 import { Hospital, UserCog, Stethoscope } from "lucide-react";
 
@@ -22,21 +21,21 @@ const profiles = [
 
 const WhoNeedsThis = () => {
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-[#EAEFF2]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-primary text-center mb-12">
+        <h2 className="text-4xl font-serif text-[#004466] text-center mb-12">
           Who Needs This Most?
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {profiles.map((profile, index) => (
-            <Card key={index} className="border-none shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <CardContent className="p-6">
+            <Card key={index} className="bg-white border border-[#CCCCCC] rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+              <CardContent className="p-8">
                 <div className="flex flex-col items-center text-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-accent flex items-center justify-center mb-4">
-                    <profile.icon className="w-8 h-8 text-primary" />
+                  <div className="w-16 h-16 rounded-lg bg-[#EAEFF2] flex items-center justify-center mb-4 border border-[#CCCCCC]">
+                    <profile.icon className="w-8 h-8 text-[#004466]" />
                   </div>
-                  <h3 className="text-xl font-semibold text-primary">{profile.title}</h3>
-                  <p className="text-gray-600">{profile.description}</p>
+                  <h3 className="text-xl font-serif text-[#004466] mb-2">{profile.title}</h3>
+                  <p className="text-[#333333] text-base leading-relaxed">{profile.description}</p>
                 </div>
               </CardContent>
             </Card>

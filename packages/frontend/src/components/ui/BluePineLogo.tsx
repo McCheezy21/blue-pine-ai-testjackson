@@ -3,25 +3,30 @@ import React from 'react';
 interface BluePineLogoProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+  variant?: 'default' | 'footer';
 }
 
 const BluePineLogo: React.FC<BluePineLogoProps> = ({ 
   className = '', 
-  size = 'lg' 
+  size = 'lg',
+  variant = 'default'
 }) => {
   const sizeClasses = {
-    sm: 'w-8 h-9',
-    md: 'w-10 h-11',
-    lg: 'w-12 h-14',
-    xl: 'w-16 h-18',
-    xxl: 'w-20 h-22'
+    sm: 'w-8 h-8',
+    md: 'w-12 h-12',
+    lg: 'w-16 h-16',
+    xl: 'w-24 h-24',
+    xxl: 'w-32 h-32'
   };
 
+  const src = variant === 'footer' ? '/blue-pine-logo-footer.png' : '/blue-pine-logo.png';
+  
   return (
     <img
-      src="/lovable-uploads/408a9d6d-f5ef-4982-8932-336aecfb2915.png"
+      src={src}
       alt="Blue Pine AI Logo"
       className={`${sizeClasses[size]} ${className} object-contain`}
+      draggable={false}
     />
   );
 };

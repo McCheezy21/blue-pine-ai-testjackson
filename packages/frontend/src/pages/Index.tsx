@@ -1,7 +1,7 @@
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import Features from "../components/Features";
-import WhyNeedUs from "../components/WhyNeedUs";
+import MoreFeatures from "../components/MoreFeatures";
 import FAQ from "../components/FAQ";
 import Testimonials from "../components/Testimonials";
 import Footer from "../components/Footer";
@@ -21,7 +21,7 @@ const Index = () => {
       
       <section className="relative py-24 bg-white">
         <div className="absolute inset-0 bg-gradient-to-r from-slate-50/30 via-white to-slate-50/30"></div>
-        <WhyNeedUs />
+        <MoreFeatures />
       </section>
       
       <section id="ai-explanation" className="relative py-24 bg-gradient-to-b from-slate-50/30 to-white">

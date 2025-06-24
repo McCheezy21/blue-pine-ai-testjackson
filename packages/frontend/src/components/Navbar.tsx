@@ -26,149 +26,143 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-      isScrolled 
-        ? 'bg-white/80 backdrop-blur-xl border-b border-slate-200/50 shadow-lg' 
-        : 'bg-transparent'
-    }`}>
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-        <div className="flex justify-between items-center h-20">
-          {/* Left Side: Logo + Navigation Items */}
-          <div className="flex items-center space-x-8">
-            {/* Logo */}
-            <div 
-              className="flex items-center cursor-pointer group space-x-3"
-              onClick={() => navigate('/')}
-            >
-                              <BluePineLogo className="group-hover:scale-110 transition-transform duration-300" size="lg" />
-              <span className="text-2xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">
-                Blue Pine AI
-              </span>
-            </div>
-
-            {/* Desktop Navigation Items */}
-            <div className="hidden lg:flex items-center space-x-2">
-              <Button 
-                variant="ghost" 
-                onClick={() => navigate('/')}
-                className="text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium px-4 py-2 rounded-lg text-base"
-              >
-                Home
-              </Button>
-              <Button 
-                variant="ghost" 
-                onClick={() => scrollToSection('features')}
-                className="text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium px-4 py-2 rounded-lg text-base"
-              >
-                Features
-              </Button>
-              <Button 
-                variant="ghost" 
-                onClick={() => scrollToSection('ai-explanation')}
-                className="text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium px-4 py-2 rounded-lg text-base"
-              >
-                AI Solutions
-              </Button>
-              <Button 
-                variant="ghost" 
-                onClick={() => scrollToSection('faq')}
-                className="text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium px-4 py-2 rounded-lg text-base"
-              >
-                Resources
-              </Button>
-            </div>
+    <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-[#EAEFF2] border-b border-[#EAEFF2] shadow-sm px-6 sm:px-8 lg:px-12">
+      <div className="flex justify-between items-center h-20 w-full">
+        {/* Left Side: Logo + Navigation Items */}
+        <div className="flex items-center space-x-8 flex-shrink-0">
+          {/* Logo */}
+          <div 
+            className="flex items-center cursor-pointer group space-x-1"
+            onClick={() => navigate('/')}
+          >
+            <BluePineLogo className="group-hover:scale-110 transition-transform duration-300" size="lg" />
+            <span className="text-2xl text-[#004466] font-serif">
+              Blue Pine AI
+            </span>
           </div>
 
-          {/* Right Side: Auth Buttons */}
-          <div className="hidden lg:flex items-center space-x-4">
+          {/* Desktop Navigation Items */}
+          <div className="hidden lg:flex items-center space-x-2">
             <Button 
               variant="ghost" 
-              onClick={() => navigate('/signin')}
-              className="text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium px-6 py-2 rounded-lg text-base"
+              onClick={() => navigate('/')} 
+              className="text-[#333333] hover:text-[#004466] hover:bg-[#EAEFF2] transition-all duration-300 font-medium px-4 py-2 rounded-lg text-base"
             >
-              LOG-IN
+              Home
             </Button>
             <Button 
-              onClick={() => navigate('/waitlist')} 
-              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold px-6 py-2 rounded-lg text-base shadow-lg transition-all duration-300"
+              variant="ghost" 
+              onClick={() => scrollToSection('features')} 
+              className="text-[#333333] hover:text-[#004466] hover:bg-[#EAEFF2] transition-all duration-300 font-medium px-4 py-2 rounded-lg text-base"
             >
-              JOIN WAITLIST
+              Features
             </Button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="lg:hidden flex items-center">
-            <button 
-              onClick={() => setIsOpen(!isOpen)} 
-              className="text-slate-700 p-3 rounded-xl hover:bg-slate-100 transition-all duration-300"
+            <Button 
+              variant="ghost" 
+              onClick={() => scrollToSection('ai-explanation')} 
+              className="text-[#333333] hover:text-[#004466] hover:bg-[#EAEFF2] transition-all duration-300 font-medium px-4 py-2 rounded-lg text-base"
             >
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
+              AI Solutions
+            </Button>
+            <Button 
+              variant="ghost" 
+              onClick={() => scrollToSection('faq')} 
+              className="text-[#333333] hover:text-[#004466] hover:bg-[#EAEFF2] transition-all duration-300 font-medium px-4 py-2 rounded-lg text-base"
+            >
+              Resources
+            </Button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        {isOpen && (
-          <div className="lg:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-slate-200/50 shadow-xl rounded-b-2xl">
-            <div className="px-6 py-8 space-y-4">
+        {/* Right Side: Auth Buttons */}
+        <div className="hidden lg:flex items-center space-x-4 ml-auto">
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate('/signin')} 
+            className="text-[#333333] hover:text-[#004466] hover:bg-[#EAEFF2] transition-all duration-300 font-medium px-6 py-2 rounded-lg text-base"
+          >
+            LOG-IN
+          </Button>
+          <Button 
+            onClick={() => navigate('/demo')} 
+            className="blue-pine-button px-6 py-2 rounded-lg text-base"
+          >
+            DEMO
+          </Button>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <div className="lg:hidden flex items-center">
+          <button 
+            onClick={() => setIsOpen(!isOpen)} 
+            className="text-[#333333] p-3 rounded-xl hover:bg-[#EAEFF2] transition-all duration-300"
+          >
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Navigation */}
+      {isOpen && (
+        <div className="lg:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-[#EAEFF2] shadow-sm rounded-b-lg">
+          <div className="px-6 py-8 space-y-4">
+            <Button 
+              variant="ghost" 
+              className="w-full text-left justify-start text-[#333333] hover:text-[#004466] hover:bg-[#EAEFF2] transition-all duration-300 font-medium text-lg py-4" 
+              onClick={() => {
+                navigate('/');
+                setIsOpen(false);
+              }}
+            >
+              Home
+            </Button>
+            <Button 
+              variant="ghost" 
+              className="w-full text-left justify-start text-[#333333] hover:text-[#004466] hover:bg-[#EAEFF2] transition-all duration-300 font-medium text-lg py-4" 
+              onClick={() => scrollToSection('features')}
+            >
+              Features
+            </Button>
+            <Button 
+              variant="ghost" 
+              className="w-full text-left justify-start text-[#333333] hover:text-[#004466] hover:bg-[#EAEFF2] transition-all duration-300 font-medium text-lg py-4" 
+              onClick={() => scrollToSection('ai-explanation')}
+            >
+              AI Solutions
+            </Button>
+            <Button 
+              variant="ghost" 
+              className="w-full text-left justify-start text-[#333333] hover:text-[#004466] hover:bg-[#EAEFF2] transition-all duration-300 font-medium text-lg py-4" 
+              onClick={() => scrollToSection('faq')}
+            >
+              Resources
+            </Button>
+            
+            {/* Mobile Auth Section */}
+            <div className="pt-6 border-t border-[#EAEFF2]">
               <Button 
                 variant="ghost" 
-                className="w-full text-left justify-start text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium text-lg py-4" 
+                className="w-full text-left justify-start text-[#333333] hover:text-[#004466] hover:bg-[#EAEFF2] transition-all duration-300 font-medium text-lg py-4" 
                 onClick={() => {
-                  navigate('/');
+                  navigate('/signin');
                   setIsOpen(false);
                 }}
               >
-                Home
+                LOG-IN
               </Button>
               <Button 
-                variant="ghost" 
-                className="w-full text-left justify-start text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium text-lg py-4" 
-                onClick={() => scrollToSection('features')}
+                onClick={() => {
+                  navigate('/demo');
+                  setIsOpen(false);
+                }} 
+                className="w-full mt-3 blue-pine-button py-4 rounded-lg text-lg"
               >
-                Features
+                DEMO
               </Button>
-              <Button 
-                variant="ghost" 
-                className="w-full text-left justify-start text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium text-lg py-4" 
-                onClick={() => scrollToSection('ai-explanation')}
-              >
-                AI Solutions
-              </Button>
-              <Button 
-                variant="ghost" 
-                className="w-full text-left justify-start text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium text-lg py-4" 
-                onClick={() => scrollToSection('faq')}
-              >
-                Resources
-              </Button>
-              
-              {/* Mobile Auth Section */}
-              <div className="pt-6 border-t border-slate-200">
-                <Button 
-                  variant="ghost" 
-                  className="w-full text-left justify-start text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300 font-medium text-lg py-4" 
-                  onClick={() => {
-                    navigate('/signin');
-                    setIsOpen(false);
-                  }}
-                >
-                  LOG-IN
-                </Button>
-                <Button 
-                  onClick={() => {
-                    navigate('/waitlist');
-                    setIsOpen(false);
-                  }} 
-                  className="w-full mt-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-4 rounded-xl text-lg shadow-lg"
-                >
-                  JOIN WAITLIST
-                </Button>
-              </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </nav>
   );
 };

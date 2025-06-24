@@ -7,7 +7,7 @@ const Footer = () => {
   
   return (
     <FooterUI
-      logo={<BluePineLogo size="lg" />}
+      logo={<BluePineLogo size="lg" variant="footer" />}
       brandName="Blue Pine AI"
       socialLinks={[]}
       mainLinks={[]}
@@ -25,7 +25,7 @@ const Footer = () => {
         text: `© ${new Date().getFullYear()} Blue Pine AI`,
         license: "All rights reserved"
       }}
-      className="text-right sm:text-left"
+      className="text-right sm:text-left bg-[#004466] text-white border-t border-[#003355]"
     />
   )
 }
