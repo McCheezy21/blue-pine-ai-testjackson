@@ -1,0 +1,64 @@
+{
+  "family": "staging-backend-fixed",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::841283904924:role/staging-ecs-execution-role",
+  "taskRoleArn": "arn:aws:iam::841283904924:role/staging-ecs-task-role",
+  "containerDefinitions": [
+    {
+      "name": "backend",
+      "image": "841283904924.dkr.ecr.us-west-1.amazonaws.com/blue-pine-ai/backend:staging",
+      "portMappings": [
+        {
+          "containerPort": 3001,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "staging"
+        },
+        {
+          "name": "PORT",
+          "value": "3001"
+        },
+        {
+          "name": "AWS_REGION",
+          "value": "us-west-1"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "DATABASE_URL",
+          "valueFrom": "arn:aws:secretsmanager:us-west-1:841283904924:secret:blue-pine-ai-staging-db-password-tiM1JY"
+        },
+        {
+          "name": "JWT_SECRET",
+          "valueFrom": "arn:aws:secretsmanager:us-west-1:841283904924:secret:blue-pine-ai-staging-jwt-secret-iUgDKL"
+        },
+        {
+          "name": "APP_CONFIG",
+          "valueFrom": "arn:aws:secretsmanager:us-west-1:841283904924:secret:blue-pine-ai-staging-app-config-g6AgIP"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/staging-backend",
+          "awslogs-region": "us-west-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "healthCheck": {
+        "command": ["CMD-SHELL", "curl -f http://localhost:3001/api/health || exit 1"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 60
+      }
+    }
+  ]
+} 
