@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CheckCircle, TreePine, Building2 } from "lucide-react";
+import { ArrowLeft, CheckCircle, TreePine, Building2, Shield } from "lucide-react";
 import { initiateSocialLogin, initiateCognitoLogin } from "@/utils/cognitoAuth";
 import { initiatePointClickCareLogin } from "@/utils/pointClickCareAuth";
 import BluePineLogo from "@/components/ui/BluePineLogo";
@@ -60,23 +60,23 @@ const SignIn = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30 relative overflow-hidden">
-      {/* Background Elements */}
+    <div className="min-h-screen bg-white relative overflow-hidden">
+      {/* Background Elements - Blue Pine AI styling */}
       <div className="absolute inset-0">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary/10 to-blue-300/10 rounded-full blur-3xl floating-element"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-blue-200/10 to-primary/10 rounded-full blur-3xl floating-element" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#EAEFF2] rounded-full opacity-20"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-[#EAEFF2] rounded-full opacity-20"></div>
       </div>
 
-      {/* Navigation */}
-      <nav className="relative z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100">
+      {/* Navigation - Blue Pine AI styling */}
+      <nav className="relative z-50 bg-white/90 backdrop-blur-sm border-b border-[#CCCCCC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <button 
               onClick={() => navigate("/")} 
-              className="flex items-center gap-3 text-gray-600 hover:text-primary transition-all duration-300 group"
+              className="flex items-center gap-3 text-[#333333] hover:text-[#004466] transition-all duration-300 group"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              Back to Home
+              <span className="font-medium">Back to Home</span>
             </button>
           </div>
         </div>
@@ -86,10 +86,10 @@ const SignIn = () => {
         <div className="w-full max-w-md">
           {/* Header */}
           <div className={`text-center mb-12 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            {/* Badge */}
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-blue-100/50 border border-primary/20 text-primary font-medium text-sm mb-6">
-              <CheckCircle className="w-4 h-4 mr-2" />
-              Secure Access Portal
+            {/* Trust Badge */}
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#EAEFF2] text-[#004466] font-medium text-sm mb-8">
+              <Shield className="w-4 h-4 mr-2" />
+              HIPAA Compliant Access Portal
             </div>
 
             {/* Logo */}
@@ -97,29 +97,29 @@ const SignIn = () => {
               <div className="flex items-center justify-center mb-4">
                 <BluePineLogo size="xl" />
               </div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent mb-2">
+              <h1 className="text-2xl text-[#004466] font-serif mb-2">
                 Blue Pine AI
               </h1>
-              <p className="text-slate-600 text-lg">
-                Revenue Cycle Automation for SNFs
+              <p className="text-[#666666] text-lg">
+                Revenue Cycle AI for SNFs
               </p>
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="gradient-text">Welcome Back</span>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight leading-none text-[#004466]">
+              Welcome Back
             </h1>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-[#333333] leading-relaxed">
               Continue your revenue cycle transformation
             </p>
           </div>
           
-          {/* Sign In Card */}
-          <div className={`glass-card p-8 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="space-y-4">
+          {/* Sign In Card - Blue Pine AI styling */}
+          <div className={`bg-white p-8 rounded-lg shadow-lg border border-[#CCCCCC] transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className="space-y-6">
               {/* PointClickCare Sign In - Primary Option */}
               <button 
                 onClick={() => handleSocialLogin('PointClickCare')}
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 py-4 px-6 rounded-xl font-semibold group shadow-lg"
+                className="w-full blue-pine-button py-4 px-6 font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group"
                 disabled={isLoading}
               >
                 {loadingProvider === 'PointClickCare' ? (
@@ -127,7 +127,7 @@ const SignIn = () => {
                 ) : (
                   <Building2 className="w-5 h-5 group-hover:scale-110 transition-transform" />
                 )}
-                <span className="font-semibold">
+                <span>
                   {loadingProvider === 'PointClickCare' ? 'Connecting...' : 'Continue with PointClickCare'}
                 </span>
               </button>
@@ -135,21 +135,21 @@ const SignIn = () => {
               {/* Divider */}
               <div className="relative py-2">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-gray-200" />
+                  <span className="w-full border-t border-[#CCCCCC]" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="bg-white px-4 text-gray-500 font-medium">Or continue with</span>
+                  <span className="bg-white px-4 text-[#666666] font-medium">Or continue with</span>
                 </div>
               </div>
 
               {/* Google Sign In */}
               <button 
                 onClick={() => handleSocialLogin('Google')}
-                className="w-full bg-white text-gray-700 border border-gray-200 hover:border-primary/30 hover:bg-gray-50 flex items-center justify-center gap-3 py-4 px-6 rounded-xl transition-all duration-300 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed group"
+                className="w-full bg-white text-[#333333] border border-[#CCCCCC] hover:border-[#004466] hover:bg-[#F8F9FA] flex items-center justify-center gap-3 py-4 px-6 rounded-lg transition-all duration-300 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed group font-medium"
                 disabled={isLoading}
               >
                 {loadingProvider === 'Google' ? (
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-700"></div>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#333333]"></div>
                 ) : (
                   <svg className="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -158,30 +158,30 @@ const SignIn = () => {
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                   </svg>
                 )}
-                <span className="font-medium">
+                <span>
                   {loadingProvider === 'Google' ? 'Connecting...' : 'Continue with Google'}
                 </span>
               </button>
 
               {/* Divider */}
-              <div className="relative py-4">
+              <div className="relative py-2">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-gray-200" />
+                  <span className="w-full border-t border-[#CCCCCC]" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="bg-white px-4 text-gray-500 font-medium">Or continue with</span>
+                  <span className="bg-white px-4 text-[#666666] font-medium">Or continue with</span>
                 </div>
               </div>
 
               {/* Traditional Blue Pine AI Login */}
               <button 
                 onClick={handleCognitoLogin}
-                className="w-full bg-gradient-to-r from-primary to-blue-600 text-white hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 py-4 px-6 rounded-xl font-semibold"
+                className="w-full bg-white text-[#004466] border border-[#004466] hover:bg-[#004466] hover:text-white flex items-center justify-center gap-3 py-4 px-6 rounded-lg transition-all duration-300 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                 disabled={isLoading}
               >
                 {loadingProvider === 'Cognito' ? (
                   <span className="flex items-center gap-2">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
                     Redirecting...
                   </span>
                 ) : (
@@ -191,20 +191,35 @@ const SignIn = () => {
             </div>
             
             <div className="mt-8 text-center space-y-4">
-              <p className="text-gray-600">
-                Don't have an account?{" "}
-                <Link to="/demo" className="text-primary hover:underline font-medium transition-colors">
-                  Join our demo
-                </Link>
-              </p>
+                              <p className="text-[#666666]">
+                  Don't have an account?{' '}
+                  <Link to="/demo" className="text-[#004466] hover:text-[#005580] hover:underline font-medium transition-colors">
+                    Request Demo
+                  </Link>
+                </p>
               
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-[#666666]">
                 <p>
-                  By signing in, you agree to our{" "}
-                  <Link to="/privacy-policy" className="text-primary hover:underline transition-colors">
+                  By signing in, you agree to our{' '}
+                  <Link to="/privacy-policy" className="text-[#004466] hover:text-[#005580] hover:underline transition-colors">
                     Privacy Policy
                   </Link>
                 </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Trust Indicators */}
+          <div className={`mt-8 text-center transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className="flex items-center justify-center space-x-6 text-sm text-[#666666]">
+              <div className="flex items-center space-x-2">
+                <Shield className="w-4 h-4 text-[#004466]" />
+                <span>HIPAA Compliant</span>
+              </div>
+              <div className="w-1 h-1 bg-[#CCCCCC] rounded-full"></div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-4 h-4 text-[#004466]" />
+                <span>SOC 2 Certified</span>
               </div>
             </div>
           </div>

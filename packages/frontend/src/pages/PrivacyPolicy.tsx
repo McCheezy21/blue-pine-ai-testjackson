@@ -1,33 +1,55 @@
-
+import { useEffect, useState } from "react";
+import { Shield, CheckCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const PrivacyPolicy = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
+    <div className="min-h-screen bg-white">
       <Navbar />
-      <div className="max-w-4xl mx-auto px-4 py-24">
-        <div className="text-center mb-12 animate-fade-up">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4">
-            <span className="gradient-text">Privacy Policy</span>
+      
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#EAEFF2] rounded-full opacity-20"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-[#EAEFF2] rounded-full opacity-20"></div>
+      </div>
+
+      <div className="relative max-w-4xl mx-auto px-4 py-24">
+        {/* Header */}
+        <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          {/* Trust Badge */}
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#EAEFF2] text-[#004466] font-medium text-sm mb-8">
+            <Shield className="w-4 h-4 mr-2" />
+            HIPAA Compliant Privacy Policy
+          </div>
+
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight leading-none text-[#004466]">
+            Privacy Policy
           </h1>
-          <p className="text-lg text-gray-600">Last Updated: February 18, 2025</p>
+          <p className="text-xl text-[#666666]">Last Updated: February 18, 2025</p>
         </div>
         
         <div className="space-y-8">
-          <div className="modern-card p-8 animate-fade-up">
+          {/* Introduction */}
+          <div className={`bg-white p-8 rounded-lg shadow-lg border border-[#CCCCCC] transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="prose prose-lg max-w-none">
-              <p className="text-gray-700 text-lg leading-relaxed">
+              <p className="text-[#333333] text-lg leading-relaxed">
                 This privacy notice for Blue Pine AI LLC ("Company," "we," "us," or "our"), describes how and why we might collect, store, use, and/or share ("process") your information when you use our services ("Services"), such as when you:
               </p>
-              <ul className="list-disc ml-6 mt-6 text-gray-700 space-y-2">
+              <ul className="list-disc ml-6 mt-6 text-[#333333] space-y-2">
                 <li>Visit our website at https://bluepineai.com/, or any website of ours that links to this privacy notice</li>
                 <li>Engage with us in other related ways, including any sales, marketing, or events</li>
               </ul>
-              <div className="mt-6 p-6 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border-l-4 border-primary">
-                <p className="text-gray-700">
-                  <strong className="text-primary">Questions or concerns?</strong> Reading this privacy notice will help you understand your privacy rights and choices. If you do not agree with our policies and practices, please do not use our Services. If you still have any questions or concerns, please contact us at{" "}
-                  <a href="mailto:contact@bluepineai.com" className="text-primary hover:text-blue-700 transition-colors duration-300 hover:underline">
+              <div className="mt-6 p-6 bg-[#EAEFF2] rounded-lg border border-[#CCCCCC]">
+                <p className="text-[#333333]">
+                  <strong className="text-[#004466]">Questions or concerns?</strong> Reading this privacy notice will help you understand your privacy rights and choices. If you do not agree with our policies and practices, please do not use our Services. If you still have any questions or concerns, please contact us at{' '}
+                  <a href="mailto:contact@bluepineai.com" className="text-[#004466] hover:text-[#005580] transition-colors duration-300 hover:underline">
                     contact@bluepineai.com
                   </a>
                 </p>
@@ -35,13 +57,15 @@ const PrivacyPolicy = () => {
             </div>
           </div>
 
-          <section className="modern-card p-8 animate-fade-up">
-            <h2 className="text-3xl font-semibold text-primary mb-6">Summary</h2>
-            <p className="text-gray-700 text-lg leading-relaxed">
+          {/* Summary */}
+          <section className={`bg-white p-8 rounded-lg shadow-lg border border-[#CCCCCC] transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <h2 className="text-3xl font-bold text-[#004466] mb-6">Summary</h2>
+            <p className="text-[#333333] text-lg leading-relaxed">
               This Privacy Policy explains how Blue Pine AI LLC collects, uses, discloses, and protects your information when you use our services. We process Protected Health Information (PHI) but do not store any PHI on our servers. Our goal is to ensure transparency and safeguard your privacy. By using our services, you acknowledge and agree to the terms outlined in this policy.
             </p>
           </section>
 
+          {/* Policy Sections */}
           <div className="space-y-6">
             {[
               {
@@ -134,8 +158,8 @@ const PrivacyPolicy = () => {
                 title: "10. Contact Us",
                 content: (
                   <p>
-                    If you have any questions about this Privacy Policy, contact us at{" "}
-                    <a href="mailto:contact@bluepineai.com" className="text-primary hover:text-blue-700 transition-colors duration-300 hover:underline">
+                    If you have any questions about this Privacy Policy, contact us at{' '}
+                    <a href="mailto:contact@bluepineai.com" className="text-[#004466] hover:text-[#005580] transition-colors duration-300 hover:underline">
                       contact@bluepineai.com
                     </a>
                   </p>
@@ -144,13 +168,32 @@ const PrivacyPolicy = () => {
             ].map((section, index) => (
               <section 
                 key={section.title} 
-                className="modern-card p-8 animate-fade-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                className={`bg-white p-8 rounded-lg shadow-lg border border-[#CCCCCC] transition-all duration-1000 delay-${400 + (index * 100)} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
               >
-                <h2 className="text-2xl font-semibold text-primary mb-6">{section.title}</h2>
-                <div className="text-gray-700 text-lg leading-relaxed">{section.content}</div>
+                <h2 className="text-2xl font-bold text-[#004466] mb-6">{section.title}</h2>
+                <div className="text-[#333333] text-lg leading-relaxed">{section.content}</div>
               </section>
             ))}
+          </div>
+
+          {/* Trust Indicators */}
+          <div className={`mt-12 text-center transition-all duration-1000 delay-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className="flex items-center justify-center space-x-8 text-sm text-[#666666]">
+              <div className="flex items-center space-x-2">
+                <Shield className="w-5 h-5 text-[#004466]" />
+                <span>HIPAA Compliant</span>
+              </div>
+              <div className="w-1 h-1 bg-[#CCCCCC] rounded-full"></div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-5 h-5 text-[#004466]" />
+                <span>SOC 2 Certified</span>
+              </div>
+              <div className="w-1 h-1 bg-[#CCCCCC] rounded-full"></div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-5 h-5 text-[#004466]" />
+                <span>Healthcare Privacy Protected</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
