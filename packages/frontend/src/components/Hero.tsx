@@ -49,15 +49,17 @@ const Hero = () => {
 
           {/* Main headline - professional typography with subtle animation */}
           <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight leading-none transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-            <span className="text-[#004466]">SNF Revenue Cycle Made Effortless:</span>
+            <span className="text-[#004466]">SNF Revenue Cycle Made</span>
             <br />
-            <span className="text-[#004466]">AI does the work</span>
+            <span className="text-[#004466]">
+              Effortless
+            </span>
           </h1>
 
           {/* Subheadline - calm and benefit-focused */}
           <div className={`flex justify-center mb-8 transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             <p className="text-[#004466] font-semibold tracking-wide text-xl md:text-2xl">
-              Maximize Revenue | Reduce Denials | Automate Cashflow
+              AI does the work • You get the results
             </p>
           </div>
 
