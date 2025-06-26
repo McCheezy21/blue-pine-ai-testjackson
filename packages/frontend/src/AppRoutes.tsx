@@ -15,6 +15,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import TenantProtectedRoute from "./components/TenantProtectedRoute";
 import TenantDashboard from "./components/TenantDashboard";
 import PointClickCareCallback from "./components/PointClickCareCallback";
+import SSOCallback from "./components/SSOCallback";
 import { getUserInfo } from "./utils/cognitoAuth";
 
 const Unauthorized = () => {
@@ -81,6 +82,12 @@ const AppRoutes = () => {
         
         {/* PointClickCare OAuth Callback */}
         <Route path="/auth/pointclickcare/callback" element={<PointClickCareCallback />} />
+        
+        {/* SSO Callback */}
+        <Route path="/auth/sso/callback" element={<SSOCallback onAuthSuccess={(token, user) => {
+          console.log('SSO authentication successful', user);
+          // Handle successful SSO authentication
+        }} />} />
         
         {/* Admin routes */}
         <Route path="/admin" element={<Admin />} />
