@@ -16,7 +16,7 @@ resource "aws_acm_certificate" "cloudfront" {
   provider = aws.us_east_1
 
   domain_name               = var.domain_name
-  subject_alternative_names = ["*.${var.domain_name}"]
+  subject_alternative_names = concat(["*.${var.domain_name}"], var.additional_domain_names)
   validation_method         = "DNS"
 
   lifecycle {
@@ -81,7 +81,8 @@ resource "aws_cloudfront_distribution" "main" {
   comment             = "Blue Pine AI CDN"
   default_root_object = "index.html"
 
-  # aliases = [var.domain_name]  # Temporarily disabled to avoid CNAME conflict
+  # Add aliases for custom domain names
+  aliases = concat([var.domain_name, "www.${var.domain_name}"], var.additional_domain_names)
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]

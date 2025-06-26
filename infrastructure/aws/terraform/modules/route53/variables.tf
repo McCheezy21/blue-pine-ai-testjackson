@@ -5,6 +5,12 @@ variable "domain_name" {
   type        = string
 }
 
+variable "additional_domain_names" {
+  description = "Additional domain names to create DNS records for"
+  type        = list(string)
+  default     = []
+}
+
 variable "cloudfront_domain_name" {
   description = "CloudFront distribution domain name"
   type        = string

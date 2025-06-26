@@ -155,6 +155,12 @@ module "cloudfront" {
   name_prefix = local.name_prefix
   domain_name = var.domain_name
   
+  # Additional domain names for staging
+  additional_domain_names = [
+    "staging.${var.domain_name}",
+    "www.staging.${var.domain_name}"
+  ]
+  
   # ALB as origin
   alb_domain_name = module.alb.alb_dns_name
   
@@ -166,6 +172,12 @@ module "route53" {
   source = "./modules/route53"
   
   domain_name = var.domain_name
+  
+  # Additional domain names for staging
+  additional_domain_names = [
+    "staging.${var.domain_name}",
+    "www.staging.${var.domain_name}"
+  ]
   
   # CloudFront distribution
   cloudfront_domain_name = module.cloudfront.distribution_domain_name

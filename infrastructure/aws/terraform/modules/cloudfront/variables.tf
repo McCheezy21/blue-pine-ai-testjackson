@@ -10,6 +10,12 @@ variable "domain_name" {
   type        = string
 }
 
+variable "additional_domain_names" {
+  description = "Additional domain names to include in the CloudFront distribution and SSL certificate"
+  type        = list(string)
+  default     = []
+}
+
 variable "alb_domain_name" {
   description = "ALB domain name as origin"
   type        = string
