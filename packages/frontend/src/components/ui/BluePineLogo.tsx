@@ -19,9 +19,10 @@ const BluePineLogo: React.FC<BluePineLogoProps> = ({
 
   return (
     <img
-      src="/lovable-uploads/408a9d6d-f5ef-4982-8932-336aecfb2915.png"
+      src="/blue-pine-logo.png"
       alt="Blue Pine AI Logo"
       className={`${sizeClasses[size]} ${className} object-contain`}
+      draggable={false}
     />
   );
 };
