@@ -35,28 +35,25 @@ export const Sidebar = ({ activeView, setActiveView, expanded, setExpanded }: Si
       path: `/tenant/${tenantId}/dashboard`,
     },
     {
-      id: 'insurance' as DashboardView,
+      id: 'insurance',
       icon: Image,
       label: 'Insurance Cards',
       description: 'Upload & Process Cards',
-      onClick: () => setActiveView('insurance'),
-      isDashboardView: true,
+      path: `/tenant/${tenantId}/insurance`,
     },
     {
-      id: 'automation' as DashboardView,
+      id: 'automation',
       icon: Activity,
       label: 'Automation Services',
       description: 'AI-Powered Workflows',
-      onClick: () => setActiveView('automation'),
-      isDashboardView: true,
+      path: `/tenant/${tenantId}/automation`,
     },
     {
-      id: 'services' as DashboardView,
+      id: 'services',
       icon: Settings,
       label: 'Reports & Analytics',
       description: 'Insights & Performance',
-      onClick: () => setActiveView('services'),
-      isDashboardView: true,
+      path: `/tenant/${tenantId}/reports`,
     },
   ];
 
@@ -97,62 +94,22 @@ export const Sidebar = ({ activeView, setActiveView, expanded, setExpanded }: Si
       {/* Navigation */}
       <nav className="mt-6 px-3 flex-1">
         {menuItems.map((item, index) => {
-          // For AI Home and Dashboard, use path navigation
-          if (item.path) {
-            const isActive = currentPath === item.path;
-            return (
-              <button
-                key={item.id}
-                onClick={() => navigate(item.path!)}
-                className={`w-full flex items-center gap-3 px-3 py-3 mb-2 text-left rounded-lg transition-all duration-200 group overflow-hidden ${
-                  isActive 
-                    ? 'bg-[#004466] text-white' 
-                    : 'text-[#333333] hover:bg-[#EAEFF2]'
-                }`}
-              >
-                {isActive && (
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#004466] rounded-r" />
-                )}
-                <div className={`w-5 h-5 flex items-center justify-center transition-colors duration-200 ${
-                  isActive ? 'text-white' : 'text-[#333333]/70'
-                }`}>
-                  <item.icon className="h-5 w-5" />
-                </div>
-                <div className={`flex-1 min-w-0 transition-all duration-200 ease-out ${
-                  expanded 
-                    ? 'opacity-100 w-auto' 
-                    : 'opacity-0 w-0'
-                }`}>
-                  <div className={`font-medium whitespace-nowrap ${
-                    isActive ? 'text-white' : 'text-[#333333]'
-                  }`}>
-                    {item.label}
-                  </div>
-                  <div className={`text-xs whitespace-nowrap transition-colors duration-200 ${
-                    isActive ? 'text-white/80' : 'text-[#333333]/60'
-                  }`}>
-                    {item.description}
-                  </div>
-                </div>
-              </button>
-            );
-          }
-          // For dashboard views, use setActiveView
+          const isActive = currentPath === item.path;
           return (
             <button
               key={item.id}
-              onClick={item.onClick}
+              onClick={() => navigate(item.path!)}
               className={`w-full flex items-center gap-3 px-3 py-3 mb-2 text-left rounded-lg transition-all duration-200 group overflow-hidden ${
-                activeView === item.id 
+                isActive 
                   ? 'bg-[#004466] text-white' 
                   : 'text-[#333333] hover:bg-[#EAEFF2]'
               }`}
             >
-              {activeView === item.id && (
+              {isActive && (
                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#004466] rounded-r" />
               )}
               <div className={`w-5 h-5 flex items-center justify-center transition-colors duration-200 ${
-                activeView === item.id ? 'text-white' : 'text-[#333333]/70'
+                isActive ? 'text-white' : 'text-[#333333]/70'
               }`}>
                 <item.icon className="h-5 w-5" />
               </div>
@@ -162,12 +119,12 @@ export const Sidebar = ({ activeView, setActiveView, expanded, setExpanded }: Si
                   : 'opacity-0 w-0'
               }`}>
                 <div className={`font-medium whitespace-nowrap ${
-                  activeView === item.id ? 'text-white' : 'text-[#333333]'
+                  isActive ? 'text-white' : 'text-[#333333]'
                 }`}>
                   {item.label}
                 </div>
                 <div className={`text-xs whitespace-nowrap transition-colors duration-200 ${
-                  activeView === item.id ? 'text-white/80' : 'text-[#333333]/60'
+                  isActive ? 'text-white/80' : 'text-[#333333]/60'
                 }`}>
                   {item.description}
                 </div>
