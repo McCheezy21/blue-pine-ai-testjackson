@@ -59,25 +59,6 @@ const TenantDashboard = ({ user }: TenantDashboardProps) => {
       default:
         return (
           <div className="space-y-6">
-            {/* Healthcare Professional Welcome Section */}
-            <div className={`bg-white border border-[#CCCCCC] rounded-lg shadow-sm transition-all duration-500 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}>
-              <div className="p-8 text-center">
-                <div className="flex items-center justify-center mb-6">
-                  <div className="w-16 h-16 bg-[#004466] rounded-lg flex items-center justify-center">
-                    <Activity className="w-8 h-8 text-white" />
-                  </div>
-                </div>
-                <h1 className="text-3xl font-semibold text-[#333333] mb-3">
-                  Welcome, {user.tenant.name}
-                </h1>
-                <p className="text-[#333333]/70 text-lg max-w-2xl mx-auto">
-                  Healthcare Revenue Cycle Management Platform
-                </p>
-              </div>
-            </div>
-
             {/* Dashboard Content */}
             <div className={`transition-all duration-500 delay-200 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'

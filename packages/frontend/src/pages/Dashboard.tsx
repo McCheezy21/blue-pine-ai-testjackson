@@ -142,10 +142,10 @@ const Dashboard = () => {
           if (tenants.length === 1) {
             // User has access to exactly one tenant - redirect directly
             const tenant = tenants[0];
-            const tenantDashboardUrl = `/tenant/${tenant.id}/dashboard`;
+            const tenantWelcomeUrl = `/tenant/${tenant.id}/welcome`;
             console.log(`🎯 Auto-redirecting to single accessible tenant: ${tenant.name} (${tenant.id})`);
-            console.log(`🔗 Redirecting to: ${tenantDashboardUrl}`);
-            window.location.href = tenantDashboardUrl;
+            console.log(`🔗 Redirecting to: ${tenantWelcomeUrl}`);
+            window.location.href = tenantWelcomeUrl;
             return;
           } else if (tenants.length > 1) {
             // User has access to multiple tenants - redirect to tenant selector
@@ -188,7 +188,7 @@ const Dashboard = () => {
               
               if (fallbackTenantId) {
                 console.log(`🔓 FALLBACK SUCCESS: Redirecting ${emailDomain} to tenant ${fallbackTenantId}`);
-                window.location.href = `/tenant/${fallbackTenantId}/dashboard`;
+                window.location.href = `/tenant/${fallbackTenantId}/welcome`;
                 return;
               } else {
                 console.error(`🚨 SECURITY: Unknown domain "${emailDomain}" with database unavailable - failing secure`);
@@ -225,7 +225,7 @@ const Dashboard = () => {
         
         if (fallbackTenantId) {
           console.log(`🔓 FALLBACK SUCCESS (Network Error): Redirecting ${emailDomain} to tenant ${fallbackTenantId}`);
-          window.location.href = `/tenant/${fallbackTenantId}/dashboard`;
+          window.location.href = `/tenant/${fallbackTenantId}/welcome`;
           return;
         }
         
