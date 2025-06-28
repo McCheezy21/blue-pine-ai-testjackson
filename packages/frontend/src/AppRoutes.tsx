@@ -17,6 +17,7 @@ import TenantDashboard from "./components/TenantDashboard";
 import PointClickCareCallback from "./components/PointClickCareCallback";
 import SSOCallback from "./components/SSOCallback";
 import { getUserInfo } from "./utils/cognitoAuth";
+import TenantWelcome from "./pages/TenantWelcome";
 
 const Unauthorized = () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -93,6 +94,12 @@ const AppRoutes = () => {
         <Route path="/admin" element={<Admin />} />
         
         {/* Multi-tenant routing */}
+        <Route path="/tenant/:tenantId/welcome" element={
+          <TenantProtectedRoute>
+            {(user) => <TenantWelcome />}
+          </TenantProtectedRoute>
+        } />
+        <Route path="/tenant/:tenantId" element={<Navigate to="/tenant/:tenantId/welcome" replace />} />
         <Route path="/tenant/:tenantId/dashboard" element={
           <TenantProtectedRoute>
             {(user) => <TenantDashboard user={user} />}
