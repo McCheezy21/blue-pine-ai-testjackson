@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { Sidebar } from "@/components/dashboard/Sidebar";
-import { Header } from "@/components/dashboard/Header";
+import { TopNavigation } from "@/components/dashboard/TopNavigation";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
 import { InsuranceCardService } from "@/components/dashboard/InsuranceCardService";
 import { AutomationServices } from "@/components/dashboard/AutomationServices";
@@ -18,7 +17,6 @@ interface TenantDashboardProps {
 
 const TenantDashboard = ({ user }: TenantDashboardProps) => {
   const [activeView, setActiveView] = useState<DashboardView>('home');
-  const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [showReports, setShowReports] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -76,18 +74,13 @@ const TenantDashboard = ({ user }: TenantDashboardProps) => {
 
   return (
     <div className="min-h-screen bg-[#EAEFF2] font-['Inter',system-ui,sans-serif]">
-      <Sidebar 
+      <TopNavigation 
         activeView={activeView}
         setActiveView={setActiveView}
-        expanded={sidebarExpanded}
-        setExpanded={setSidebarExpanded}
       />
-      <div className={`transition-all duration-300 ${sidebarExpanded ? 'ml-64' : 'ml-16'}`}>
-        <Header onSettingsClick={() => {}} />
-        <main className="p-6">
-          {renderContent()}
-        </main>
-      </div>
+      <main className="p-6">
+        {renderContent()}
+      </main>
       
       {/* ChatInterface available on ALL dashboard pages with authentication */}
       <ChatInterface 
