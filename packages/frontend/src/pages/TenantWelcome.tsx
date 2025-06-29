@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getTenantInfo } from '@/utils/tenantAuth';
 import { ChatInterface } from '@/components/dashboard/ChatInterface';
-import { Sidebar } from '@/components/dashboard/Sidebar';
-import { Header } from '@/components/dashboard/Header';
+import { TopNavigation } from '@/components/dashboard/TopNavigation';
 import { DashboardView } from '@/pages/Dashboard';
 import { Sparkles } from 'lucide-react';
 
@@ -18,7 +17,6 @@ const TenantWelcome = () => {
   const [tenantName, setTenantName] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [activeView, setActiveView] = useState<DashboardView>('home');
 
   useEffect(() => {
@@ -55,43 +53,36 @@ const TenantWelcome = () => {
 
   return (
     <div className="min-h-screen bg-[#EAEFF2] font-['Inter',system-ui,sans-serif]">
-      <Sidebar 
+      <TopNavigation 
         activeView={activeView}
         setActiveView={setActiveView}
-        expanded={sidebarExpanded}
-        setExpanded={setSidebarExpanded}
       />
-      <div className={`transition-all duration-300 ${sidebarExpanded ? 'ml-64' : 'ml-16'}`}> 
-        <Header onSettingsClick={() => {}} />
-        <main className="p-6 flex flex-col items-center justify-center min-h-[80vh]">
-          <div className="flex flex-col items-center mt-10 mb-6">
-            <span className="rounded-full bg-[#EAEFF2] p-3 mb-4">
-              <Sparkles className="w-8 h-8 text-[#004466]" />
-            </span>
-            <h1 className="text-4xl font-bold text-[#004466] mb-2">Hi, {tenantName}!</h1>
+      <main className="p-6 flex flex-col items-center justify-center min-h-[80vh]">
+        <div className="flex flex-col items-center mt-10 mb-6">
+          <span className="rounded-full bg-[#EAEFF2] p-3 mb-4">
+            <Sparkles className="w-8 h-8 text-[#004466]" />
+          </span>
+          <h1 className="text-4xl font-bold text-[#004466] mb-2">Hi, {tenantName}!</h1>
+        </div>
+        {/* Chat Card */}
+        <div className="w-full max-w-3xl flex flex-col items-center justify-center">
+          <div className="w-full bg-white rounded-3xl shadow-2xl border border-[#CCCCCC] p-0 h-[520px] flex flex-col">
+            <ChatInterface tenantId={tenantId!} userToken={userToken} embeddedMode={true} className="h-full" />
           </div>
-          {/* Chat Card */}
-          <div className="w-full max-w-3xl flex flex-col items-center justify-center">
-            <div className="w-full bg-white rounded-3xl shadow-2xl border border-[#CCCCCC] p-0 h-[520px] flex flex-col justify-between transition-all duration-300">
-              <div className="flex-1 flex flex-col justify-end h-full overflow-y-auto min-h-0">
-                <ChatInterface tenantId={tenantId!} userToken={userToken} embeddedMode={true} />
-              </div>
-            </div>
-            {/* Example action buttons below the chat card */}
-            <div className="flex flex-row gap-4 justify-center mt-10">
-              {exampleActions.map((action) => (
-                <button
-                  key={action.label}
-                  onClick={action.onClick}
-                  className="px-8 py-4 rounded-2xl bg-white shadow border border-[#CCCCCC] text-lg font-semibold text-[#004466] hover:bg-[#EAEFF2] hover:border-[#005580] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#004466]"
-                >
-                  {action.label}
-                </button>
-              ))}
-            </div>
+          {/* Example action buttons below the chat card */}
+          <div className="flex flex-row gap-4 justify-center mt-10">
+            {exampleActions.map((action) => (
+              <button
+                key={action.label}
+                onClick={action.onClick}
+                className="px-8 py-4 rounded-2xl bg-white shadow border border-[#CCCCCC] text-lg font-semibold text-[#004466] hover:bg-[#EAEFF2] hover:border-[#005580] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#004466]"
+              >
+                {action.label}
+              </button>
+            ))}
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 };

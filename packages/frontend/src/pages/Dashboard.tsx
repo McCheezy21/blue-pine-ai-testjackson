@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sidebar } from "@/components/dashboard/Sidebar";
-import { Header } from "@/components/dashboard/Header";
+import { TopNavigation } from "@/components/dashboard/TopNavigation";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
 import { InsuranceCardService } from "@/components/dashboard/InsuranceCardService";
 import { AutomationServices } from "@/components/dashboard/AutomationServices";
@@ -12,7 +11,6 @@ export type DashboardView = 'home' | 'insurance' | 'automation' | 'services';
 
 const Dashboard = () => {
   const [activeView, setActiveView] = useState<DashboardView>('home');
-  const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [showReports, setShowReports] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
@@ -288,29 +286,14 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen flex w-full bg-gray-50">
-      <Sidebar 
-        activeView={activeView} 
+    <div className="min-h-screen bg-[#EAEFF2] font-['Inter',system-ui,sans-serif]">
+      <TopNavigation 
+        activeView={activeView}
         setActiveView={setActiveView}
-        expanded={sidebarExpanded}
-        setExpanded={setSidebarExpanded}
       />
-      
-      {/* Main content area with smooth transition */}
-      <div 
-        className={`flex-1 transition-all duration-300 ease-in-out ${
-          sidebarExpanded ? 'ml-64' : 'ml-20'
-        }`}
-      >
-        {/* Header with user profile dropdown */}
-        <Header onSettingsClick={() => {}} />
-        
-        <main className="h-full">
-          {renderContent()}
-        </main>
-      </div>
-
-
+      <main className="p-6">
+        {renderContent()}
+      </main>
     </div>
   );
 };

@@ -76,11 +76,12 @@ interface ChatInterfaceProps {
   tenantId?: string;
   userToken?: string;
   embeddedMode?: boolean;
+  className?: string;
 }
 
 const INACTIVITY_TIMEOUT_MS = 20 * 60 * 1000; // 20 minutes
 
-export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embeddedMode = false }: ChatInterfaceProps) => {
+export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embeddedMode = false, className }: ChatInterfaceProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>(globalChatState.messages);
   const [isOpen, setIsOpen] = useState(globalChatState.isOpen);
   const [isMinimized, setIsMinimized] = useState(globalChatState.isMinimized);
@@ -769,8 +770,8 @@ export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embed
 
       {/* Embedded mode: always show chat window in place */}
       {embeddedMode && (
-        <div className="flex flex-col h-full">
-          <div className="flex-1 min-h-0 overflow-y-auto space-y-3 bg-white p-4 flex flex-col justify-end rounded-3xl">
+        <div className={`flex flex-col h-full ${className || ''}`}>
+          <div className="flex-1 min-h-0 overflow-y-auto flex flex-col justify-end space-y-3 bg-white p-4 rounded-3xl">
             {messages.length === 0 && (
               <div className="flex flex-1 items-center justify-center">
                 <div className="text-2xl md:text-3xl text-[#CCCCCC] text-center font-medium select-none" style={{lineHeight: 1.3}}>
