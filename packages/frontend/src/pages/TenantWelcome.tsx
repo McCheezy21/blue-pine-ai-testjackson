@@ -71,9 +71,9 @@ const TenantWelcome = () => {
             <h1 className="text-4xl font-bold text-[#004466] mb-2">Hi, {tenantName}!</h1>
           </div>
           {/* Chat Card */}
-          <div className="w-full max-w-2xl flex flex-col items-center justify-center">
-            <div className="w-full bg-white rounded-3xl shadow-2xl border border-[#CCCCCC] p-0 min-h-[420px] flex flex-col justify-between transition-all duration-300">
-              <div className="flex-1 flex flex-col justify-end">
+          <div className="w-full max-w-3xl flex flex-col items-center justify-center">
+            <div className="w-full bg-white rounded-3xl shadow-2xl border border-[#CCCCCC] p-0 h-[520px] flex flex-col justify-between transition-all duration-300">
+              <div className="flex-1 flex flex-col justify-end h-full overflow-y-auto min-h-0">
                 <ChatInterface tenantId={tenantId!} userToken={userToken} embeddedMode={true} />
               </div>
             </div>
