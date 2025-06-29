@@ -1,28 +1,20 @@
 import React from 'react';
+import logo from '@/assets/logo.png';
 
 interface BluePineLogoProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 }
 
-const BluePineLogo: React.FC<BluePineLogoProps> = ({ 
-  className = '', 
-  size = 'lg' 
-}) => {
-  const sizeClasses = {
-    sm: 'w-8 h-9',
-    md: 'w-10 h-11',
-    lg: 'w-12 h-14',
-    xl: 'w-16 h-18',
-    xxl: 'w-20 h-22'
-  };
-
+const BluePineLogo: React.FC<BluePineLogoProps> = ({ size = "md", className = "" }) => {
+  let dimension = "h-8 w-8";
+  if (size === "lg") dimension = "h-12 w-12";
+  if (size === "xl") dimension = "h-16 w-16";
   return (
     <img
-      src="/blue-pine-logo.png"
+      src={logo}
       alt="Blue Pine AI Logo"
-      className={`${sizeClasses[size]} ${className} object-contain`}
-      draggable={false}
+      className={`${dimension} ${className}`}
     />
   );
 };
