@@ -12,7 +12,7 @@ import {
   AlertDialogHeader, 
   AlertDialogTitle 
 } from "@/components/ui/alert-dialog";
-import { X, Send, MessageCircle, Minimize2, Maximize2, AlertCircle, Loader2, Expand, Shrink, ThumbsUp, ThumbsDown, MessageSquare, Star } from "lucide-react";
+import { X, Send, MessageCircle, Minimize2, Maximize2, AlertCircle, Loader2, Expand, Shrink, ThumbsUp, ThumbsDown, MessageSquare, Star, Paperclip } from "lucide-react";
 
 interface ChatMessage {
   id: string;
@@ -78,6 +78,8 @@ interface ChatInterfaceProps {
   embeddedMode?: boolean;
 }
 
+const INACTIVITY_TIMEOUT_MS = 20 * 60 * 1000; // 20 minutes
+
 export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embeddedMode = false }: ChatInterfaceProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>(globalChatState.messages);
   const [isOpen, setIsOpen] = useState(globalChatState.isOpen);
@@ -109,6 +111,19 @@ export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embed
   });
   const [isSubmittingRating, setIsSubmittingRating] = useState(false);
 
+  const [showInactivityModal, setShowInactivityModal] = useState(false);
+  const [inactivityRating, setInactivityRating] = useState(0);
+  const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  // Add tooltip state for hover
+  const [showFileTooltip, setShowFileTooltip] = useState(false);
+
+  // Always focus the input after sending and on mount
+  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef2 = useRef<HTMLInputElement>(null);
+
   // Subscribe to global state changes
   useEffect(() => {
     return globalChatState.subscribe((state) => {
@@ -137,16 +152,91 @@ export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embed
     scrollToBottom();
   }, [messages]);
 
+  // Reset inactivity timer
+  const resetInactivityTimer = () => {
+    if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
+    inactivityTimerRef.current = setTimeout(() => {
+      setShowInactivityModal(true);
+    }, INACTIVITY_TIMEOUT_MS);
+  };
+
+  // Reset timer on user message or chat interaction
+  useEffect(() => {
+    resetInactivityTimer();
+    return () => {
+      if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
+    };
+  }, [messages, isOpen, isMinimized]);
+
+  // Also reset timer on input change (user is typing)
+  useEffect(() => {
+    resetInactivityTimer();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputValue]);
+
+  // Hide modal and reset timer if user interacts with chat after inactivity
+  const handleCloseInactivityModal = () => {
+    setShowInactivityModal(false);
+    setInactivityRating(0);
+    resetInactivityTimer();
+  };
+
+  // Submit inactivity rating (reuse conversationId, etc.)
+  const handleSubmitInactivityRating = async () => {
+    if (inactivityRating === 0) {
+      alert('Please select a rating.');
+      return;
+    }
+    setIsSubmittingRating(true);
+    try {
+      await fetch(`http://localhost:3001/api/tenants/${tenantId}/chat/rating`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userToken}`
+        },
+        body: JSON.stringify({
+          conversation_id: conversationId,
+          overall_rating: inactivityRating,
+          conversation_length: messages.length,
+          conversation_duration_seconds: Math.floor((Date.now() - conversationStartTime) / 1000),
+          source: 'inactivity_modal'
+        })
+      });
+      setShowInactivityModal(false);
+      setInactivityRating(0);
+      resetInactivityTimer();
+    } catch (error) {
+      alert('Failed to submit rating.');
+    } finally {
+      setIsSubmittingRating(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() && !selectedFile) return;
 
-    const userMessage: ChatMessage = {
+    let userMessage: ChatMessage = {
       id: Date.now().toString(),
       text: inputValue,
       sender: 'user',
-      timestamp: new Date()
+      timestamp: new Date(),
     };
+
+    // If a file is selected, add a fileUrl and fileName to the message
+    let fileUrl: string | undefined = undefined;
+    let fileName: string | undefined = undefined;
+    let fileType: string | undefined = undefined;
+    if (selectedFile) {
+      fileUrl = URL.createObjectURL(selectedFile);
+      fileName = selectedFile.name;
+      fileType = selectedFile.type;
+      // Attach file info to message
+      (userMessage as any).fileUrl = fileUrl;
+      (userMessage as any).fileName = fileName;
+      (userMessage as any).fileType = fileType;
+    }
 
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
@@ -159,6 +249,7 @@ export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embed
     
     const currentMessage = inputValue;
     setInputValue("");
+    setSelectedFile(null);
     setIsLoading(true);
 
     try {
@@ -412,6 +503,16 @@ export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embed
     });
   };
 
+  // Always focus the input after sending and on mount
+  useEffect(() => {
+    if (inputRef.current) inputRef.current.focus();
+    if (inputRef2.current) inputRef2.current.focus();
+  }, []);
+  useEffect(() => {
+    if (inputRef.current) inputRef.current.focus();
+    if (inputRef2.current) inputRef2.current.focus();
+  }, [messages]);
+
   return (
     <>
       {/* Chat Input Bar - only show on dashboard or embedded mode */}
@@ -428,6 +529,7 @@ export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embed
             <form onSubmit={handleSubmit} className="flex gap-3 items-center">
               <div className="flex-1 relative">
                 <Input
+                  ref={inputRef}
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder={isLoading ? "AI is responding..." : "Ask Blue Pine AI anything..."}
@@ -561,6 +663,17 @@ export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embed
                             </div>
                           )}
                           <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                          {(message as any).fileUrl && (
+                            <div className="mt-2">
+                              {((message as any).fileType || '').startsWith('image/') ? (
+                                <img src={(message as any).fileUrl} alt={(message as any).fileName} className="max-w-xs max-h-40 rounded shadow border" />
+                              ) : (
+                                <a href={(message as any).fileUrl} download={(message as any).fileName} className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">
+                                  {(message as any).fileName || 'Download file'}
+                                </a>
+                              )}
+                            </div>
+                          )}
                           <p className={`text-xs mt-1 ${
                             message.sender === 'user' 
                               ? 'text-blue-100' 
@@ -597,7 +710,35 @@ export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embed
                       </div>
                     ) : (
                       <form onSubmit={handleSubmit} className="flex gap-2">
+                        {/* + Button for file upload with tooltip */}
+                        <div className="relative flex items-center">
+                          <label
+                            className="flex items-center cursor-pointer"
+                            onMouseEnter={() => setShowFileTooltip(true)}
+                            onMouseLeave={() => setShowFileTooltip(false)}
+                          >
+                            <Paperclip className="h-5 w-5 text-gray-500 hover:text-blue-600" />
+                            <input
+                              type="file"
+                              className="hidden"
+                              onChange={e => {
+                                if (e.target.files && e.target.files[0]) setSelectedFile(e.target.files[0]);
+                              }}
+                              accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx,.txt"
+                            />
+                          </label>
+                          {showFileTooltip && (
+                            <div className="absolute left-1/2 -translate-x-1/2 top-8 z-50 bg-gray-800 text-white text-xs rounded px-2 py-1 shadow-lg whitespace-nowrap">
+                              Add photos and files
+                            </div>
+                          )}
+                        </div>
+                        {/* Show filename if file selected */}
+                        {selectedFile && (
+                          <span className="text-xs text-gray-600 max-w-[120px] truncate">{selectedFile.name}</span>
+                        )}
                         <Input
+                          ref={inputRef}
                           value={inputValue}
                           onChange={(e) => setInputValue(e.target.value)}
                           placeholder={isLoading ? "AI is responding..." : "Ask about healthcare RCM..."}
@@ -607,7 +748,7 @@ export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embed
                         <Button
                           type="submit"
                           size="sm"
-                          disabled={isDisabled || !inputValue.trim()}
+                          disabled={isDisabled || (!inputValue.trim() && !selectedFile)}
                           className="px-3"
                         >
                           {isLoading ? (
@@ -629,7 +770,7 @@ export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embed
       {/* Embedded mode: always show chat window in place */}
       {embeddedMode && (
         <div className="flex flex-col h-full">
-          <div className="flex-1 overflow-y-auto space-y-3 bg-white p-4 flex flex-col justify-end">
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-3 bg-white p-4 flex flex-col justify-end rounded-3xl">
             {messages.length === 0 && (
               <div className="flex flex-1 items-center justify-center">
                 <div className="text-2xl md:text-3xl text-[#CCCCCC] text-center font-medium select-none" style={{lineHeight: 1.3}}>
@@ -658,6 +799,17 @@ export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embed
                     </div>
                   )}
                   <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                  {(message as any).fileUrl && (
+                    <div className="mt-2">
+                      {((message as any).fileType || '').startsWith('image/') ? (
+                        <img src={(message as any).fileUrl} alt={(message as any).fileName} className="max-w-xs max-h-40 rounded shadow border" />
+                      ) : (
+                        <a href={(message as any).fileUrl} download={(message as any).fileName} className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">
+                          {(message as any).fileName || 'Download file'}
+                        </a>
+                      )}
+                    </div>
+                  )}
                   <p className={`text-xs mt-1 ${
                     message.sender === 'user' 
                       ? 'text-[#EAEFF2]' 
@@ -674,7 +826,7 @@ export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embed
               <div className="flex justify-start">
                 <div className="bg-[#EAEFF2] text-[#333333] p-3 rounded-lg border border-[#CCCCCC]">
                   <div className="flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader2 className="w-4 w-4 animate-spin" />
                     <span className="text-sm">AI is thinking...</span>
                   </div>
                 </div>
@@ -682,7 +834,7 @@ export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embed
             )}
             <div ref={messagesEndRef} />
           </div>
-          {/* Chat Input in Window */}
+          {/* Chat Input in Window (outside scrollable area) */}
           <div className="border-t-0 bg-white p-6 rounded-b-2xl">
             {!tenantId || !userToken ? (
               <div className="text-center py-2">
@@ -693,7 +845,35 @@ export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embed
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex gap-2 items-center">
+                {/* + Button for file upload with tooltip */}
+                <div className="relative flex items-center">
+                  <label
+                    className="flex items-center cursor-pointer"
+                    onMouseEnter={() => setShowFileTooltip(true)}
+                    onMouseLeave={() => setShowFileTooltip(false)}
+                  >
+                    <Paperclip className="h-6 w-6 text-[#CCCCCC] hover:text-[#004466]" />
+                    <input
+                      type="file"
+                      className="hidden"
+                      onChange={e => {
+                        if (e.target.files && e.target.files[0]) setSelectedFile(e.target.files[0]);
+                      }}
+                      accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx,.txt"
+                    />
+                  </label>
+                  {showFileTooltip && (
+                    <div className="absolute left-1/2 -translate-x-1/2 top-8 z-50 bg-gray-800 text-white text-xs rounded px-2 py-1 shadow-lg whitespace-nowrap">
+                      Add photos and files
+                    </div>
+                  )}
+                </div>
+                {/* Show filename if file selected */}
+                {selectedFile && (
+                  <span className="text-xs text-[#004466] max-w-[120px] truncate">{selectedFile.name}</span>
+                )}
                 <input
+                  ref={inputRef2}
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder={isLoading ? "AI is responding..." : "Type anything..."}
@@ -703,7 +883,7 @@ export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embed
                 />
                 <button
                   type="submit"
-                  disabled={isDisabled || !inputValue.trim()}
+                  disabled={isDisabled || (!inputValue.trim() && !selectedFile)}
                   className="px-5 py-4 rounded-2xl bg-[#004466] hover:bg-[#005580] text-white shadow transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                   style={{fontSize: 22}}
                 >
@@ -839,6 +1019,42 @@ export const ChatInterface = ({ showInputBar = false, tenantId, userToken, embed
             </div>
           </div>
         </div>
+      )}
+
+      {/* Inactivity Modal */}
+      {showInactivityModal && (
+        <AlertDialog open={showInactivityModal} onOpenChange={setShowInactivityModal}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you still there?</AlertDialogTitle>
+              <AlertDialogDescription>
+                It looks like you haven't interacted with the chat for a while. Was this chat helpful?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <div className="flex items-center justify-center gap-2 my-2">
+              {[1,2,3,4,5].map(star => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => setInactivityRating(star)}
+                  className={
+                    (inactivityRating >= star ? 'text-yellow-400' : 'text-gray-300') +
+                    ' text-2xl focus:outline-none'
+                  }
+                  aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
+                >
+                  <Star />
+                </button>
+              ))}
+            </div>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={handleCloseInactivityModal}>Dismiss</AlertDialogCancel>
+              <AlertDialogAction onClick={handleSubmitInactivityRating} disabled={isSubmittingRating || inactivityRating === 0}>
+                Submit
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       )}
     </>
   );
