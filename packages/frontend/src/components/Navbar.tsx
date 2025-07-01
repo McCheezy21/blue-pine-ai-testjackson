@@ -40,7 +40,7 @@ const Navbar = () => {
             onClick={() => navigate('/')}
           >
             <BluePineLogo className="group-hover:scale-110 transition-transform duration-300" size="lg" />
-            <span className="text-2xl text-[#004466] font-serif font-bold leading-tight">
+            <span className="text-2xl text-[#004466] font-serif font-bold leading-tight font-heading">
               Blue Pine AI
             </span>
           </div>

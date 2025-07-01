@@ -1,5 +1,5 @@
-/* Import Noto Serif and Noto Sans fonts */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Noto+Serif:wght@400;700&display=swap');
+/* Import Plus Jakarta Sans font */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -108,65 +108,65 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
-}
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-    font-family: 'Noto Sans', sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
-    color: var(--color-text-body);
-  }
-  
   html {
     scroll-behavior: smooth;
   }
 
-  /* Typography - Blue Pine AI Brand */
-  h1, h2, h3 {
-    font-family: 'Noto Serif', serif;
-    font-weight: 700;
-    line-height: 1.2;
+  body {
+    @apply font-body bg-white text-gray-900 antialiased;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading text-gray-900;
   }
 
   h1 {
-    font-size: 48px;
-    line-height: 1.2;
+    @apply text-4xl font-bold leading-tight tracking-tight;
   }
 
   h2 {
-    font-size: 36px;
-    line-height: 1.3;
+    @apply text-3xl font-semibold leading-snug;
   }
 
   h3 {
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 1.4;
+    @apply text-2xl font-medium leading-snug;
+  }
+
+  h4 {
+    @apply text-xl font-medium;
+  }
+
+  h5 {
+    @apply text-lg font-medium;
+  }
+
+  h6 {
+    @apply text-base font-medium;
   }
 
   p {
-    font-family: 'Noto Sans', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1.5;
+    @apply font-body text-base text-gray-700;
   }
 
-  .text-small {
-    font-size: 14px;
-    line-height: 1.5;
+  a {
+    @apply text-blue-600 hover:text-blue-800 transition-colors;
   }
 
-  .button-text {
-    font-family: 'Noto Sans', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.4;
+  small {
+    @apply text-sm text-gray-500;
+  }
+
+  strong {
+    @apply font-semibold;
+  }
+}
+
+@layer base {
+  * {
+    border: none;
   }
 }
 
@@ -391,11 +391,11 @@
 
 @layer base {
   * {
-    @apply border-border;
+    border: none;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white text-gray-900;
   }
   
   html {

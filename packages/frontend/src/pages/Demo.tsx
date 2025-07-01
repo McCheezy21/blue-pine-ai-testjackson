@@ -171,7 +171,7 @@ const Demo = () => {
 
             {/* Right Content - Form */}
             <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-              <div className="bg-white p-8 rounded-lg shadow-lg border border-[#CCCCCC]">
+              <div className="bg-white p-8 rounded-lg shadow-lg border-2 border-gray-300 ring-1 ring-gray-200">
                 <div className="text-center mb-8">
                   <h2 className="text-2xl font-bold text-[#004466] mb-2">
                     Schedule Your Personalized Demo
@@ -327,7 +327,7 @@ const Demo = () => {
               <div className="w-20 h-20 mx-auto mb-6 bg-white/20 rounded-full flex items-center justify-center">
                 <Play className="w-10 h-10 text-white ml-1" />
               </div>
-              <h3 className="text-2xl font-bold mb-4">Live Demo Preview</h3>
+              <h3 className="text-2xl font-bold mb-4 text-white">Live Demo Preview</h3>
               <p className="text-[#EAEFF2] mb-6 max-w-2xl mx-auto">
                 Watch a 3-minute overview of how Blue Pine AI transforms revenue cycles for SNFs like yours
               </p>

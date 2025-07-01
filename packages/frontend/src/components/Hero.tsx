@@ -24,21 +24,6 @@ const Hero = () => {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-white">
-      {/* Subtle, professional background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#EAEFF2] rounded-full opacity-20"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-[#EAEFF2] rounded-full opacity-20"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#EAEFF2] rounded-full opacity-10"></div>
-      </div>
-
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 25px 25px, #004466 2px, transparent 0)`,
-          backgroundSize: '50px 50px'
-        }}></div>
-      </div>
-
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center">
           {/* Trust badge - professional and calm */}

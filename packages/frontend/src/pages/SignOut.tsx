@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { logout } from "@/utils/cognitoAuth";
-import { CheckCircle, ArrowRight, Sparkles, Home } from "lucide-react";
+import { CheckCircle, ArrowRight, Home } from "lucide-react";
+import BluePineLogo from "@/components/ui/BluePineLogo";
 
 const SignOut = () => {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -41,35 +42,34 @@ const SignOut = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-slate-50/30 to-white">
-      {/* Background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-500/10 to-blue-300/10 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-blue-400/10 to-blue-600/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
-      </div>
-
+    <div className="min-h-screen bg-white">
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
         <div className={`w-full max-w-md transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           {/* Header */}
-          <div className="text-center mb-8">
-            {/* Logo placeholder */}
-            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
-              <Sparkles className="w-8 h-8 text-white" />
+          <div className="text-center mb-10">
+            {/* Logo */}
+            <div className="mb-6 text-center">
+              <div className="flex items-center justify-center mb-4">
+                <BluePineLogo size="lg" />
+              </div>
+              <h1 className="text-2xl text-[#004466] font-heading font-bold">
+                Blue Pine AI
+              </h1>
             </div>
             
-            <h1 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
-              <span className="bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">Sign Out</span>
-            </h1>
-            <p className="text-slate-600 font-medium">We're sorry to see you go</p>
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">
+              Sign Out
+            </h2>
+            <p className="text-lg text-gray-700">We're sorry to see you go</p>
           </div>
           
           {/* Main Card */}
-          <div className="apple-glass-card p-8 mb-6">
-            <div className="text-center text-slate-700 mb-8">
-              <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-blue-50 flex items-center justify-center">
-                <CheckCircle className="w-6 h-6 text-blue-600" />
+          <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200 mb-6">
+            <div className="text-center text-gray-700 mb-8">
+              <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-[#EAEFF2] flex items-center justify-center">
+                <CheckCircle className="w-6 h-6 text-[#004466]" />
               </div>
-              <p className="leading-relaxed">
+              <p className="text-base leading-relaxed">
                 You will be securely logged out of your Blue Pine AI account and redirected to our homepage.
               </p>
             </div>
@@ -77,7 +77,7 @@ const SignOut = () => {
             <div className="space-y-4">
               <Button 
                 onClick={handleLogout}
-                className="w-full apple-button bg-gradient-to-b from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3 rounded-xl font-semibold shadow-lg"
+                className="w-full bg-[#004466] hover:bg-[#005580] text-white py-4 px-6 rounded-lg text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-sm"
                 disabled={isLoggingOut}
               >
                 {isLoggingOut ? (
@@ -95,8 +95,7 @@ const SignOut = () => {
 
               <Button 
                 onClick={handleCancel}
-                variant="outline"
-                className="w-full py-3 rounded-xl font-semibold border-slate-300 text-slate-700 hover:bg-slate-50 transition-colors duration-300"
+                className="w-full bg-white text-gray-900 border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 py-4 px-6 rounded-lg text-base font-semibold transition-all duration-300"
                 disabled={isLoggingOut}
               >
                 Cancel
@@ -105,14 +104,14 @@ const SignOut = () => {
           </div>
 
           {/* Continue Exploring CTA */}
-          <div className={`apple-glass-card p-6 text-center transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">Continue Exploring</h3>
-            <p className="text-sm text-slate-600 mb-4">
+          <div className={`bg-white p-6 rounded-xl shadow-lg border border-gray-200 text-center transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <h3 className="text-xl font-bold text-[#004466] mb-2">Continue Exploring</h3>
+            <p className="text-base text-gray-700 mb-4">
               Discover how Blue Pine AI is transforming healthcare revenue cycles
             </p>
             <button
               onClick={handleContinueExploring}
-              className="inline-flex items-center gap-2 px-6 py-2 text-blue-600 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors duration-300 font-semibold"
+              className="inline-flex items-center gap-2 px-6 py-3 text-[#004466] bg-[#EAEFF2] rounded-lg hover:bg-[#d5dde3] transition-colors duration-300 font-semibold"
               disabled={isLoggingOut}
             >
               <Home className="w-4 h-4" />
@@ -122,8 +121,8 @@ const SignOut = () => {
 
           {/* Additional Info */}
           <div className={`text-center mt-8 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <p className="text-sm text-slate-500">
-              Questions? <a href="mailto:support@bluepineai.com" className="text-blue-600 hover:text-blue-700 transition-colors duration-300">Contact our support team</a>
+            <p className="text-sm text-gray-700">
+              Questions? <a href="mailto:support@bluepineai.com" className="text-[#004466] hover:text-[#005580] hover:underline transition-colors duration-300 font-semibold">Contact our support team</a>
             </p>
           </div>
         </div>

@@ -31,7 +31,7 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-3 mb-6">
               <BluePineLogo size="lg" variant="footer" />
-              <span className="text-2xl text-white font-serif font-bold">Blue Pine AI</span>
+              <span className="text-2xl text-white font-heading font-bold">Blue Pine AI</span>
             </div>
             
             {/* Contact Information */}
