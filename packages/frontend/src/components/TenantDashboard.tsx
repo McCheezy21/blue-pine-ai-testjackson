@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { Sidebar } from "@/components/dashboard/Sidebar";
-import { Header } from "@/components/dashboard/Header";
+import { TopNavigation } from "@/components/dashboard/TopNavigation";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
 import { InsuranceCardService } from "@/components/dashboard/InsuranceCardService";
 import { AutomationServices } from "@/components/dashboard/AutomationServices";
@@ -18,7 +17,6 @@ interface TenantDashboardProps {
 
 const TenantDashboard = ({ user }: TenantDashboardProps) => {
   const [activeView, setActiveView] = useState<DashboardView>('home');
-  const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [showReports, setShowReports] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -59,25 +57,6 @@ const TenantDashboard = ({ user }: TenantDashboardProps) => {
       default:
         return (
           <div className="space-y-6">
-            {/* Healthcare Professional Welcome Section */}
-            <div className={`bg-white border border-[#CCCCCC] rounded-lg shadow-sm transition-all duration-500 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}>
-              <div className="p-8 text-center">
-                <div className="flex items-center justify-center mb-6">
-                  <div className="w-16 h-16 bg-[#004466] rounded-lg flex items-center justify-center">
-                    <Activity className="w-8 h-8 text-white" />
-                  </div>
-                </div>
-                <h1 className="text-3xl font-semibold text-[#333333] mb-3">
-                  Welcome, {user.tenant.name}
-                </h1>
-                <p className="text-[#333333]/70 text-lg max-w-2xl mx-auto">
-                  Healthcare Revenue Cycle Management Platform
-                </p>
-              </div>
-            </div>
-
             {/* Dashboard Content */}
             <div className={`transition-all duration-500 delay-200 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
@@ -95,18 +74,13 @@ const TenantDashboard = ({ user }: TenantDashboardProps) => {
 
   return (
     <div className="min-h-screen bg-[#EAEFF2] font-['Inter',system-ui,sans-serif]">
-      <Sidebar 
+      <TopNavigation 
         activeView={activeView}
         setActiveView={setActiveView}
-        expanded={sidebarExpanded}
-        setExpanded={setSidebarExpanded}
       />
-      <div className={`transition-all duration-300 ${sidebarExpanded ? 'ml-64' : 'ml-16'}`}>
-        <Header onSettingsClick={() => {}} />
-        <main className="p-6">
-          {renderContent()}
-        </main>
-      </div>
+      <main className="p-6">
+        {renderContent()}
+      </main>
       
       {/* ChatInterface available on ALL dashboard pages with authentication */}
       <ChatInterface 

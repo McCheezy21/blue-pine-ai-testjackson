@@ -15,7 +15,13 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import TenantProtectedRoute from "./components/TenantProtectedRoute";
 import TenantDashboard from "./components/TenantDashboard";
 import PointClickCareCallback from "./components/PointClickCareCallback";
+import SSOCallback from "./components/SSOCallback";
 import { getUserInfo } from "./utils/cognitoAuth";
+import TenantWelcome from "./pages/TenantWelcome";
+import { InsuranceCardService } from "./components/dashboard/InsuranceCardService";
+import { AutomationServices } from "./components/dashboard/AutomationServices";
+import { ReportsAnalytics } from "./components/dashboard/ReportsAnalytics";
+import TenantPortalLayout from "./components/dashboard/TenantPortalLayout";
 
 const Unauthorized = () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -82,10 +88,22 @@ const AppRoutes = () => {
         {/* PointClickCare OAuth Callback */}
         <Route path="/auth/pointclickcare/callback" element={<PointClickCareCallback />} />
         
+        {/* SSO Callback */}
+        <Route path="/auth/sso/callback" element={<SSOCallback onAuthSuccess={(token, user) => {
+          console.log('SSO authentication successful', user);
+          // Handle successful SSO authentication
+        }} />} />
+        
         {/* Admin routes */}
         <Route path="/admin" element={<Admin />} />
         
         {/* Multi-tenant routing */}
+        <Route path="/tenant/:tenantId/welcome" element={
+          <TenantProtectedRoute>
+            {(user) => <TenantWelcome />}
+          </TenantProtectedRoute>
+        } />
+        <Route path="/tenant/:tenantId" element={<Navigate to="/tenant/:tenantId/welcome" replace />} />
         <Route path="/tenant/:tenantId/dashboard" element={
           <TenantProtectedRoute>
             {(user) => <TenantDashboard user={user} />}
@@ -102,6 +120,33 @@ const AppRoutes = () => {
                   <p className="text-blue-800">Tenant ID: <span className="font-medium">{user.tenant.id}</span></p>
                 </div>
               </div>
+            )}
+          </TenantProtectedRoute>
+        } />
+        <Route path="/tenant/:tenantId/insurance" element={
+          <TenantProtectedRoute>
+            {(user) => (
+              <TenantPortalLayout user={user}>
+                <InsuranceCardService />
+              </TenantPortalLayout>
+            )}
+          </TenantProtectedRoute>
+        } />
+        <Route path="/tenant/:tenantId/automation" element={
+          <TenantProtectedRoute>
+            {(user) => (
+              <TenantPortalLayout user={user}>
+                <AutomationServices />
+              </TenantPortalLayout>
+            )}
+          </TenantProtectedRoute>
+        } />
+        <Route path="/tenant/:tenantId/reports" element={
+          <TenantProtectedRoute>
+            {(user) => (
+              <TenantPortalLayout user={user}>
+                <ReportsAnalytics />
+              </TenantPortalLayout>
             )}
           </TenantProtectedRoute>
         } />

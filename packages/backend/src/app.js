@@ -7,6 +7,7 @@ const jwkToPem = require('jwk-to-pem');
 const axios = require('axios');
 // const { sendInvitationEmail, testEmailConfiguration } = require('./services/email-service');
 const BedrockService = require('./services/bedrock-service');
+const SSOService = require('./services/sso-service');
 require('dotenv').config();
 
 const app = express();
@@ -1001,8 +1002,187 @@ app.delete('/api/admin/tenants/:tenantId/users', async (req, res) => {
   }
 });
 
-// Initialize Bedrock service
+// Initialize services
 const bedrockService = new BedrockService();
+const ssoService = new SSOService(pool);
+
+// ===== SSO AUTHENTICATION ENDPOINTS =====
+
+// Discover SSO configuration by email
+app.post('/api/auth/sso/discover', async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required' });
+    }
+    
+    const ssoInfo = await ssoService.discoverSSO(email);
+    
+    if (!ssoInfo) {
+      return res.status(404).json({ 
+        hasSSO: false, 
+        message: 'No SSO configuration found for this email domain' 
+      });
+    }
+    
+    res.json(ssoInfo);
+  } catch (error) {
+    console.error('SSO discovery error:', error);
+    res.status(500).json({ error: 'SSO discovery failed' });
+  }
+});
+
+// Initiate SSO login
+app.post('/api/auth/sso/initiate', async (req, res) => {
+  try {
+    const { email, orgDomain } = req.body;
+    
+    if (!email && !orgDomain) {
+      return res.status(400).json({ error: 'Email or organization domain is required' });
+    }
+    
+    // Discover SSO configuration
+    const ssoInfo = await ssoService.discoverSSO(email);
+    
+    if (!ssoInfo) {
+      return res.status(404).json({ 
+        error: 'SSO not configured for this organization',
+        fallback: 'consumer_auth'
+      });
+    }
+    
+    const redirectUri = `${process.env.FRONTEND_URL || 'http://localhost:8084'}/auth/sso/callback`;
+    const state = ssoService.generateState(ssoInfo.config.id, redirectUri);
+    
+    // Generate SSO redirect URL
+    const redirectUrl = await ssoService.initiateSSOLogin(ssoInfo.config.id, redirectUri, state);
+    
+    res.json({
+      provider: ssoInfo.provider,
+      redirect_url: redirectUrl,
+      organization: ssoInfo.organization,
+      state: state
+    });
+    
+  } catch (error) {
+    console.error('SSO initiation error:', error);
+    res.status(500).json({ error: 'SSO initiation failed' });
+  }
+});
+
+// Handle SSO callback
+app.post('/api/auth/sso/callback', async (req, res) => {
+  try {
+    const { code, state, error } = req.body;
+    
+    if (error) {
+      console.error('SSO callback error:', error);
+      return res.status(400).json({ error: `SSO authentication failed: ${error}` });
+    }
+    
+    if (!code || !state) {
+      return res.status(400).json({ error: 'Missing authorization code or state' });
+    }
+    
+    const result = await ssoService.handleSSOCallback(code, state);
+    
+    console.log(`✅ SSO authentication successful for user: ${result.user.email}`);
+    
+    res.json(result);
+    
+  } catch (error) {
+    console.error('SSO callback error:', error);
+    res.status(400).json({ error: 'SSO authentication failed' });
+  }
+});
+
+// Get SSO configuration for organization (admin only)
+app.get('/api/admin/organizations/:orgId/sso', verifyToken, async (req, res) => {
+  try {
+    const { orgId } = req.params;
+    
+    const configs = await pool.query(`
+      SELECT 
+        sc.*,
+        array_agg(sd.domain) as configured_domains
+      FROM sso_configurations sc
+      LEFT JOIN sso_domains sd ON sc.id = sd.sso_config_id
+      WHERE sc.organization_id = $1
+      GROUP BY sc.id
+    `, [orgId]);
+    
+    res.json(configs.rows);
+  } catch (error) {
+    console.error('Error fetching SSO config:', error);
+    res.status(500).json({ error: 'Failed to fetch SSO configuration' });
+  }
+});
+
+// Create/Update SSO configuration (admin only)
+app.post('/api/admin/organizations/:orgId/sso', verifyToken, async (req, res) => {
+  try {
+    const { orgId } = req.params;
+    const { 
+      provider, 
+      client_id, 
+      client_secret, 
+      authority_url, 
+      domain_hint,
+      auto_provision = true,
+      default_role = 'member',
+      domains = []
+    } = req.body;
+    
+    // Validate required fields
+    if (!provider || !client_id || !authority_url) {
+      return res.status(400).json({ 
+        error: 'Provider, client_id, and authority_url are required' 
+      });
+    }
+    
+    // Create or update SSO configuration
+    const ssoConfig = await pool.query(`
+      INSERT INTO sso_configurations (
+        organization_id, provider, client_id, client_secret, 
+        authority_url, domain_hint, auto_provision, default_role
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      ON CONFLICT (organization_id, provider) 
+      DO UPDATE SET 
+        client_id = EXCLUDED.client_id,
+        client_secret = EXCLUDED.client_secret,
+        authority_url = EXCLUDED.authority_url,
+        domain_hint = EXCLUDED.domain_hint,
+        auto_provision = EXCLUDED.auto_provision,
+        default_role = EXCLUDED.default_role,
+        updated_at = NOW()
+      RETURNING *
+    `, [orgId, provider, client_id, client_secret, authority_url, domain_hint, auto_provision, default_role]);
+    
+    const configId = ssoConfig.rows[0].id;
+    
+    // Update domains
+    await pool.query('DELETE FROM sso_domains WHERE sso_config_id = $1', [configId]);
+    
+    for (const domain of domains) {
+      await pool.query(`
+        INSERT INTO sso_domains (sso_config_id, domain) VALUES ($1, $2)
+      `, [configId, domain.toLowerCase()]);
+    }
+    
+    console.log(`✅ SSO configuration updated for organization ${orgId}`);
+    
+    res.json({ 
+      success: true, 
+      config: ssoConfig.rows[0],
+      domains: domains
+    });
+    
+  } catch (error) {
+    console.error('Error updating SSO config:', error);
+    res.status(500).json({ error: 'Failed to update SSO configuration' });
+  }
+});
 
 // ===== BEDROCK AI CHATBOT ENDPOINTS =====
 
